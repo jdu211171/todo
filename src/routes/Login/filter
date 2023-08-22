@@ -1,0 +1,42 @@
+// App.tsx
+import React, { useState } from "react";
+
+interface ICrypto {
+  id: string;
+  name: string;
+}
+
+const defaultProps: ICrypto[] = [
+  { id: "1", name: "Bitcoin" },
+  { id: "2", name: "Ethereum" },
+  { id: "3", name: "Litecoin" },
+];
+
+const App = () => {
+  const [crypto, setCryptos] = useState(defaultProps);
+  const [search, setSearch] = useState("");
+
+  const handleChange = (e: { target: { value: string } }) => {
+    setsearch(e.target.value);
+  };
+
+  const filteredCoins = crypto.filter((crypto) =>
+    crypto.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div className="App">
+      <ul className="posts">
+        <input type="text" onChange={handleChange} />
+        {filteredCoins.map((crypto) => (
+          <li key={crypto.id}>
+            <h3>{crypto.id}</h3>
+            <p>{crypto.name}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default App;

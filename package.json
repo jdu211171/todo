@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "proxy": "http://localhost:3001",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -16,7 +17,9 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@svgr/webpack": "^8.1.0",
     "@types/react-router-dom": "^5.3.3",
+    "axios": "^1.4.0",
     "moment": "^2.29.4",
+    "qs": "^6.11.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",

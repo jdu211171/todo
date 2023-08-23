@@ -1,16 +1,98 @@
 import React from 'react';
 import './style.css'
+import { useNavigate } from "react-router-dom";
+
+import axios from "axios";
+import * as qs from "qs";
 
 // Define an interface for the props of the component
 interface RegisterProps {
   
   // You can add any props you need here
 }
+<<<<<<< HEAD
 // Define a functional component that takes the props as an argument
 const Register: React.FC<RegisterProps> = (props) => {
   function handleSubmit(event: any) {
    event.preventDefault();
   }
+=======
+
+// Define a functional component that takes the props as an argument
+const Register: React.FC<RegisterProps> = (props) => {
+const navigate = useNavigate();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Your form submission logic goes here
+
+     // Gather data from the input fields
+     const formData = new FormData(event.target);
+     const formDataObject = {};
+     formData.forEach((value, key) => {
+       formDataObject[key] = value;
+     });
+    
+
+    let data = qs.stringify({
+      'password': formDataObject['password'],
+      'email': formDataObject['email'],
+      'username': formDataObject['firstname'] + ' ' + formDataObject['lastname'] 
+    });
+    
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'http://localhost:3001/api/users',
+      headers: { 
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data : data
+    };
+    axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data));
+      // just created new user
+      // need to post auth data
+
+      //to automatically login after registering
+                                   config = {
+                                    method: "post",
+                                    maxBodyLength: Infinity,
+                                    url: "http://localhost:3001/api/auth",
+                                    headers: {
+                                      "Content-Type": "application/x-www-form-urlencoded",
+                                    },
+                                    data: data,
+                                  };
+                              
+                                  axios
+                                    .request(config)
+                                    .then((response) => {
+                                      // You can replace this with your own logic
+                                      const token = response.data.token
+                                      console.log(token);
+                                      // Save the user token and status in localStorage
+                                      localStorage.setItem("user", "true");
+                                      localStorage.setItem("token", token);
+                              
+                                      // Navigate to the home page
+                                      navigate("/");
+                                    })
+                                    .catch((error) => {
+                                      console.log(error);
+                                    });
+
+
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    
+  };
+
+
+>>>>>>> 97fcc88ccb30818d7b61168641dbc2ebdcce6916
   // You can use any state or effect hooks here
   return (
     // Use JSX syntax to render the HTML elements
@@ -39,6 +121,10 @@ const Register: React.FC<RegisterProps> = (props) => {
           <button className='entrance-button' type="submit">Create account</button>
         </form>
         <span className='entrance-span' >Already have an account?<a className='entrance-a' href={`/login`}>Log in</a></span>
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 97fcc88ccb30818d7b61168641dbc2ebdcce6916
       </div>
     </div>
   );

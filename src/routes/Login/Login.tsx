@@ -7,9 +7,6 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function handleSubmit(){
-     
-  }
   
   // Use navigate hook to navigate to other pages
   const navigate = useNavigate();

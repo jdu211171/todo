@@ -16,6 +16,7 @@ export default function All(){
                     </div>
                     <Button />
                 </div>
+                
             </div>
     )
 }

@@ -17,7 +17,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
     // You can add any state or logic here if needed
 
     return (
-        <main className="whole-page">
+        <main className="whole-page container-fluid">
 
             <nav className="sidebar noselect">
                 <header>

@@ -3,13 +3,14 @@ import './style.css'
 
 // Define an interface for the props of the component
 interface RegisterProps {
+  
   // You can add any props you need here
-}
-function handleSubmit() {
-
 }
 // Define a functional component that takes the props as an argument
 const Register: React.FC<RegisterProps> = (props) => {
+  function handleSubmit(event: any) {
+   event.preventDefault();
+  }
   // You can use any state or effect hooks here
   return (
     // Use JSX syntax to render the HTML elements
@@ -19,7 +20,7 @@ const Register: React.FC<RegisterProps> = (props) => {
       <div className="form">
         <span className="title">Create your account</span>
         <span className='entrance-span'>organize your work</span>
-        <form action="" method="">
+        <form onSubmit={handleSubmit} action="" method="">
           <label className='entrance-label' htmlFor="fname">first name</label>
           <input className='entrance-input' name="firstname" type="text" placeholder="Write your first name"/>
 
@@ -37,7 +38,7 @@ const Register: React.FC<RegisterProps> = (props) => {
 
           <button className='entrance-button' type="submit">Create account</button>
         </form>
-        <span className='entrance-span' obSubmit={handleSubmit}>Already have an account?<a className='entrance-a' href={`/login`}>Log in</a></span>
+        <span className='entrance-span' >Already have an account?<a className='entrance-a' href={`/login`}>Log in</a></span>
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ type ErrorPageProps = {
     message: string;
 };
 
-const ErrorPage = (props: ErrorPageProps) => {
+const ErrorPage = (props: ErrorPageProps, ) => {
     // Destructure the message prop from the props object
     const { message } = props;
 

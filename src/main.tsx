@@ -12,6 +12,7 @@ import { PrivateRoute } from './PrivateRoute'
 import Login from './routes/Login/Login'
 import Register from './routes/Register/Register'
 import Sidebar from './test'
+import CreateTask from './routes/CreateTask'
 
 const router = createBrowserRouter([
   {
@@ -36,7 +37,7 @@ const router = createBrowserRouter([
 
   {
     path: '/test',
-    element: <Sidebar />,
+    element: <CreateTask />,
   }
 ]);
 

@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+
+/* classes that are actually used */
+
+.create-task-container {
+    font-family: 'Poppins', sans-serif;
+}
+
+.column {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 70%;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    gap: 1em;
+}
+
+.task-title {
+    flex-direction: column;
+    align-items: center;
+    row-gap: 30px;
+}
+
+.wrapper {
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    gap: 1em;
+}
+
+.wrapper .input-data {
+    height: 40px;
+    width: 100%;
+    position: relative;
+}
+
+.wrapper .input-data input {
+    height: 100%;
+    width: 100%;
+    border: none;
+    /* font-size: 17px; */
+    outline: none;
+}
+
+.input-data input:focus~label,
+.input-data input:valid~label {
+    transform: translateY(-20px);
+    /* font-size: 15px; */
+    color: #4158d0;
+}
+
+.wrapper .input-data label {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    color: black;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.input-data .underline {
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    bottom: 0;
+}
+
+.input-data .underline:before {
+    position: absolute;
+    content: "";
+    height: 100%;
+    width: 100%;
+    background: #4158d0;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s ease;
+}
+
+.input-data input:focus~.underline:before,
+.input-data input:valid~.underline:before {
+    transform: scaleX(1);
+}
+
+textarea {
+    padding: 20px;
+    outline: none;
+}
+
+.task-description {
+    margin-top: 10px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.option {
+    display: flex;
+    height: 55px;
+    cursor: pointer;
+    padding: 0 16px;
+    border-radius: 8px;
+    align-items: center;
+    background: #fff;
+}
+
+.option:hover {
+    background: #F2F2F2;
+}
+
+.option i {
+    font-size: 25px;
+    margin-right: 12px;
+}
+
+.option .option-text {
+    font-size: 18px;
+    color: #333;
+}
+
+.select-chevron {
+    width: 30px;
+    height: 30px;
+}
+
+/* Remove default appearance */
+select option {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+select {
+
+    outline: none;
+    padding: 10px;
+    background-color: lightblue;
+    font-family: Arial, sans-serif;
+    gap: 1em;
+    height: 40px;
+    background: #fff;
+    padding: 5px;
+    /* width: 100%; */
+    width: 200px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+
+}
+
+select option {
+    padding: 10px;
+    background-color: white;
+}
+
+label#task-priority {
+    display: block;
+    max-width: 100%;
+    font-weight: 700;
+
+}
+
+.task-details-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end
+}
+
+.custom-select {
+    position: relative;
+    padding: 10px 10px 10px 0;
+    background-color: lightblue;
+    font-family: Arial, sans-serif;
+    height: 40px;
+    background: #fff;
+    height: 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    border: 1px solid grey;
+}
+
+.selected-options {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.options-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: none;
+    background-color: white;
+    border: 1px solid black;
+}
+
+.option {
+    padding: 10px;
+}
+
+.option input {
+    display: none;
+}
+
+.option label {
+    cursor: pointer;
+}
+
+/* btn design */
+.btn {
+    font-family: "Tajawal", sans-serif;
+    font-size: 16px;
+    font-weight: 450;
+    background: #2564cf;
+    width: 100%;
+    height: 14px;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #ffffff;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: box-shadow, transform;
+    transition-property: box-shadow, transform;
+    margin-bottom: 10px;
+}
+
+.btn:hover,
+.btn:focus,
+.btn:active {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}

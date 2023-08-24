@@ -4,33 +4,29 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 import * as qs from "qs";
+import { stringify } from 'querystring';
 
 // Define an interface for the props of the component
 interface RegisterProps {
   
   // You can add any props you need here
 }
-<<<<<<< HEAD
 // Define a functional component that takes the props as an argument
-const Register: React.FC<RegisterProps> = (props) => {
-  function handleSubmit(event: any) {
-   event.preventDefault();
-  }
-=======
+
 
 // Define a functional component that takes the props as an argument
 const Register: React.FC<RegisterProps> = (props) => {
 const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event:any) => {
     event.preventDefault();
     // Your form submission logic goes here
 
      // Gather data from the input fields
      const formData = new FormData(event.target);
-     const formDataObject = {};
+     const formDataObject: { [key: string]: any } = {};
      formData.forEach((value, key) => {
-       formDataObject[key] = value;
+       formDataObject[key]  = value;
      });
     
 
@@ -92,7 +88,6 @@ const navigate = useNavigate();
   };
 
 
->>>>>>> 97fcc88ccb30818d7b61168641dbc2ebdcce6916
   // You can use any state or effect hooks here
   return (
     // Use JSX syntax to render the HTML elements
@@ -121,10 +116,6 @@ const navigate = useNavigate();
           <button className='entrance-button' type="submit">Create account</button>
         </form>
         <span className='entrance-span' >Already have an account?<a className='entrance-a' href={`/login`}>Log in</a></span>
-<<<<<<< HEAD
-=======
-        
->>>>>>> 97fcc88ccb30818d7b61168641dbc2ebdcce6916
       </div>
     </div>
   );

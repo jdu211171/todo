@@ -1,0 +1,32 @@
+.buttons {
+  display: block;
+  /* flex-direction: row-reverse; */
+  border: 1px solid black;
+  width: 100px;
+  height: 100px;
+}
+
+.TaskContainer {
+  height: calc(100vh - 160px);
+  /* background-color: red; */
+  /* border: 1px solid black; */
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: var(--dark-blue) var(--custom-white);
+  padding: 20px;
+}
+
+.TaskContainer::-webkit-scrollbar {
+  background-color: transparent;
+  width: 10px;
+}
+.TaskContainer {
+}
+.TaskContainer::-webkit-scrollbar-track {
+  background-color: var(--custom-white);
+}
+.TaskContainer::-webkit-scrollbar-thumb {
+  background-color: var(--dark-blue);
+  border-radius: 20px;
+  border: 3px solid var(--custom-white);
+}

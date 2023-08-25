@@ -9,19 +9,22 @@
 }
 
 .content {
-    /* text-align: center;
-    float: left; */
-    margin-left: 300px;
+    display: block;
+    margin-left: 265px;
+    /* border: 1px solid black; */
 }
 
 .top {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
+
+    /* display: flex; */
+    /* align-items: baseline; */
+    /* justify-content: space-between; */
     color: #212121;
     font-family: Inter;
     /* line-height: normal; */
     padding: 20px;
+    /* border: 1px solid black; */
+    height: 150px;
 }
 
 h1 {

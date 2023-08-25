@@ -1,0 +1,72 @@
+.task {
+  background-color: white;
+  border-radius: 5px;
+  padding: 20px;
+  display: flex;
+  margin: 5px;
+}
+
+.title {
+  flex: 30%;
+  display: flex;
+  align-items: center;
+}
+
+.title svg {
+  display: block;
+  margin-right: 10px;
+}
+
+.title .text {
+  font-family: Inter;
+  font-size: 24px;
+  font-weight: 600;
+  color: #212121;
+}
+.info {
+  flex: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.priority {
+  height: 30px;
+  border-radius: 5px;
+  padding: 6px 10px;
+}
+
+.category {
+  height: 30px;
+  padding: 6px 10px;
+}
+
+.deadline {
+  height: 30px;
+  padding: 6px 10px;
+}
+
+.critical {
+  background-color: #f8d7da;
+}
+
+.critical::before {
+  content: "\25CF"; /* Unicode character escape sequence */
+  color: red;
+  position: relative;
+  margin-right: 5px;
+}
+
+.buttons {
+  flex: 20%;
+  display: flex;
+  align-items: center;
+}
+
+.buttons div {
+  margin: 5px;
+}
+
+/* div {
+    border: 1px solid black;
+} */

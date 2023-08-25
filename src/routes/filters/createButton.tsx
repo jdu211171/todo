@@ -1,4 +1,4 @@
-import './createButton.css'
+import './createButton.module.css'
 
 export default function Button() {
     return(

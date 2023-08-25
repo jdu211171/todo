@@ -108,13 +108,13 @@ const CreateTask: React.FC = () => {
 
         
         <div className="days-of-week" style={{ display: "block", flex: "left" }}>
+          {/* <input type="checkbox" name="" id="monday" /><label htmlFor="monday">Mon</label>
           <input type="checkbox" name="" id="monday" /><label htmlFor="monday">Mon</label>
           <input type="checkbox" name="" id="monday" /><label htmlFor="monday">Mon</label>
           <input type="checkbox" name="" id="monday" /><label htmlFor="monday">Mon</label>
           <input type="checkbox" name="" id="monday" /><label htmlFor="monday">Mon</label>
           <input type="checkbox" name="" id="monday" /><label htmlFor="monday">Mon</label>
-          <input type="checkbox" name="" id="monday" /><label htmlFor="monday">Mon</label>
-          <input type="checkbox" name="" id="monday" /><label htmlFor="monday">Mon</label>
+          <input type="checkbox" name="" id="monday" /><label htmlFor="monday">Mon</label> */}
         </div>
 
       </div>
@@ -125,7 +125,7 @@ const CreateTask: React.FC = () => {
       <div className="task-create-options" style={{ display: "flex", flexDirection: "column", }}>
         <button style={{ border: "none", backgroundColor: "white", fontSize: "16px", color: "#0D6EFD" }} type="reset">Reset</button>
         <button style={{ border: "none", backgroundColor: "white", fontSize: "16px", color: "#DC3545" }}>Delete</button>
-        <a style={{ alignSelf: "flex-end" }} href="https://www.google.com" className="btn"><i className="fa-solid fa-plus"></i>Add Task</a>
+        <a style={{ alignSelf: "flex-end" }} href="https://www.google.com" className="btnLocal"><i className="fa-solid fa-plus"></i>Add Task</a>
       </div>
     </div>
   );

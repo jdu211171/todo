@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import all from './all.module.css';
-import '../general.css';
+import React, { useEffect, useState } from "react";
+import all from "./all.module.css";
+import "../general.css";
 
-import App from '../../htmlAssets/Select/Select';
-import Button from '../filters/createButton';
-import Tasks from './task/task';
-import axios from 'axios';
-import * as qs from 'qs';
+import App from "../../htmlAssets/Select/Select";
+import Button from "../filters/createButton";
+import Tasks from "./task/task";
+import CreateTask from "./createTask/CreateTask";
+import axios from "axios";
+import * as qs from "qs";
 
 async function fetchTaskData() {
   const data = qs.stringify({});
   const config = {
-    method: 'get',
+    method: "get",
     maxBodyLength: Infinity,
-    url: 'http://localhost:3001/upcoming',
+    url: "http://localhost:3001/upcoming",
     headers: {
       Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE2OTI5NzgzMTksImV4cCI6MTY5MzIzNzUxOX0.YS6_14qzlBUcaFZ95ZVaRRuzxg9uzj_RSw6RSXOQ-9w',
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE2OTMxNTIwMzcsImV4cCI6MTY5MzQxMTIzN30.pt03dtbU4uMFSWl49ErrY2G6krygjYg8nDgJlNpDxDA",
     },
     data: data,
   };
@@ -25,7 +26,7 @@ async function fetchTaskData() {
     const response = await axios.request(config);
     return response.data;
   } catch (error) {
-    console.log('Error fetching task data:', error);
+    console.log("Error fetching task data:", error);
     throw error;
   }
 }
@@ -35,10 +36,10 @@ export default function All() {
 
   useEffect(() => {
     fetchTaskData()
-      .then(data => {
+      .then((data) => {
         setTaskdata(data);
       })
-      .catch(error => {
+      .catch((error) => {
         // Handle error if needed
       });
   }, []);
@@ -46,9 +47,6 @@ export default function All() {
   return (
     <div className="content">
       <div className="top">
-        <div className="_priority_v-9hlr_65 _critical_v1hlr_97">
-          hello 
-        </div>
         <h1>All tasks</h1>
 
         <div className="filters">
@@ -61,6 +59,9 @@ export default function All() {
             <Button />
           </div>
         </div>
+      </div>
+      <div className="CreateTask">
+        <CreateTask />
       </div>
       <div className={all.TaskContainer}>
         <Tasks taskdata={taskdata} />

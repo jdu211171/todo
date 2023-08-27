@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 /* *,
 *::before,
@@ -9,30 +9,33 @@
 } */
 
 .content {
-    display: block;
-    margin-left: 265px;
-    /* border: 1px solid black; */
+  display: block;
+  margin-left: 265px;
+  /* border: 1px solid black; */
 }
 
 .top {
+  /* display: flex; */
+  /* align-items: baseline; */
+  /* justify-content: space-between; */
+  color: #212121;
+  font-family: Inter;
+  /* line-height: normal; */
+  padding: 20px;
+  /* border: 1px solid black; */
+  height: 150px;
+}
 
-    /* display: flex; */
-    /* align-items: baseline; */
-    /* justify-content: space-between; */
-    color: #212121;
-    font-family: Inter;
-    /* line-height: normal; */
-    padding: 20px;
-    /* border: 1px solid black; */
-    height: 150px;
+.CreateTask {
+  padding: 20px;
 }
 
 h1 {
-    font-size: 40px;
-    font-weight: 600;
+  font-size: 40px;
+  font-weight: 600;
 }
 
 .filters {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }

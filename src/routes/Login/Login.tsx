@@ -1,4 +1,4 @@
-import "../Register/style.css";
+import style from "./Login.module.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -60,18 +60,17 @@ function Login() {
   };
 
   return (
-    <div className="entrance-container">
-      <div className="logo"></div>
+    <div className={style.container}>
 
-      <div className="form">
-        <span className="title">Login to Account</span>
-        <span className="entrance-span">organize your work</span>
+      <div className={style.form}>
+        <span className={style.title}>Login to Account</span>
+        <span className={style.entranceSpan}>organize your work</span>
         <form onSubmit={handleSubmit}>
-          <label className="entrance-label" htmlFor="email">
+          <label className={style.entranceLabel} htmlFor="email">
             Email
           </label>
           <input
-            className="entrance-input"
+            className={style.entranceInput}
             id="email"
             name="email"
             type="text"
@@ -80,11 +79,11 @@ function Login() {
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <label className="entrance-label" htmlFor="password">
+          <label className={style.entranceLabel} htmlFor="password">
             password
           </label>
           <input
-            className="entrance-input"
+            className={style.entranceInput}
             id="password"
             name="password"
             type="password"
@@ -93,16 +92,16 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button
-            className="entrance-button"
+            className={style.entranceButton}
             type="submit"
             onSubmit={handleSubmit}
           >
             Log In
           </button>
         </form>
-        <span className="entrance-span">
+        <span className={style.entranceSpan}>
           Don't have an account?
-          <a className="entrance-a" href={`/register`}>
+          <a className={style.entranceA} href={`/register`}>
             Create one
           </a>
         </span>

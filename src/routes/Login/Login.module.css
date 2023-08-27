@@ -16,7 +16,7 @@
     margin-bottom: 7px;
 }
 
-span {
+.entranceSpan {
     margin-bottom: 13px;
     text-transform: capitalize;
     color: #585858;
@@ -28,7 +28,7 @@ span {
     letter-spacing: 0.45px;
 }
 
-label {
+.entranceLabel {
     display: block;
     margin-bottom: 9px;
     color: #0B0502;
@@ -41,7 +41,7 @@ label {
     letter-spacing: 0.26px;
 }
 
-input {
+.entranceInput {
     display: block;
     margin-bottom: 15px;
     width: 319px;
@@ -63,7 +63,7 @@ input {
     letter-spacing: 0.45px;
 }
 
-button {
+.entranceButton {
     margin: 30px 0 20px 0;
     width: 319px;
     height: 46px;
@@ -80,7 +80,7 @@ button {
     line-height: normal;
 }
 
-a {
+.entranceA {
     margin-left: 10px;
     color: #2564CF;
     font-family: Inter;
@@ -99,10 +99,10 @@ a {
     align-items: center;
 }
 
-button {
+.entranceButton {
     transition: transform 0.3s ease-in-out;
 }
 
-button:hover {
+.entranceButton:hover {
     transform: scale(1.02);
 }

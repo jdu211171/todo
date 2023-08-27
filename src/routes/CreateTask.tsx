@@ -125,7 +125,7 @@ const CreateTask: React.FC = () => {
       <div className="task-create-options" style={{ display: "flex", flexDirection: "column", }}>
         <button style={{ border: "none", backgroundColor: "white", fontSize: "16px", color: "#0D6EFD" }} type="reset">Reset</button>
         <button style={{ border: "none", backgroundColor: "white", fontSize: "16px", color: "#DC3545" }}>Delete</button>
-        <a style={{ alignSelf: "flex-end" }} href="https://www.google.com" className="btnLocal"><i className="fa-solid fa-plus"></i>Add Task</a>
+        <a style={{ alignSelf: "flex-end" }} href="https://www.google.com" className="btnLocal">Add Task</a>
       </div>
     </div>
   );

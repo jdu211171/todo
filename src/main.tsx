@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom'
 import './index.css'
 import Root from './routes/root'
-import ErrorPage from './ErrorPage'
+import ErrorPage from './htmlAssets/ErrorPage/ErrorPage'
 import All from './routes/All/all'
 import { PrivateRoute } from './PrivateRoute'
 import Login from './routes/Login/Login'
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element:<Root />,
-    // errorElement: <ErrorPage message='Page Not Found!' />,
+    errorElement: <ErrorPage message='Page Not Found!' />,
     children: [
       {
         path: '/',

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import all from './all.module.css';
 import '../general.css';
 
-import App from '../filters/filter';
+import App from '../../htmlAssets/Select/Select';
 import Button from '../filters/createButton';
 import Tasks from './task/task';
 import axios from 'axios';

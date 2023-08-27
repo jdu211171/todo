@@ -33,7 +33,6 @@
 @media (max-width: 768px) {
   .taskTitDesc {
     flex: 100%;
-    background-color: red;
   }
   .taskPrCtRep {
     flex: 100%;

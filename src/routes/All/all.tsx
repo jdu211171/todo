@@ -11,13 +11,14 @@ import * as qs from "qs";
 
 async function fetchTaskData() {
   const data = qs.stringify({});
+  const token = localStorage.getItem('token');
   const config = {
     method: "get",
     maxBodyLength: Infinity,
     url: "http://localhost:3001/upcoming",
     headers: {
       Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE2OTMxNTIwMzcsImV4cCI6MTY5MzQxMTIzN30.pt03dtbU4uMFSWl49ErrY2G6krygjYg8nDgJlNpDxDA",
+        "Bearer " + token,
     },
     data: data,
   };

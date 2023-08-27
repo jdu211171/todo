@@ -4,7 +4,6 @@ import st from './task.module.css';
 
 // import './taskT.module.css';
 export default function Tasks({ taskdata }: any) {
-    console.log(taskdata)
   const formatDeadline = (deadline:any) => {
     const date = new Date(deadline);
     const formattedDate = `${date.getFullYear()}:${(date.getMonth() + 1)

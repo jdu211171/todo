@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import st from "./createTask.module.css";
-
-import './dateinput.css'
-
-// Boxicons CSS
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import "@fontawesome/fontawesome-free/css/all.css";
+import axios from "axios";
+import * as qs from "qs";
 
 interface Task {
   title: string;
@@ -20,9 +16,9 @@ const CreateTask: React.FC = () => {
   const [task, setTask] = useState<Task>({
     title: "",
     description: "",
-    priority: "ordinary",
+    priority: "High",
     category: "fitness",
-    repetition: "weekly",
+    repetition: "onetime",
     days: ["monday"],
   });
 
@@ -47,10 +43,40 @@ const CreateTask: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const AddTask = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(task);
+    const date = new Date().toJSON().slice(0, 10);
+    console.log(date);
     // Add task to database or state
+    let data = qs.stringify({
+      taskName: task.title,
+      categoryName: task.category,
+      description: task.description,
+      priority: task.priority,
+      deadline: date,
+    });
+    console.log(data);
+    // return 0;
+    const token = localStorage.getItem("token");
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "http://localhost:3001/api/task",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: "Bearer " + token,
+      },
+      data: data,
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -72,7 +98,14 @@ const CreateTask: React.FC = () => {
               />
             </svg>
             <div className="input-data">
-              <input type="text" required autoFocus />
+              <input
+                name="title"
+                value={task.title}
+                onChange={handleInputChange}
+                type="text"
+                required
+                autoFocus
+              />
               <div className="underline"></div>
               <label>Enter a task title</label>
             </div>
@@ -82,9 +115,11 @@ const CreateTask: React.FC = () => {
         <div className="task-description">
           <div>
             <textarea
-              name=""
-              id=""
+              name="description"
+              id="description"
               placeholder="Enter task description"
+              value={task.description}
+              onChange={handleInputChange}
             ></textarea>
           </div>
         </div>
@@ -93,49 +128,48 @@ const CreateTask: React.FC = () => {
       <div className={st.taskPrCtRep}>
         <div className={st.optionsBox}>
           <label htmlFor="task-priority">Task Priority</label>
-          <select className="form-select" id="task-priority">
-            <option value="ordinary" selected>
-              Ordinary
+          <select
+            value={task.priority}
+            className="form-select"
+            id="task-priority"
+            name="priority"
+            onChange={handleInputChange}
+          >
+            <option value="ordinary">High</option>
+            <option value="important" selected>
+              Medium
             </option>
-            <option value="important">Important</option>
-            <option value="critical">Critical</option>
+            <option value="critical">Low</option>
           </select>
 
           <label htmlFor="task-category">Task Category</label>
-          <select className="form-select" id="task-priority">
-            <option value="ordinary" selected>
-              Fitness
-            </option>
-            <option value="important">Important</option>
-            <option value="critical">Critical</option>
+          <select
+            className="form-select"
+            id="task-category"
+            name="category"
+            value={task.category}
+            onChange={handleInputChange}
+          >
+            <option value="fitness">Fitness</option>
+            <option value="work">Work</option>
+            <option value="study">Study</option>
           </select>
         </div>
         <div className={st.optionsBox}>
-          <span className="datepicker-toggle">
-            <span className="datepicker-toggle-button"></span>
-            <input type="date" className="datepicker-input" />
-          </span>
           <label htmlFor="task-category">Task Repetition</label>
-          <select className="form-select" id="task-priority">
-            <option value="ordinary" selected>
-              One time only
-            </option>
-            <option value="important">Daily</option>
-            <option value="critical">Weekly</option>
-          </select>
-
-          <div
-            className="days-of-week"
-            style={{ display: "block", flex: "left" }}
+          <select
+            className="form-select"
+            id="task-repetition"
+            name="repetition"
+            value={task.repetition}
+            onChange={handleInputChange}
           >
-            {/* <input type="checkbox" name="" id="monday" /><label htmlFor="monday">Mon</label>
-          <input type="checkbox" name="" id="monday" /><label htmlFor="monday">Mon</label>
-          <input type="checkbox" name="" id="monday" /><label htmlFor="monday">Mon</label>
-          <input type="checkbox" name="" id="monday" /><label htmlFor="monday">Mon</label>
-          <input type="checkbox" name="" id="monday" /><label htmlFor="monday">Mon</label>
-          <input type="checkbox" name="" id="monday" /><label htmlFor="monday">Mon</label>
-          <input type="checkbox" name="" id="monday" /><label htmlFor="monday">Mon</label> */}
-          </div>
+            <option value="onetime">One time only</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+          </select>
+          {/* Other options */}
+          {/* ... */}
         </div>
       </div>
 
@@ -166,7 +200,7 @@ const CreateTask: React.FC = () => {
         </button>
         <a
           style={{ alignSelf: "flex-end" }}
-          href="https://www.google.com"
+          onClick={AddTask}
           className="btnLocal"
         >
           Add Task

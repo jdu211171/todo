@@ -12,7 +12,7 @@ import { PrivateRoute } from './PrivateRoute'
 import Login from './routes/Login/Login'
 import Register from './routes/Register/Register'
 import Sidebar from './test'
-import CreateTask from './routes/CreateTask'
+import CreateTask from './htmlAssets/CreateTask/CreateTask'
 
 const router = createBrowserRouter([
   {

@@ -1,6 +1,35 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap");
 
 /* classes that are actually used */
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+  margin: 5px;
+}
+
+.createTaskContainer {
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 70%;
+  margin: auto;
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  gap: 1em;
+}
+
+.taskTitle {
+  flex-direction: column;
+  align-items: center;
+  row-gap: 30px;
+}
 
 .wrapper {
   display: flex;
@@ -9,28 +38,26 @@
   gap: 1em;
 }
 
-.wrapper .input-data {
+.wrapper .inputData {
   height: 40px;
   width: 100%;
   position: relative;
 }
 
-.wrapper .input-data input {
+.wrapper .inputData .input {
   height: 100%;
   width: 100%;
   border: none;
-  /* font-size: 17px; */
   outline: none;
 }
 
-.input-data input:focus ~ label,
-.input-data input:valid ~ label {
+.inputData .input:focus ~ .label,
+.inputData .input:valid ~ .label {
   transform: translateY(-20px);
-  /* font-size: 15px; */
   color: #4158d0;
 }
 
-.wrapper .input-data label {
+.wrapper .inputData .label {
   position: absolute;
   bottom: 10px;
   left: 0;
@@ -39,14 +66,14 @@
   transition: all 0.3s ease;
 }
 
-.input-data .underline {
+.inputData .underline {
   position: absolute;
   height: 2px;
   width: 100%;
   bottom: 0;
 }
 
-.input-data .underline:before {
+.inputData .underline:before {
   position: absolute;
   content: "";
   height: 100%;
@@ -57,19 +84,19 @@
   transition: transform 0.3s ease;
 }
 
-.input-data input:focus ~ .underline:before,
-.input-data input:valid ~ .underline:before {
+.inputData .input:focus ~ .underline:before,
+.inputData .input:valid ~ .underline:before {
   transform: scaleX(1);
 }
 
-textarea {
+.textarea {
   padding: 5px;
   outline: none;
   width: 100%;
   min-height: 80px;
 }
 
-.task-description {
+.taskDescription {
   margin-top: 10px;
   font-family: "Poppins", sans-serif;
 }
@@ -88,12 +115,12 @@ textarea {
   background: #f2f2f2;
 }
 
-.option i {
+.option .i {
   font-size: 25px;
   margin-right: 12px;
 }
 
-.option .option-text {
+.option .optionText {
   font-size: 18px;
   color: #333;
 }
@@ -104,13 +131,11 @@ textarea {
 }
 
 /* Remove default appearance */
-.form-select option {
+
+.formSelect {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-}
-
-.form-select {
   outline: none;
   padding: 10px;
   background-color: lightblue;
@@ -126,79 +151,44 @@ textarea {
   display: block;
   margin-bottom: 10px;
   font-size: 16px;
+  border: 1px solid black;
 }
 
-select option {
+.formSelect:active {
+  border: 1px solid #4158d0;
+}
+
+
+.select .option {
   padding: 10px;
   background-color: white;
 }
 
-label#task-priority {
-  display: block;
-  max-width: 100%;
-  font-weight: 700;
-}
-
-.task-details-form {
+.taskDetailsForm {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-}
-
-.custom-select {
-  position: relative;
-  padding: 10px 10px 10px 0;
-  background-color: lightblue;
-  font-family: Arial, sans-serif;
-  height: 40px;
-  background: #fff;
-  height: 18px;
-  border-radius: 4px;
-  cursor: pointer;
-  display: block;
-  border: 1px solid grey;
-}
-
-.selected-options {
-  /* padding: 10px; */
-  cursor: pointer;
-}
-
-.options-container {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  display: none;
-  background-color: white;
-  border: 1px solid black;
 }
 
 .option {
   padding: 10px;
 }
 
-.option input {
-  display: none;
-}
-
-.option label {
+.option .label {
   cursor: pointer;
 }
 
 /* btn design */
 .btnLocal {
-  display: flex;
-  align-items: center;
+  display: inline-block;
   font-family: "Tajawal", sans-serif;
-  font-size: 16px;
-  font-weight: 450;
-  background: #2564cf;
-  width: 100%;
-  height: 14px;
-  padding: 25px;
+  font-size: 1rem;
   text-align: center;
   text-decoration: none;
+  background-color: #2564cf;
+  width: fit-content;
+  height: fit-content;
+  padding: 20px;
   color: #ffffff;
   border-radius: 5px;
   cursor: pointer;
@@ -208,15 +198,13 @@ label#task-priority {
   -webkit-transition-property: box-shadow, transform;
   transition-property: box-shadow, transform;
 }
-
 .btnLocal:hover,
 .btnLocal:focus,
 .btnLocal:active {
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   -webkit-transform: scale(1.1);
-  transform: scale(1.1);
+  transform: scale(1.02);
 }
-
-.task-create-options {
+.taskCreateOptions {
   justify-content: space-around;
 }

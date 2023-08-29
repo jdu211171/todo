@@ -302,3 +302,20 @@ body.dark .switch::before {
 .bottom-content {
   padding-bottom: 25px;
 }
+
+
+.content {
+  display: block;
+  margin-left: 250px;
+  transition: var(--tran-05);
+}
+@media only screen and (max-width: 600px) {
+  .sidebar {
+    margin-left: -250px;
+  }
+  .content {
+    margin-left: 0;
+  }
+}
+
+

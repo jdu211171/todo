@@ -8,11 +8,7 @@
     box-sizing: border-box;
 } */
 
-.content {
-  display: block;
-  margin-left: 265px;
-  /* border: 1px solid black; */
-}
+
 
 .top {
   /* display: flex; */
@@ -23,7 +19,7 @@
   /* line-height: normal; */
   padding: 20px;
   /* border: 1px solid black; */
-  height: 150px;
+  /* height: 120px; */
 }
 
 .CreateTask {
@@ -39,3 +35,8 @@ h1 {
   display: flex;
   gap: 10px;
 }
+
+
+/* div {
+  border:  1px solid black;
+} */

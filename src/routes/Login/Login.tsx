@@ -60,7 +60,7 @@ function Login() {
   };
 
   return (
-    <div className={style.container}>
+    <div className={style.container + ' ' + style.container} >
 
       <div className={style.form}>
         <span className={style.title}>Login to Account</span>

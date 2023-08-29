@@ -5,9 +5,9 @@ import "../general.css";
 import App from "../../htmlAssets/Select/Select";
 import Button from "../filters/createButton";
 import Tasks from "./task/task";
-import CreateTask from "./createTask/CreateTask";
 import axios from "axios";
 import * as qs from "qs";
+import CreateTask from "../../htmlAssets/CreateTask/CreateTask";
 
 async function fetchTaskData() {
   const data = qs.stringify({});

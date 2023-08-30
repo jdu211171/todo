@@ -2,7 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   margin: 25px;
 }
 
@@ -49,7 +49,7 @@
 
 .categoryName {
   font-weight: 800;
-  font-size: 1.8em;
+  font-size: 1.3em;
 }
 
 .categoryCount {

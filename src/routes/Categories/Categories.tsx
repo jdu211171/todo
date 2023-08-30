@@ -4,21 +4,19 @@ import Button from "../filters/createButton";
 import st from "./categories.module.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClipboard, faThumbtack } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import * as qs from "qs";
-import { faClipboard, faThumbtack } from "@fortawesome/free-solid-svg-icons";
 
-async function fetchTaskData() {
-  const data = qs.stringify({});
+async function fetchCategories() {
   const token = localStorage.getItem("token");
-  const config = {
+  let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: "http://localhost:3001/upcoming",
+    url: "http://" + window.location.hostname + ":3001/api/categories",
     headers: {
       Authorization: "Bearer " + token,
     },
-    data: data,
   };
 
   try {
@@ -31,23 +29,30 @@ async function fetchTaskData() {
 }
 
 export default function Categories() {
-  const [taskdata, setTaskdata] = useState([]);
-
+  const [categories, setCategories] = useState([]);
+  console.log(categories)
   useEffect(() => {
-    fetchTaskData()
+    fetchCategories()
       .then((data) => {
-        setTaskdata(data);
+        setCategories(data);
       })
       .catch((error) => {
         // Handle error if needed
       });
   }, []);
 
+  const CategoryComponents = categories.map((category) => (
+    <div className={st.categoryFolders} key={category.CategoryID}>
+      <FontAwesomeIcon icon={faThumbtack} className={st.icon} />
+      <div className={st.categoryName}>{category.CategoryName}</div>
+      <div className={st.categoryCount}>12</div>
+    </div>
+  ));
+
   return (
     <div className="content">
       <div className="top">
         <h1>All tasks</h1>
-
         <div className="filters">
           <div className="allbuttons">
             <Button />
@@ -56,20 +61,16 @@ export default function Categories() {
       </div>
 
       <div className={st.categoryBox}>
+        {/* this is just for design */}
         <div className={st.categoryFolders}>
           <FontAwesomeIcon icon={faThumbtack} className={st.icon} />
           <div className={st.categoryName}>All</div>
           <div className={st.categoryCount}>12</div>
         </div>
-        <div className={st.categoryFolders}>1</div>
-        <div className={st.categoryFolders}>1</div>
-        <div className={st.categoryFolders}>1</div>
-        <div className={st.categoryFolders}>1</div>
-        <div className={st.categoryFolders}>1</div>
-        <div className={st.categoryFolders}>1</div>
-        <div className={st.categoryFolders}>1</div>
-        <div className={st.categoryFolders}>1</div>
-        <div className={st.categoryFolders}>1</div>
+         {/* this is just for design */}
+
+
+        {CategoryComponents}
 
         <div className={st.categoryFoldersBlank}></div>
         <div className={st.categoryFoldersBlank}></div>

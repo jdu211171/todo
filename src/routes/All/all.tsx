@@ -15,7 +15,7 @@ async function fetchTaskData() {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: "http://localhost:3001/upcoming",
+    url: "http://" + window.location.hostname + ":3001/upcoming",
     headers: {
       Authorization:
         "Bearer " + token,

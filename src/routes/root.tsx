@@ -6,6 +6,7 @@ import { faList, faCalendarDay, faRotateRight, faThumbsUp, faBoxOpen, faTrashCan
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CurrentDate from "../Date";
 import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
 
 // Define the props type for the component
 type DashboardSideBarMenuProps = {
@@ -14,7 +15,13 @@ type DashboardSideBarMenuProps = {
 
 // Create a component that renders the JSX
 function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
-    // You can add any state or logic here if needed
+
+    type ClickEvent = React.MouseEvent<HTMLDivElement>;
+    function handleClick(event: ClickEvent) {
+        event.preventDefault();
+        const sidebar: HTMLElement = document.querySelector('.sidebar') as HTMLElement;
+        sidebar.classList.toggle('close');
+    }
 
     return (
         <main className="whole-page container-fluid">
@@ -23,7 +30,6 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
                 <header>
                     <div className="image-text">
                         <span className="image">
-                            {/* Use the src attribute to import the image */}
                             <img src={logo} alt="logo" />
                         </span>
                         <div className="text header-text">
@@ -31,17 +37,18 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
                             <span className="profession noselect">Always On Time</span>
                         </div>
                     </div>
+                    <div className="toggle cursor" onClick={handleClick}>
+                        <FontAwesomeIcon icon={faCircleChevronRight} />
 
-                    {/* Use the FontAwesomeIcon component to render the icons */}
-                    <FontAwesomeIcon icon={faCircleChevronRight} className="toggle cursor" />
+                    </div>
                 </header>
                 <div className="menu-bar">
                     <div className="menu">
                         {/* Uncomment this section if you want to add a search box */}
                         {/*<li className="search-box">
-                    <FontAwesomeIcon icon={faSearch} className="icon" />
-                    <input type="search" placeholder="Search..." />
-                </li>*/}
+    <FontAwesomeIcon icon={faSearch} className="icon" />
+    <input type="search" placeholder="Search..." />
+</li>*/}
                         <CurrentDate />
                         <ul className="menu-links">
                             <li className="nav-link">
@@ -118,5 +125,6 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
         </main>
     );
 }
+
 
 export default DashboardSideBarMenu; // Export the component

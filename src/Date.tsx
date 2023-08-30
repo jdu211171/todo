@@ -6,7 +6,7 @@ const CurrentDate = () => {
   const today = moment().format('dddd, MMMM D');
 
   // Return a JSX element that renders the date
-  return <div className='today'>{today}</div>;
+  return <div className='today text nav-text'>{today}</div>;
 };
 
 // Export the component

@@ -11,6 +11,7 @@ import All from './routes/All/all'
 import Login from './routes/Login/Login'
 import Register from './routes/Register/Register'
 import CreateTask from './htmlAssets/CreateTask/CreateTask'
+import Categories from "./routes/Categories/Categories";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
         path: '/',
         element:  <All />,
       },
+      {
+        path: '/categories',
+        element:  <Categories />
+      }
     ],
   },
 

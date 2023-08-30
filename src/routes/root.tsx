@@ -52,7 +52,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
                         <CurrentDate />
                         <ul className="menu-links">
                             <li className="nav-link">
-                                <a href={`/all`}>
+                                <a href={`/`}>
                                     <FontAwesomeIcon icon={faList} className="icon" />
                                     <span className="text nav-text">All Tasks</span>
                                 </a>
@@ -88,9 +88,9 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
                                 </a>
                             </li>
                             <li className="nav-link">
-                                <a href="#">
+                                <a href="/categories">
                                     <FontAwesomeIcon icon={faFolderPlus} className="icon" id="addCategoryIcon" />
-                                    <span className="text nav-text addCategory" id="addCategoryText">Create Category</span>
+                                    <span className="text nav-text addCategory" id="addCategoryText">Categories</span>
                                 </a>
                             </li>
                         </ul>

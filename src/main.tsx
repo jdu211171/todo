@@ -42,7 +42,11 @@ const router = createBrowserRouter([
 
   {
     path: '/test',
-    element: <Task />,
+    element: <Task taskTitle={''} taskCategory={''} taskDeadline={''} taskPriority={''} handleChange={function (): void {
+      throw new Error('Function not implemented.')
+    } } handleDelete={function (): void {
+      throw new Error('Function not implemented.')
+    } } />,
   }
 ]);
 

@@ -3,35 +3,47 @@ import styles from "./Task.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
 
-const Task: React.FC = () => {
-    function expandTask(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-        const target = event.target as HTMLElement;
-        const parentDiv = target.closest('.actions') as HTMLElement;
+interface TaskProps {
+    taskTitle: string;
+    taskCategory: string;
+    taskDeadline: string;
+    taskPriority: string;
+    handleChange: () => void;
+    handleDelete: () => void;
+}
 
-        if (parentDiv) {
-            const checkbox = parentDiv.querySelector('input[type="checkbox"]') as HTMLInputElement;
+const Task: React.FC<TaskProps> = (props: TaskProps) => {
 
-            if (checkbox) {
-                if (checkbox.checked) {
-                    // checkbox.setAttribute('checked', 'false');
-                    checkbox.classList.remove('details')
-                } else {
-                    // checkbox.setAttribute('checked', 'true');
-                }
-            }
-        }
-    }
+    const {
+        taskTitle,
+        taskCategory,
+        taskDeadline,
+        taskPriority,
+        handleChange,
+        handleDelete
+    } = props;
 
     return (
         <ul className={styles.accordion}>
             <li>
-                <input type="checkbox" name="accordion" id="first" />
-                {/* <FontAwesomeIcon icon={faCircle} style={{color: "#151515",}} /> */}
-                <label htmlFor="first">Products</label>
-                <div className={styles.content}>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur 			adipiscing elit. Suspendisse maximus nisl tortor. In vitae sem in orci gravida semper. Aliquam maximus ullamcorper ligula vel vehicula. Nunc tincidunt mattis metus sed fermentum. Pellentesque gravida interdum ligula pulvinar eleifend. Maecenas sit amet turpis metus.
-                    </p>
+                <FontAwesomeIcon className={styles.icon} icon={faCircle} style={{ color: "#151515", }} />
+                <div className={styles.container}>
+                    <p className={styles.taskTitle}>{taskTitle}</p>
+                    <input type="checkbox" name="accordion" id="first" />
+                    <label style={{}} htmlFor="first">Details</label>
+                    <div className={styles.content}>
+                        <div className={styles.info}>
+                            <p className={styles.span}>Category: {taskCategory}</p>
+                            <p className={styles.span}>Deadline: {taskDeadline}</p>
+                            <span className={styles.span}>Importance: {taskPriority}</span>
+                        </div>
+                        <div className={styles.info1}>
+                        </div>
+                        <div className={styles.option}>
+                            <button className={styles.button} style={{ color: "blue" }} onClick={handleChange}>Change</button>
+                            <button className={styles.button} style={{ color: "red" }} onClick={handleDelete}>Delete</button>
+                        </div>
+                    </div>
                 </div>
             </li>
         </ul>

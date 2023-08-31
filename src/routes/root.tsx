@@ -109,15 +109,6 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
                             </div>
                             <span className="mode-text text">Dark Mode</span>
                         </li>
-                        {/* Use a custom component to render the toggle switch */}
-                        {/* You can define the logic and style for this component in another file */}
-                        {/* You can also pass props to this component if needed */}
-                        {/* For example, you can pass a prop called mode that indicates the current mode (dark or light) */}
-                        {/* You can also pass a prop called onToggle that is a function that handles the toggle event */}
-                        {/* For simplicity, I will just use a placeholder component name here */}
-                        {/* You can replace it with your own component name and import it at the top */}
-                        {/* You can also remove the comment lines if you want */}
-                        {/*<ToggleSwitch mode={mode} onToggle={onToggle} />*/}
                     </div>
                 </div>
             </nav>

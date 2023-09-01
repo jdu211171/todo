@@ -2,7 +2,7 @@ import "./style.css";
 import logo from './logo.png'
 
 // Import the font awesome icons
-import { faList, faCalendarDay, faRotateRight, faThumbsUp, faBoxOpen, faTrashCan, faCircleChevronRight, faRightFromBracket, faMoon, faSun, faFolderPlus } from "@fortawesome/free-solid-svg-icons";
+import { faList, faCalendarDay, faRotateRight, faThumbsUp, faBoxOpen, faTrashCan, faCircleChevronRight, faRightFromBracket, faMoon, faSun, faFolderPlus, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CurrentDate from "../Date";
 import { Outlet } from "react-router-dom";
@@ -38,7 +38,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
                         </div>
                     </div>
                     <div className="toggle cursor" onClick={handleClick}>
-                        <FontAwesomeIcon icon={faCircleChevronRight} />
+                        <FontAwesomeIcon icon={faChevronLeft} />
 
                     </div>
                 </header>

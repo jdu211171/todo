@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboard, faThumbtack } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import * as qs from "qs";
+import CreateCategory from "./CreateCategory";
 
 async function fetchCategories() {
   const token = localStorage.getItem("token");
@@ -61,6 +62,7 @@ export default function Categories() {
       </div>
 
       <div className={st.categoryBox}>
+        <CreateCategory />
         {/* this is just for design */}
         <div className={st.categoryFolders}>
           <FontAwesomeIcon icon={faThumbtack} className={st.icon} />

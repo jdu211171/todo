@@ -14,6 +14,7 @@ import CreateTask from './htmlAssets/CreateTask/CreateTask'
 import Categories from "./routes/Categories/Categories";
 import Tasks from './routes/All/task/task'
 import Task from './htmlAssets/Task/Task'
+import CreateCategory from './routes/Categories/CreateCategory'
 
 const router = createBrowserRouter([
   {
@@ -41,12 +42,17 @@ const router = createBrowserRouter([
   },
 
   {
-    path: '/test',
+    path: '/task',
     element: <Task taskTitle={'Write essay about Shakespear\'s life and literature'} taskCategory={'School and Education'} taskDeadline={'February 14th'} taskPriority={'Ordinary'} handleChange={function (): void {
       throw new Error('Function not implemented.')
     } } handleDelete={function (): void {
       throw new Error('Function not implemented.')
     } } />,
+  },
+
+  {
+    path: '/category',
+    element: <CreateCategory />
   }
 ]);
 

@@ -34,6 +34,19 @@ async function fetchTaskData() {
 export default function All() {
   const [taskdata, setTaskdata] = useState([]);
 
+  // Function to update the taskdata state
+  const updateTaskData = () => {
+
+    // Fetch the latest data when a new task is created
+    fetchTaskData()
+      .then((data) => {
+        setTaskdata(data);
+      })
+      .catch((error) => {
+        // Handle error if needed
+      });
+  };
+
   useEffect(() => {
     fetchTaskData()
       .then((data) => {
@@ -61,8 +74,12 @@ export default function All() {
         </div>
       </div>
       <div className="CreateTask">
-        <CreateTask />
+        {/* Pass the updateTaskData function as a prop to CreateTask */}
+        <CreateTask updateTaskData={updateTaskData} />
       </div>
+      {/* <div className="CreateTaskBtn">
+        
+      </div> */}
       <div className={all.TaskContainer}>
         <Tasks taskdata={taskdata} />
       </div>

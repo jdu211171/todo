@@ -8,8 +8,6 @@
     box-sizing: border-box;
 } */
 
-
-
 .top {
   /* display: flex; */
   /* align-items: baseline; */
@@ -23,7 +21,21 @@
 }
 
 .CreateTask {
-  padding: 20px 0 20px 16px;
+  overflow: hidden;
+}
+
+.CreateTaskBtn {
+  width: 40px;
+  border-bottom: 2px solid black;
+  margin: auto;
+}
+
+.CreateTaskBtn::after {
+  display: inline-block;
+  position: relative;
+  content: "_";
+
+  /* border-bottom: 2px solid black; */
 }
 
 h1 {

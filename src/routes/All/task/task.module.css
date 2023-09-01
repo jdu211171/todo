@@ -39,9 +39,11 @@
 .critical::after {
   content: "\25CF"; /* Unicode character escape sequence */
   color: red;
+  font-size: 1.5em;
   margin-right: 5px;
   position: absolute;
   right: 8%;
+  top: -5px;
 }
 
 .title {

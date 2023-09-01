@@ -59,3 +59,18 @@
 .categoryCount::after {
   content: "タスク";
 }
+
+.createCategory {
+  font-weight: 800;
+  font-size: 1em;
+}
+
+.input {
+  appearance: none;
+  border: none;
+  outline: none;
+  background-color: white;
+  font-size: 1rem;
+  width: 90%;
+  
+}

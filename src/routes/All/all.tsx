@@ -7,18 +7,17 @@ import Button from "../filters/createButton";
 import Tasks from "./task/task";
 import axios from "axios";
 import * as qs from "qs";
-import CreateTask from "../../htmlAssets/CreateTask/CreateTask";
+import CreateTask from "./createTask/CreateTask";
 
 async function fetchTaskData() {
   const data = qs.stringify({});
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const config = {
     method: "get",
     maxBodyLength: Infinity,
     url: "http://" + window.location.hostname + ":3001/upcoming",
     headers: {
-      Authorization:
-        "Bearer " + token,
+      Authorization: "Bearer " + token,
     },
     data: data,
   };
@@ -56,13 +55,13 @@ export default function All() {
           <App />
           <App />
           {/* <Test/> */}
-          <div className="allbuttons">
+          <div className="CreateButton">
             <Button />
           </div>
         </div>
       </div>
       <div className="CreateTask">
-        <CreateTask taskCategory={["Fitness and Gym", "Family and Relationship"]} />
+        <CreateTask />
       </div>
       <div className={all.TaskContainer}>
         <Tasks taskdata={taskdata} />

@@ -15,8 +15,8 @@ export default function Tasks({ taskdata }: any) {
     return formattedDate;
   };
 
-  const TaskItems = taskdata.map((taskdatas: any) => (
-    <div>
+  const TaskItems = taskdata.map((taskdatas: any, index:number) => (
+    <div key={index}>
       <span className={st.taskFold + " " + st.critical}>
         {taskdatas.CategoryName}
       </span>

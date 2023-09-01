@@ -23,7 +23,7 @@
 }
 
 .CreateTask {
-  padding: 20px;
+  padding: 20px 0 20px 16px;
 }
 
 h1 {
@@ -36,6 +36,9 @@ h1 {
   gap: 10px;
 }
 
+label {
+  white-space: nowrap;
+}
 
 /* div {
   border:  1px solid black;

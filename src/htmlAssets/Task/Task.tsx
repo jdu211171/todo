@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./Task.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle, faCircleCheck } from "@fortawesome/free-regular-svg-icons";
+import { stat } from "fs";
 
 interface TaskProps {
     taskTitle: string;
@@ -27,6 +28,7 @@ const Task: React.FC<TaskProps> = (props: TaskProps) => {
 
     // Use a state variable to store the icon state
     const [icon, setIcon] = useState(faCircle);
+    const [status, setStatus] = useState(taskPriority);
 
     // Use another state variable to store the class name of the <p> tag
     const [className, setClassName] = useState(styles.taskTitle);
@@ -37,14 +39,18 @@ const Task: React.FC<TaskProps> = (props: TaskProps) => {
             setIcon(faCircleCheck);
             // Add the .done class to the class name
             setClassName(styles.taskTitle + " " + styles.done);
+            setStatus("Complete");
         } else {
             setIcon(faCircle);
             // Remove the .done class from the class name
             setClassName(styles.taskTitle);
+            setStatus(taskPriority);
         }
         // Call the handleDone prop if it is defined
         handleDone && handleDone();
     }
+
+    
 
     return (
         <ul className={styles.accordion}>
@@ -60,7 +66,7 @@ const Task: React.FC<TaskProps> = (props: TaskProps) => {
                         <div className={styles.info}>
                             <p className={styles.span}>Category: {taskCategory}</p>
                             <p className={styles.span}>Deadline: {taskDeadline}</p>
-                            <span className={styles.span}>Importance: {taskPriority}</span>
+                            <span className={styles.span}>Importance: {status}</span>
                         </div>
                         <div className={styles.info1}>
                         </div>

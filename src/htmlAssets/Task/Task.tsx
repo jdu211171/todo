@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Task.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle } from "@fortawesome/free-regular-svg-icons";
+import { faCircle, faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 
 interface TaskProps {
     taskTitle: string;
@@ -10,6 +10,7 @@ interface TaskProps {
     taskPriority: string;
     handleChange: () => void;
     handleDelete: () => void;
+    handleDone?: () => void;
 }
 
 const Task: React.FC<TaskProps> = (props: TaskProps) => {
@@ -20,15 +21,39 @@ const Task: React.FC<TaskProps> = (props: TaskProps) => {
         taskDeadline,
         taskPriority,
         handleChange,
-        handleDelete
+        handleDelete,
+        handleDone,
     } = props;
+
+    // Use a state variable to store the icon state
+    const [icon, setIcon] = useState(faCircle);
+
+    // Use another state variable to store the class name of the <p> tag
+    const [className, setClassName] = useState(styles.taskTitle);
+
+    // Define a function to toggle the icon state and the class name
+    const toggleIcon = () => {
+        if (icon === faCircle) {
+            setIcon(faCircleCheck);
+            // Add the .done class to the class name
+            setClassName(styles.taskTitle + " " + styles.done);
+        } else {
+            setIcon(faCircle);
+            // Remove the .done class from the class name
+            setClassName(styles.taskTitle);
+        }
+        // Call the handleDone prop if it is defined
+        handleDone && handleDone();
+    }
 
     return (
         <ul className={styles.accordion}>
             <li>
-                <FontAwesomeIcon className={styles.icon} icon={faCircle} style={{ color: "#151515", }} />
+                {/* Use a conditional rendering to show the icon based on the state */}
+                <FontAwesomeIcon className={styles.icon} icon={icon} style={{ color: "#151515", }} onClick={toggleIcon} />
                 <div className={styles.container}>
-                    <p className={styles.taskTitle}>{taskTitle}</p>
+                    {/* Use the class name in the <p> tag */}
+                    <p className={className}>{taskTitle}</p>
                     <input type="checkbox" name="accordion" id="first" />
                     <label style={{}} htmlFor="first">Details</label>
                     <div className={styles.content}>
@@ -48,6 +73,12 @@ const Task: React.FC<TaskProps> = (props: TaskProps) => {
             </li>
         </ul>
     );
+}
+
+Task.defaultProps = {
+    handleDone: () => {
+        console.log("Task is done");
+    }
 }
 
 export default Task;

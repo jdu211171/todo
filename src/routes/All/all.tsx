@@ -52,9 +52,9 @@ export default function All() {
 
         <div className="filters">
           {/* <div>Importance</div> */}
-          <App placeholder="Importance: All" />
-          <App placeholder="Category: All" />
-          <App placeholder="By Date: All" />
+          <App />
+          <App />
+          <App />
           {/* <Test/> */}
           <div className="allbuttons">
             <Button />
@@ -62,7 +62,7 @@ export default function All() {
         </div>
       </div>
       <div className="CreateTask">
-        <CreateTask />
+        <CreateTask taskCategory={["Fitness and Gym", "Family and Relationship"]} />
       </div>
       <div className={all.TaskContainer}>
         <Tasks taskdata={taskdata} />

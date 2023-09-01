@@ -42,7 +42,7 @@ const router = createBrowserRouter([
 
   {
     path: '/test',
-    element: <Task taskTitle={''} taskCategory={''} taskDeadline={''} taskPriority={''} handleChange={function (): void {
+    element: <Task taskTitle={'Write essay about Shakespear\'s life and literature'} taskCategory={'School and Education'} taskDeadline={'February 14th'} taskPriority={'Ordinary'} handleChange={function (): void {
       throw new Error('Function not implemented.')
     } } handleDelete={function (): void {
       throw new Error('Function not implemented.')

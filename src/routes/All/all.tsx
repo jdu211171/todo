@@ -15,7 +15,7 @@ async function fetchTaskData() {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: "http://" + window.location.hostname + ":3001/upcoming",
+    url: "http://" + window.location.hostname + ":3001/api/all",
     headers: {
       Authorization: "Bearer " + token,
     },
@@ -32,10 +32,10 @@ async function fetchTaskData() {
 }
 
 export default function All() {
+  const [currentTaskID, setCurrentTaskID] = useState<number | null>(null);
   const [taskdata, setTaskdata] = useState([]);
   // Function to update the taskdata state
   const updateTaskData = () => {
-
     // Fetch the latest data when a new task is created
     fetchTaskData()
       .then((data) => {
@@ -44,6 +44,18 @@ export default function All() {
       .catch((error) => {
         // Handle error if needed
       });
+  };
+
+  const setUpdateData = () => {
+    console.log("triggered");
+    return;
+  };
+
+  const getUpdateData = (TaskID: number) => {
+    console.log("asd: " + currentTaskID)
+    setCurrentTaskID(TaskID); 
+    console.log("UPD: " +currentTaskID)
+    return TaskID;
   };
 
   useEffect(() => {
@@ -74,13 +86,20 @@ export default function All() {
       </div>
       <div className="CreateTask">
         {/* Pass the updateTaskData function as a prop to CreateTask */}
-        <CreateTask updateTaskData={updateTaskData} />
+        <CreateTask
+          updateTaskData={updateTaskData}
+          TaskID={currentTaskID} // Pass currentTaskID
+        />
       </div>
       {/* <div className="CreateTaskBtn">
         
       </div> */}
       <div className={all.TaskContainer}>
-        <Tasks taskdata={taskdata} updateTaskData={updateTaskData} />
+        <Tasks
+          taskdata={taskdata}
+          updateTaskData={updateTaskData}
+          getUpdateData={getUpdateData}
+        />
       </div>
     </div>
   );

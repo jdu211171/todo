@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
+import { format } from "date-fns";
 import styles from "./CreateTask.module.css";
 import axios from "axios";
 import * as qs from "qs";
@@ -9,26 +10,63 @@ interface Task {
   title: string;
   description: string;
   priority: string;
-  category: string;
+  category: number; // Change category to use number (ID)
   repetition: string;
   deadline: string;
+  TaskID: any;
+}
+
+interface Category {
+  CategoryID: number;
+  CategoryName: string;
 }
 
 interface CreateTaskProps {
   updateTaskData: (newTask: Task) => void;
+  TaskID: any;
 }
 
-const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData }) => {
+const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID }) => {
   const currentDate = new Date();
   const currentDateString = currentDate.toISOString().split("T")[0];
+  const [categories, setCategories] = useState<Category[]>([]);
+  const defaultCategory = categories.length > 0 ? categories[0].CategoryID : 0; // Use CategoryID
+
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "http://" + window.location.hostname + ":3001/api/categories",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        const fetchedCategories = response.data;
+        setCategories(fetchedCategories);
+
+        const defaultCategory = categories.length > 0 ? categories[0].CategoryID : 0; // Use CategoryID
+        setTask((prevTask) => ({ ...prevTask, category: defaultCategory }));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const [task, setTask] = useState<Task>({
     title: "",
     description: "",
-    priority: "ordinary",
-    category: "Benkyou",
+    priority: "普通",
+    category: defaultCategory, // Use defaultCategory (ID)
     repetition: "onetime",
     deadline: currentDateString,
+    TaskID: TaskID,
   });
 
   const handleReset = () => {
@@ -37,27 +75,31 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData }) => {
     setTask({
       title: "",
       description: "",
-      priority: "ordinary",
-      category: "Benkyou",
+      priority: "普通",
+      category: defaultCategory, // Use defaultCategory (ID)
       repetition: "onetime",
       deadline: currentDateString,
+      TaskID: undefined, // Reset TaskID to undefined
     });
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
-    setTask((prev) => ({ ...prev, [name]: value }));
+    const newValue = name === "category" ? parseInt(value, 10) : value; // Convert to a number if the input is category
+    setTask((prev) => ({ ...prev, [name]: newValue }));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(task);
     const date = new Date().toJSON().slice(0, 10);
-
     let data = qs.stringify({
       taskName: task.title,
-      categoryName: task.category,
+      categoryName: "benkyou",
       description: task.description,
       priority: task.priority,
       deadline: task.deadline || date,
@@ -80,7 +122,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData }) => {
       .then((response) => {
         handleReset();
         toastr.success("Task Created Successfully");
-        const newTask = response.data;
+        const newTask = response.data as Task;
         updateTaskData(newTask);
       })
       .catch((error) => {
@@ -88,9 +130,89 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData }) => {
       });
   };
 
+  const handleUpdate = (taskID: any) => {
+    let data = qs.stringify({
+      taskName: task.title,
+      categoryName: task.category,
+      description: task.description,
+      priority: task.priority,
+      deadline: task.deadline,
+    });
+    console.log("updating..", task);
+    const token = localStorage.getItem("token");
+    let config = {
+      method: "put",
+      maxBodyLength: Infinity,
+      url: "http://" + window.location.hostname + ":3001/api/tasks/" + TaskID,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: "Bearer " + token,
+      },
+      data: data,
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        handleReset();
+        toastr.success("Task Updated Successfully");
+        const newTask = response.data as Task;
+        updateTaskData(newTask);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const setUpdateData = useCallback(
+    (taskID: any) => {
+      const currentDate = new Date();
+      const currentDateString = currentDate.toISOString().split("T")[0];
+      const token = localStorage.getItem("token");
+      let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: "http://" + window.location.hostname + ":3001/api/tasks/" + taskID,
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
+
+      axios
+        .request(config)
+        .then((response) => {
+          const formattedDate = format(
+            new Date(response.data.Deadline),
+            "yyyy-MM-dd"
+          );
+          setTask({
+            title: response.data.TaskName,
+            description: response.data.Description,
+            priority: response.data.Priority,
+            category: response.data.CategoryID, // Use CategoryID
+            repetition: "onetime",
+            deadline: formattedDate,
+            TaskID: taskID,
+          });
+
+          formRef.current?.querySelector("#inputTitle")?.focus();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    [setTask, defaultCategory, formRef]
+  );
+
+  useEffect(() => {
+    if (TaskID !== null) {
+      setUpdateData(TaskID);
+    }
+  }, [TaskID, setUpdateData]);
+
   return (
     <div className={styles.noselect}>
-      <form onSubmit={handleSubmit}>
+      <form ref={formRef} onSubmit={handleSubmit}>
         <div className={styles.createTaskContainer}>
           <div className={styles.taskTitleForm}>
             <div className={styles.taskTitle}>
@@ -109,6 +231,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData }) => {
                 </svg>
                 <div className={styles.inputData}>
                   <input
+                    id="inputTitle"
                     className={styles.input}
                     type="text"
                     name="title"
@@ -146,30 +269,38 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData }) => {
                 value={task.priority}
                 onChange={handleInputChange}
               >
-                <option className={styles.option} value="ordinary">
-                  Ordinary
+                <option className={styles.option} value="低い">
+                  低い
                 </option>
-                <option className={styles.option} value="important">
-                  Important
+                <option className={styles.option} value="普通">
+                  普通
                 </option>
-                <option className={styles.option} value="critical">
-                  Critical
+                <option className={styles.option} value="優先">
+                  優先
                 </option>
               </select>
               <label className={styles.label} htmlFor="task-category">
                 Task Category
               </label>
-              <select
-                className={styles.formSelect}
-                id="taskCategory"
-                name="category"
-                value={task.category}
-                onChange={handleInputChange}
-              >
-                <option className={styles.option} value="cat1">
-                  Benkyou
-                </option>
-              </select>
+              {categories.length > 0 && (
+                <select
+                  className={styles.formSelect}
+                  id="taskCategory"
+                  name="category"
+                  value={task.category}
+                  onChange={handleInputChange}
+                >
+                  {categories.map((category) => (
+                    <option
+                      key={category.CategoryID}
+                      className={styles.option}
+                      value={category.CategoryID} // Use CategoryID
+                    >
+                      {category.CategoryName}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
 
             <div className={styles.weekdays}>
@@ -209,18 +340,26 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData }) => {
 
           <div className={styles.taskCreateOptions}>
             <button
-              className={styles.btn + ' ' + styles.reset}
+              className={styles.btn + " " + styles.reset}
               type="reset"
               onClick={handleReset}
             >
               Reset
             </button>
-            <button className={styles.btn + ' ' + styles.delete}>
-              Delete
-            </button>
-            <button className={styles.btnLocal} type="submit">
-              Add Task
-            </button>
+            <button className={styles.btn + " " + styles.delete}>Delete</button>
+            {TaskID ? (
+              <button
+                type="button"
+                className={styles.btnLocal}
+                onClick={() => handleUpdate(TaskID)}
+              >
+                Update
+              </button>
+            ) : (
+              <button className={styles.btnLocal} type="submit">
+                Add Task
+              </button>
+            )}
           </div>
         </div>
       </form>

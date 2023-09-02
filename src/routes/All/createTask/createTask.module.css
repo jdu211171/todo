@@ -71,6 +71,10 @@
   flex: 50%;
 }
 
+.priority {
+  text-align: center;
+}
+
 .taskCreateOptions {
   flex: 10%;
   display: flex;

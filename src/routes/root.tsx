@@ -2,11 +2,11 @@ import "./style.css";
 import logo from './logo.png'
 
 // Import the font awesome icons
-import { faList, faCalendarDay, faRotateRight, faThumbsUp, faBoxOpen, faTrashCan, faCircleChevronRight, faRightFromBracket, faMoon, faSun, faFolderPlus, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { faList, faCalendarDay, faRotateRight, faThumbsUp, faBoxOpen, faTrashCan, faRightFromBracket, faMoon, faFolderPlus, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CurrentDate from "../Date";
 import { Outlet } from "react-router-dom";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 // Define the props type for the component
 type DashboardSideBarMenuProps = {

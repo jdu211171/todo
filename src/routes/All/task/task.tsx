@@ -13,9 +13,10 @@ interface Task {
 interface TasksProps {
   taskdata: Task[];
   updateTaskData: () => void;
+  getUpdateData: (TaskID: number) => void; // Correctly define the type of getUpdateData
 }
 
-export default function Tasks({ taskdata, updateTaskData }: TasksProps): JSX.Element {
+export default function Tasks({ taskdata, updateTaskData, getUpdateData }: TasksProps): JSX.Element {
   const formatDeadline = (deadline: string) => {
     const date = new Date(deadline);
     const formattedDate = `${date.getFullYear()}:${(date.getMonth() + 1)
@@ -54,6 +55,7 @@ export default function Tasks({ taskdata, updateTaskData }: TasksProps): JSX.Ele
 
   function handleChange(TaskID: number, event: React.MouseEvent<HTMLDivElement, MouseEvent>): void {
     event.stopPropagation();
+    getUpdateData(TaskID)
     console.log(TaskID);
   }  
 

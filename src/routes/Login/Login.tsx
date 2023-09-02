@@ -34,7 +34,7 @@ function Login() {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://localhost:3001/api/auth",
+      url: "http://" + window.location.hostname + ":3001/api/auth",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },

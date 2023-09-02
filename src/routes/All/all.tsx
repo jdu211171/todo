@@ -12,14 +12,13 @@ import Task from "../../htmlAssets/Task/Task";
 
 async function fetchTaskData() {
   const data = qs.stringify({});
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const config = {
     method: "get",
     maxBodyLength: Infinity,
     url: "http://" + window.location.hostname + ":3001/upcoming",
     headers: {
-      Authorization:
-        "Bearer " + token,
+      Authorization: "Bearer " + token,
     },
     data: data,
   };
@@ -35,6 +34,19 @@ async function fetchTaskData() {
 
 export default function All() {
   const [taskdata, setTaskdata] = useState([]);
+
+  // Function to update the taskdata state
+  const updateTaskData = () => {
+
+    // Fetch the latest data when a new task is created
+    fetchTaskData()
+      .then((data) => {
+        setTaskdata(data);
+      })
+      .catch((error) => {
+        // Handle error if needed
+      });
+  };
 
   useEffect(() => {
     fetchTaskData()
@@ -57,14 +69,18 @@ export default function All() {
           <App />
           <App />
           {/* <Test/> */}
-          <div className="allbuttons">
+          <div className="CreateButton">
             <Button />
           </div>
         </div>
       </div>
       <div className="CreateTask">
-        <CreateTask taskCategory={["Fitness and Gym", "Family and Relationship"]} />
+        {/* Pass the updateTaskData function as a prop to CreateTask */}
+        <CreateTask updateTaskData={updateTaskData} />
       </div>
+      {/* <div className="CreateTaskBtn">
+        
+      </div> */}
       <div className={all.TaskContainer}>
         <Tasks taskdata={taskdata} />
         <Task taskTitle={'Write essay about Shakespear\'s life and literature'} taskCategory={'School and Education'} taskDeadline={'February 14th'} taskPriority={'Ordinary'} handleChange={function (): void {

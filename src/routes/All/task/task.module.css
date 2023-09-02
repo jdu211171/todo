@@ -1,15 +1,56 @@
-:local .task {
+.task {
+  position: relative;
   background-color: white;
   border-radius: 5px;
-  padding: 20px;
+  padding: 0 20px;
   display: flex;
-  margin: 5px 5px 5px 0;
+  flex-wrap: wrap;
+  margin: 20px 5px 5px 0;
+  box-shadow: -1px 0 1px 2px #eee;
+  z-index: 2;
+}
+
+.taskFold {
+  padding: 1px 0 0 10px;
+  display: inline;
+  position: absolute;
+  width: 30%;
+  height: 28px;
+  margin-top: -10px;
+  margin-left: 4px;
+  border-radius: 5px 30px 0 0;
+  z-index: 0;
+  transition: all 0.2s;
+  font-size: 12px;
+}
+
+.taskFold:hover {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  width: 30%;
+  height: 28px;
+  margin-top: -18px;
+  margin-left: 4px;
+  border-radius: 5px 30px 0 0;
+  z-index: 0;
+}
+
+.critical::after {
+  content: "\25CF"; /* Unicode character escape sequence */
+  color: red;
+  font-size: 1.5em;
+  margin-right: 5px;
+  position: absolute;
+  right: 8%;
+  top: -5px;
 }
 
 .title {
-  flex: 30%;
+  flex: 60%;
   display: flex;
   align-items: center;
+  padding: 20px 0;
 }
 
 .title svg {
@@ -23,12 +64,7 @@
   font-weight: 600;
   color: #212121;
 }
-.info {
-  flex: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+
 
 .priority {
   height: 30px;
@@ -41,32 +77,30 @@
   padding: 6px 10px;
 }
 
-.deadline {
-  height: 30px;
-  padding: 6px 10px;
-}
 
 .critical {
   background-color: #f8d7da;
 }
 
-.critical::before {
-  content: "\25CF"; /* Unicode character escape sequence */
-  color: red;
-  position: relative;
-  margin-right: 5px;
-}
-
 .buttons {
-  flex: 20%;
+  flex: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  justify-content:flex-end;
 }
 
 .buttons div {
   margin: 5px;
 }
 
-/* div {
-    border: 1px solid black;
-} */
+.right {
+  /* background-color: red; */
+  flex: 40%;
+  align-items: end;
+}
+
+.deadline {
+  text-align: right;
+  color: #aaa;
+  padding: 6px 10px;
+}

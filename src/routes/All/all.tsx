@@ -33,7 +33,6 @@ async function fetchTaskData() {
 
 export default function All() {
   const [taskdata, setTaskdata] = useState([]);
-
   // Function to update the taskdata state
   const updateTaskData = () => {
 
@@ -81,7 +80,7 @@ export default function All() {
         
       </div> */}
       <div className={all.TaskContainer}>
-        <Tasks taskdata={taskdata} />
+        <Tasks taskdata={taskdata} updateTaskData={updateTaskData} />
       </div>
     </div>
   );

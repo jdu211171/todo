@@ -91,6 +91,24 @@
 
 .buttons div {
   margin: 5px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.buttons div:active {
+  transform: scale(0.9);
+}
+
+.details {
+  color: #4f4c4c;
+}
+
+.update {
+  color: #0d6efd ;
+}
+
+.delete {
+  color: #dc3545;
 }
 
 .right {

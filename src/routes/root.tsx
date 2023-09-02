@@ -2,11 +2,11 @@ import "./style.css";
 import logo from './logo.png'
 
 // Import the font awesome icons
-import { faList, faCalendarDay, faRotateRight, faThumbsUp, faBoxOpen, faTrashCan, faCircleChevronRight, faRightFromBracket, faMoon, faSun, faFolderPlus, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { faList, faCalendarDay, faUserPlus, faRotateRight, faThumbsUp, faBoxOpen, faTrashCan, faCircleChevronRight, faRightFromBracket, faMoon, faSun, faFolderPlus, faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CurrentDate from "../Date";
 import { Outlet } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // Define the props type for the component
 type DashboardSideBarMenuProps = {
@@ -21,6 +21,32 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
         event.preventDefault();
         const sidebar: HTMLElement = document.querySelector('.sidebar') as HTMLElement;
         sidebar.classList.toggle('close');
+    }
+
+    function changeOnStatus() {
+
+        const createAccount = (
+            <div className="bottom-content">
+                <li className="">
+                    <a href="#">
+                        <FontAwesomeIcon icon={faUserPlus} className="icon" />
+                        <span className="text nav-text">Create Account</span>
+                    </a>
+                </li>
+            </div>
+        )
+
+        const logOut = (
+            <div className="bottom-content">
+                <li className="">
+                    <a href="#">
+                        <FontAwesomeIcon icon={faRightFromBracket} className="icon" />
+                        <span className="text nav-text">Log Out</span>
+                    </a>
+                </li>
+            </div>
+        )
+        return localStorage.hasOwnProperty('token') ? logOut : createAccount;
     }
 
     return (
@@ -38,7 +64,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
                         </div>
                     </div>
                     <div className="toggle cursor" onClick={handleClick}>
-                        <FontAwesomeIcon icon={faChevronLeft} />
+                        <FontAwesomeIcon icon={faChevronRight} />
 
                     </div>
                 </header>
@@ -46,8 +72,8 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
                     <div className="menu">
                         {/* Uncomment this section if you want to add a search box */}
                         {/*<li className="search-box">
-    <FontAwesomeIcon icon={faSearch} className="icon" />
-    <input type="search" placeholder="Search..." />
+<FontAwesomeIcon icon={faSearch} className="icon" />
+<input type="search" placeholder="Search..." />
 </li>*/}
                         <CurrentDate />
                         <ul className="menu-links">
@@ -95,26 +121,14 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
                             </li>
                         </ul>
                     </div>
-                    <div className="bottom-content">
-                        <li className="">
-                            <a href="#">
-                                <FontAwesomeIcon icon={faRightFromBracket} className="icon" />
-                                <span className="text nav-text">Log Out</span>
-                            </a>
-                        </li>
-                        <li className="mode toggle-switch switch cursor">
-                            <div className="moon-sun">
-                                <FontAwesomeIcon icon={faMoon} className="fa-solid fa-moon icon moon" />
-                                {/* <FontAwesomeIcon icon={faSun} className="fa-solid fa-sun icon sun" /> */}
-                            </div>
-                            <span className="mode-text text">Dark Mode</span>
-                        </li>
-                    </div>
+                    {changeOnStatus()}
                 </div>
             </nav>
             <Outlet />
         </main>
     );
+
+
 }
 
 

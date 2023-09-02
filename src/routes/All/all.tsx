@@ -8,6 +8,7 @@ import Tasks from "./task/task";
 import axios from "axios";
 import * as qs from "qs";
 import CreateTask from "../../htmlAssets/CreateTask/CreateTask";
+import Task from "../../htmlAssets/Task/Task";
 
 async function fetchTaskData() {
   const data = qs.stringify({});
@@ -66,6 +67,11 @@ export default function All() {
       </div>
       <div className={all.TaskContainer}>
         <Tasks taskdata={taskdata} />
+        <Task taskTitle={'Write essay about Shakespear\'s life and literature'} taskCategory={'School and Education'} taskDeadline={'February 14th'} taskPriority={'Ordinary'} handleChange={function (): void {
+          throw new Error('Function not implemented.')
+        }} handleDelete={function (): void {
+          throw new Error('Function not implemented.')
+        }} />
       </div>
     </div>
   );

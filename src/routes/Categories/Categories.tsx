@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../general.css";
 import Button from "../filters/createButton";
 import st from "./categories.module.css";
@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboard, faThumbtack } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import * as qs from "qs";
-import CreateCategory from "./CreateCategory";
+import CreateCategory, { CategoryComponent } from "./CreateCategory";
 
 async function fetchCategories() {
   const token = localStorage.getItem("token");
@@ -29,7 +29,12 @@ async function fetchCategories() {
   }
 }
 
+
+
 export default function Categories() {
+
+
+
   const [categories, setCategories] = useState([]);
   console.log(categories)
   useEffect(() => {
@@ -50,30 +55,33 @@ export default function Categories() {
     </div>
   ));
 
+  function handleValueUpdate(newInputValue: string, index: number): void {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <div className="content">
       <div className="top">
-        <h1>All tasks</h1>
+        <h1>Categories</h1>
         <div className="filters">
           <div className="allbuttons">
-            <Button />
+            {/* this is just for design */}
+            <div className={st.categoryFolders}>
+              <FontAwesomeIcon icon={faThumbtack} className={st.icon} />
+              <div className={st.categoryName}>All</div>
+              <div className={st.categoryCount}>12</div>
+            </div>
+            {/* this is just for design */}
+
           </div>
         </div>
       </div>
 
-      <div className={st.categoryBox}>
-        <CreateCategory />
-        {/* this is just for design */}
-        <div className={st.categoryFolders}>
-          <FontAwesomeIcon icon={faThumbtack} className={st.icon} />
-          <div className={st.categoryName}>All</div>
-          <div className={st.categoryCount}>12</div>
-        </div>
-         {/* this is just for design */}
+      <CreateCategory />
+      {/* <div className={st.categoryBox}>
 
 
         {CategoryComponents}
-
         <div className={st.categoryFoldersBlank}></div>
         <div className={st.categoryFoldersBlank}></div>
         <div className={st.categoryFoldersBlank}></div>
@@ -82,7 +90,7 @@ export default function Categories() {
         <div className={st.categoryFoldersBlank}></div>
         <div className={st.categoryFoldersBlank}></div>
         <div className={st.categoryFoldersBlank}></div>
-      </div>
+      </div> */}
     </div>
   );
 }

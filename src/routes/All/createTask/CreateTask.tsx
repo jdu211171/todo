@@ -209,14 +209,13 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData }) => {
 
           <div className={styles.taskCreateOptions}>
             <button
-              className={styles.btn}
-              style={{ color: "#0D6EFD" }}
+              className={styles.btn + ' ' + styles.reset}
               type="reset"
               onClick={handleReset}
             >
               Reset
             </button>
-            <button className={styles.btn} style={{ color: "#DC3545" }}>
+            <button className={styles.btn + ' ' + styles.delete}>
               Delete
             </button>
             <button className={styles.btnLocal} type="submit">

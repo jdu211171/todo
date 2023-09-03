@@ -14,7 +14,7 @@ import CreateTask from './htmlAssets/CreateTask/CreateTask'
 import Categories from "./routes/Categories/Categories";
 import Tasks from './routes/All/task/task'
 import Task from './htmlAssets/Task/Task'
-import CreateCategory from './routes/Categories/CreateCategory'
+// import CreateCategory from './routes/Categories/CreateCategory'
 
 const router = createBrowserRouter([
   {
@@ -52,7 +52,7 @@ const router = createBrowserRouter([
 
   {
     path: '/category',
-    element: <CreateCategory />
+    element: <Categories />
   }
 ]);
 

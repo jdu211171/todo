@@ -1,49 +1,4 @@
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import st from "./categories.module.css";
-// import { faPlus, faFolder } from "@fortawesome/free-solid-svg-icons";
-// import React, { useState } from "react"; // Import React and useState hook
 
-// // Define a function that creates a new category with a folder icon
-// const newCategoryForm = () => {
-
-
-
-//     function handleSubmit(e: any) {
-//         e.preventDefault();
-//         console.log("new category created");
-
-//     }
-
-//     return (
-//         <form method="post">
-//             <div className={st.categoryFolders}>
-//                 <FontAwesomeIcon icon={faFolder} className={st.icon} />
-//                 <div className={st.categoryName}><input type="text" placeholder="Category name" /></div>
-//                 <div className={st.categoryCount}>0</div>
-//                 <button type="submit" onClick={handleSubmit}></button>
-//             </div>
-//         </form>
-//     )
-// }
-
-// export default function CreateCategory() {
-//     // Use a state variable to store the visibility of the newCategoryForm
-//     const [showNewCategory, setShowNewCategory] = useState(false);
-
-//     // Define a function to toggle the visibility of the newCategoryForm
-//     const handleCreateCategory = () => {
-//         setShowNewCategory(!showNewCategory);
-//     }
-
-//     return (
-//         <div className={st.categoryFolders}>
-//             {/* Add an onClick handler to the CreateCategory component */}
-//             <FontAwesomeIcon icon={faPlus} className={st.icon} onClick={handleCreateCategory} />
-//             <div className={st.createCategory}>Add New Category</div>
-//             {showNewCategory && newCategoryForm()}
-//         </div>
-//     )
-// }
 
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

@@ -8,6 +8,7 @@ import Tasks from "./task/task";
 import axios from "axios";
 import * as qs from "qs";
 import CreateTask from "./createTask/CreateTask";
+import TaskDetails from "./details/details";
 
 async function fetchTaskData() {
   const data = qs.stringify({});
@@ -24,7 +25,7 @@ async function fetchTaskData() {
 
   try {
     const response = await axios.request(config);
-    console.log(response.data)
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log("Error fetching task data:", error);
@@ -35,13 +36,45 @@ async function fetchTaskData() {
 export default function All() {
   const [currentTaskID, setCurrentTaskID] = useState<number | null>(null);
   const [taskdata, setTaskdata] = useState([]);
+  const [taskdataDetail, setTaskdataDetail] = useState([]);
+
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+
+  const openDetail = (TaskID: number) => {
+    const token = localStorage.getItem("token");
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "http://" + window.location.hostname + ":3001/api/tasks/" + TaskID,
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        // Set the fetched data in the taskdataDetail state
+        setTaskdataDetail(response.data);
+
+        // Open the detail view
+        setIsDetailOpen(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const closeDetail = (event:any) => {
+    setIsDetailOpen(false);
+  };
+
   // Function to update the taskdata state
   const updateTaskData = () => {
     // Fetch the latest data when a new task is created
     fetchTaskData()
       .then((data) => {
         setTaskdata(data);
-        
       })
       .catch((error) => {
         // Handle error if needed
@@ -53,9 +86,9 @@ export default function All() {
   };
 
   const getUpdateData = (TaskID: number) => {
-    console.log("asd: " + currentTaskID)
-    setCurrentTaskID(TaskID); 
-    console.log("UPD: " +currentTaskID)
+    console.log("asd: " + currentTaskID);
+    setCurrentTaskID(TaskID);
+    console.log("UPD: " + currentTaskID);
     return TaskID;
   };
 
@@ -93,6 +126,12 @@ export default function All() {
           TaskIDNull={setIDNull} // Pass currentTaskID
         />
       </div>
+      {isDetailOpen && (
+        <TaskDetails
+          taskdata={taskdataDetail} // Pass the fetched data to TaskDetails
+          onClose={closeDetail}
+        />
+      )}
       {/* <div className="CreateTaskBtn">
         
       </div> */}
@@ -101,6 +140,7 @@ export default function All() {
           taskdata={taskdata}
           updateTaskData={updateTaskData}
           getUpdateData={getUpdateData}
+          getDetails={openDetail} // Pass openDetail function to Tasks
         />
       </div>
     </div>

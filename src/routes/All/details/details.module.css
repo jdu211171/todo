@@ -1,0 +1,75 @@
+.taskDetail {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  width: 60%;
+  height: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid #ccc;
+  padding: 20px;
+  background-color: #fff;
+  margin-top: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 40;
+}
+
+.taskDetailBack {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 39;
+  background-color: #8989894e;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.description {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.deadline {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 5px;
+}
+
+.category {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 5px;
+}
+
+.priority {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 5px;
+}
+
+.completed {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 5px;
+}
+
+.completedDate {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 5px;
+}
+
+.taskDetail {
+  opacity: 0; /* Initially, set opacity to 0 */
+  transition: opacity 0.5s ease-in-out; /* Add a transition effect */
+}
+
+.taskDetail.active {
+  opacity: 1; /* When active class is added, fade-in the element */
+}

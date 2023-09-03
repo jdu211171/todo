@@ -21,12 +21,14 @@ interface TasksProps {
   taskdata: Task[];
   updateTaskData: () => void;
   getUpdateData: (TaskID: number) => void; // Correctly define the type of getUpdateData
+  getDetails:(TaskID: number) => void;
 }
 
 export default function Tasks({
   taskdata,
   updateTaskData,
   getUpdateData,
+  getDetails
 }: TasksProps): JSX.Element {
   const formatDeadline = (deadline: string) => {
     const date = new Date(deadline);
@@ -117,7 +119,7 @@ export default function Tasks({
   const TaskItems = taskdata.map((taskdatas: Task, index: number) => (
     <div
       key={index}
-      onClick={(event) => handleDetails(event, taskdatas.TaskID)}
+      onClick={(event) => getDetails(taskdatas.TaskID)}
     >
       <span
         className={st.taskFold + " " + st[priorityClassMap[taskdatas.Priority]]}
@@ -141,7 +143,6 @@ export default function Tasks({
               fill="#212121"
             />
 
-            {/* Checkmark (Tick) */}
             {/* Checkmark (Tick) */}
             {taskdatas.Completed ? (
               <path

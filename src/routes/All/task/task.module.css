@@ -36,6 +36,18 @@
   z-index: 0;
 }
 
+.critical {
+  background-color: #f8d7da;
+}
+
+.normal {
+  background-color: rgba(88, 88, 218, 0.598);
+}
+
+.low {
+  background-color: #d7f8dc;
+}
+
 .critical::after {
   content: "\25CF"; /* Unicode character escape sequence */
   color: red;
@@ -45,6 +57,28 @@
   right: 8%;
   top: -5px;
 }
+
+.normal::after {
+  content: "\25CF"; /* Unicode character escape sequence */
+  color: #045776;
+  font-size: 1.5em;
+  margin-right: 5px;
+  position: absolute;
+  right: 8%;
+  top: -5px;
+}
+
+.low::after {
+  content: "\25CF"; /* Unicode character escape sequence */
+  color: green;
+  font-size: 1.5em;
+  margin-right: 5px;
+  position: absolute;
+  right: 8%;
+  top: -5px;
+}
+
+
 
 .title {
   flex: 60%;
@@ -78,9 +112,7 @@
 }
 
 
-.critical {
-  background-color: #f8d7da;
-}
+
 
 .buttons {
   flex: 100%;

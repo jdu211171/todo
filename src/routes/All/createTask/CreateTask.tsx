@@ -24,9 +24,10 @@ interface Category {
 interface CreateTaskProps {
   updateTaskData: (newTask: Task) => void;
   TaskID: any;
+  TaskIDNull: () => void;
 }
 
-const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID }) => {
+const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDNull }) => {
   const currentDate = new Date();
   const currentDateString = currentDate.toISOString().split("T")[0];
   const [categories, setCategories] = useState<Category[]>([]);
@@ -158,6 +159,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID }) => {
         toastr.success("Task Updated Successfully");
         const newTask = response.data as Task;
         updateTaskData(newTask);
+        TaskIDNull();
       })
       .catch((error) => {
         console.log(error);

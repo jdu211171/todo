@@ -24,6 +24,7 @@ async function fetchTaskData() {
 
   try {
     const response = await axios.request(config);
+    console.log(response.data)
     return response.data;
   } catch (error) {
     console.log("Error fetching task data:", error);
@@ -40,15 +41,15 @@ export default function All() {
     fetchTaskData()
       .then((data) => {
         setTaskdata(data);
+        
       })
       .catch((error) => {
         // Handle error if needed
       });
   };
 
-  const setUpdateData = () => {
-    console.log("triggered");
-    return;
+  const setIDNull = () => {
+    setCurrentTaskID(null);
   };
 
   const getUpdateData = (TaskID: number) => {
@@ -88,7 +89,8 @@ export default function All() {
         {/* Pass the updateTaskData function as a prop to CreateTask */}
         <CreateTask
           updateTaskData={updateTaskData}
-          TaskID={currentTaskID} // Pass currentTaskID
+          TaskID={currentTaskID}
+          TaskIDNull={setIDNull} // Pass currentTaskID
         />
       </div>
       {/* <div className="CreateTaskBtn">

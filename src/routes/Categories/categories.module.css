@@ -83,13 +83,16 @@
 
 .update {
   color: #0d6efd;
+  opacity: 0.6;
 }
 .delete {
   color: #dc3545;
+  opacity: 0.6;
 }
 
 .cancel {
   color: #dc3545;
+  opacity: 0.6;
 }
 .update:hover {
   border-radius: 5px;
@@ -116,17 +119,21 @@
 }
 
 .UpdateCategory {
-  width: 80%;
-  outline: none;
-  border: none;
-  border-bottom: 2px solid black;
-}
-
-
-.UpdateCategory:focus {
-  content: "hello";
+  font-weight: 800;
+  font-size: 1em;
   width: 80%;
   outline: none;
   border: none;
   border-bottom: 2px solid red;
+}
+
+
+.UpdateCategory:focus {
+  font-weight: 800;
+  font-size: 1em;
+  content: "hello";
+  width: 80%;
+  outline: none;
+  border: none;
+  border-bottom: 2px solid black;
 }

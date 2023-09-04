@@ -16,6 +16,7 @@
   font-family: Inter;
   /* line-height: normal; */
   padding: 20px;
+  padding-right: 6px;
   /* border: 1px solid black; */
   /* height: 120px; */
 }
@@ -45,7 +46,8 @@ h1 {
 
 .filters {
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 5px;
 }
 
 label {

@@ -41,19 +41,18 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
 
   // Function to handle screen resize
   function handleResize() {
-    const sidebar: HTMLElement = document.querySelector(
-      ".sidebar"
-    ) as HTMLElement;
+    const sidebar: HTMLElement | null = document.querySelector(".sidebar");
     const screenWidth = window.innerWidth;
-
-    if (screenWidth <= 600) {
-      // If the screen width is smaller or equal to 600px, remove the "close" class
-      sidebar.classList.remove("close");
+  
+    if (sidebar) {
+      if (screenWidth <= 600) {
+        sidebar.classList.remove("close");
+      }
     }
   }
-
-  // Attach an event listener to the window's resize event
+  
   window.addEventListener("resize", handleResize);
+  handleResize(); 
 
   // Call handleResize initially to ensure correct behavior on page load
   handleResize();
@@ -80,12 +79,13 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
         </li>
       </div>
     );
+    // console.log
     return localStorage.hasOwnProperty("token") ? logOut : createAccount;
   }
 
   return (
     <main className="whole-page container-fluid">
-      <nav className="sidebar noselect">
+      <nav className="sidebar noselect someClass">
         <header>
           <div className="image-text">
             <span className="image">

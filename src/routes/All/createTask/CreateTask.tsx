@@ -27,11 +27,22 @@ interface CreateTaskProps {
   TaskIDNull: () => void;
 }
 
+
 const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDNull }) => {
   const currentDate = new Date();
   const currentDateString = currentDate.toISOString().split("T")[0];
   const [categories, setCategories] = useState<Category[]>([]);
-  const defaultCategory = categories.length > 0 ? categories[0].CategoryID : 0; // Use CategoryID
+    
+  // Move this part inside the useEffect
+  const [task, setTask] = useState<Task>({
+    title: "",
+    description: "",
+    priority: "普通",
+    category: 0, // Use defaultCategory (ID)
+    repetition: "onetime",
+    deadline: currentDateString,
+    TaskID: TaskID,
+  });
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -45,30 +56,22 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
         Authorization: "Bearer " + token,
       },
     };
-
+  
     axios
       .request(config)
       .then((response) => {
         const fetchedCategories = response.data;
         setCategories(fetchedCategories);
-
-        const defaultCategory = categories.length > 0 ? categories[0].CategoryID : 0; // Use CategoryID
-        setTask((prevTask) => ({ ...prevTask, category: defaultCategory }));
+        // const defaultCategory = fetchedCategories.length > 0 ? fetchedCategories[0].CategoryID : 0; // Use CategoryID
+        setTask((prevTask) => ({ ...prevTask, category: fetchedCategories.length > 0 ? fetchedCategories[0].CategoryID : 0 }));
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+  
+  
 
-  const [task, setTask] = useState<Task>({
-    title: "",
-    description: "",
-    priority: "普通",
-    category: defaultCategory, // Use defaultCategory (ID)
-    repetition: "onetime",
-    deadline: currentDateString,
-    TaskID: TaskID,
-  });
 
   const handleReset = () => {
     const currentDate = new Date();
@@ -77,7 +80,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
       title: "",
       description: "",
       priority: "普通",
-      category: defaultCategory, // Use defaultCategory (ID)
+      category: task.category, // Use defaultCategory (ID)
       repetition: "onetime",
       deadline: currentDateString,
       TaskID: undefined, // Reset TaskID to undefined
@@ -100,7 +103,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
     const date = new Date().toJSON().slice(0, 10);
     let data = qs.stringify({
       taskName: task.title,
-      categoryName: "benkyou",
+      categoryID: task.category,
       description: task.description,
       priority: task.priority,
       deadline: task.deadline || date,
@@ -203,7 +206,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
           console.log(error);
         });
     },
-    [setTask, defaultCategory, formRef]
+    [setTask, formRef]
   );
 
   useEffect(() => {

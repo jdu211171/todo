@@ -94,7 +94,7 @@ export default function Categories() {
               <input
                 className={st.input}
                 type="text"
-                placeholder="new category"
+                placeholder="New Category"
                 value={inputValue}
                 onChange={handleChange}
               />

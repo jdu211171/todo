@@ -2,6 +2,7 @@ import React, { ReactNode } from "react";
 import axios from "axios";
 import "../../general.css";
 import st from "./task.module.css";
+import { format } from "date-fns";
 
 interface Task {
   Completed: boolean;
@@ -32,13 +33,8 @@ export default function Tasks({
 }: TasksProps): JSX.Element {
   const formatDeadline = (deadline: string) => {
     const date = new Date(deadline);
-    const formattedDate = `${date.getFullYear()}:${(date.getMonth() + 1)
-      .toString()
-      .padStart(2, "0")}:${date.getDate().toString().padStart(2, "0")} ${date
-      .getHours()
-      .toString()
-      .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
-    return formattedDate;
+    const localDate = format(date, "yyyy-MM-dd");
+    return localDate;
   };
 
   const handleDelete = (

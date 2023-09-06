@@ -69,6 +69,7 @@ export default function Categories() {
   const triggerFetch = async () => {
     try {
       const data = await fetchCategories();
+      console.log(data)
       setCategories(data);
     } catch (error) {
       // Handle error if needed

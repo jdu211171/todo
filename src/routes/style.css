@@ -208,7 +208,7 @@ body.dark .sidebar li a:hover .text {
 }
 
 .sidebar .menu-bar {
-  height: calc(100% - 50px);
+  height: calc(100% - 150px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -333,6 +333,7 @@ body.dark .switch::before {
     height: 80px;
     width: 100%;
     top: auto; /* Reset top position */
+    box-shadow: 0 -1px 10px 2px #aaa;
   }
   .content {
     margin-top: 40px;

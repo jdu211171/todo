@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import st from "./categories.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Swal from "sweetalert2";
 
 import {
   faThumbtack,
@@ -11,7 +12,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import qs from "qs";
-
 
 const Folder = ({ categories, triggerFetch }: any) => {
   const [editModeFolderId, setEditModeFolderId] = useState(null);
@@ -24,31 +24,35 @@ const Folder = ({ categories, triggerFetch }: any) => {
   };
 
   const handleSaveClick = (category: any) => {
-    console.log(category.CategoryID)
+    console.log(category.CategoryID);
     // console.log(newCategoryName)
     // Make an Axios request to update the category name
     let data = qs.stringify({
-        'categoryName': newCategoryName
-      });
-      const token = localStorage.getItem("token");
+      categoryName: newCategoryName,
+    });
+    const token = localStorage.getItem("token");
 
-      let config = {
-        method: 'put',
-        maxBodyLength: Infinity,
-        url: "http://" + window.location.hostname + ":3001/api/categories/" + category.CategoryID,
-        headers: { 
-          'Content-Type': 'application/x-www-form-urlencoded', 
-          'Authorization': "Bearer " + token,
-        },
-        data : data
-      };
-      
-      axios.request(config)
+    let config = {
+      method: "put",
+      maxBodyLength: Infinity,
+      url:
+        "http://" +
+        window.location.hostname +
+        ":3001/api/categories/" +
+        category.CategoryID,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: "Bearer " + token,
+      },
+      data: data,
+    };
+
+    axios
+      .request(config)
       .then((response) => {
-        handleCancelClick()
-        triggerFetch()
+        handleCancelClick();
+        triggerFetch();
         console.log(JSON.stringify(response.data));
-        
       })
       .catch((error) => {
         console.log(error);
@@ -63,24 +67,47 @@ const Folder = ({ categories, triggerFetch }: any) => {
   const handleDeleteClick = (category: any) => {
     const token = localStorage.getItem("token");
     let config = {
-      method: 'delete',
+      method: "delete",
       maxBodyLength: Infinity,
-      url: "http://" + window.location.hostname + ":3001/api/categories/" + category.CategoryID,
-      headers: { 
-        'Authorization': "Bearer " + token,
+      url:
+        "http://" +
+        window.location.hostname +
+        ":3001/api/categories/" +
+        category.CategoryID,
+      headers: {
+        Authorization: "Bearer " + token,
       },
     };
-    
-    axios.request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-        triggerFetch(); // Trigger the fetch function here
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+
+    Swal.fire({
+      title: "本当に削除しますか？",
+      text: "フォルダが削除されると、内部のタスクも削除されます。",
+
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .request(config)
+          .then((response) => {
+            console.log(JSON.stringify(response.data));
+            triggerFetch(); // Trigger the fetch function here
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        Swal.fire({
+          icon: "success",
+          title: "Your work has been saved",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      }
+    });
   };
-  
 
   return (
     <>
@@ -134,7 +161,7 @@ const Folder = ({ categories, triggerFetch }: any) => {
               category.CategoryName
             )}
           </div>
-          <div className={st.categoryCount}>12</div>
+          <div className={st.categoryCount}>{category.taskCount}</div>
         </div>
       ))}
     </>

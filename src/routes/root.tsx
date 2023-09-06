@@ -1,5 +1,7 @@
+import React from "react";
 import "./style.css";
 import logo from "./logo.png";
+import { useNavigate } from "react-router-dom";
 
 // Import the font awesome icons
 import {
@@ -22,6 +24,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CurrentDate from "../Date";
 import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 // Define the props type for the component
 type DashboardSideBarMenuProps = {
@@ -30,6 +33,29 @@ type DashboardSideBarMenuProps = {
 
 // Create a component that renders the JSX
 function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
+  const navigate = useNavigate();
+  const CheckUser = () => {
+    const token = localStorage.getItem("token");
+    let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: "http://" + window.location.hostname + ":3001/api/checkuser",
+        headers: { 
+          'Authorization': "Bearer " + token,
+        }
+      };
+      
+      axios.request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+        navigate("/login");
+      });
+  }
+
+  CheckUser()
   type ClickEvent = React.MouseEvent<HTMLDivElement>;
   function handleClick(event: ClickEvent) {
     event.preventDefault();
@@ -43,19 +69,25 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
   function handleResize() {
     const sidebar: HTMLElement | null = document.querySelector(".sidebar");
     const screenWidth = window.innerWidth;
-  
+
     if (sidebar) {
       if (screenWidth <= 600) {
         sidebar.classList.remove("close");
       }
     }
   }
-  
-  window.addEventListener("resize", handleResize);
-  handleResize(); 
 
-  // Call handleResize initially to ensure correct behavior on page load
+  window.addEventListener("resize", handleResize);
   handleResize();
+
+  const handleLogout = () => {
+    // Perform logout actions, e.g., clear authentication token or user data
+    // For example, if you're using localStorage for the token:
+    localStorage.removeItem("token");
+
+    // Redirect the user to the logout page (assuming "/LogOut" is your logout page)
+    navigate("/");
+  };
 
   function changeOnStatus() {
     const createAccount = (
@@ -72,7 +104,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
     const logOut = (
       <div className="bottom-content">
         <li className="LogStatus">
-          <a href="#">
+          <a href="#" onClick={handleLogout}>
             <FontAwesomeIcon icon={faRightFromBracket} className="icon" />
             <span className="text nav-text">Log Out</span>
           </a>
@@ -131,7 +163,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
                 </a>
               </li>
               <li className="nav-link">
-                <a href="#">
+                <a href="/today">
                   <FontAwesomeIcon icon={faCalendarDay} className="icon" />
                   <span className="text nav-text">Today's Tasks</span>
                 </a>
@@ -143,13 +175,13 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
                 </a>
               </li>
               <li className="nav-link">
-                <a href="#">
+                <a href="/completed">
                   <FontAwesomeIcon icon={faThumbsUp} className="icon" />
                   <span className="text nav-text">Completed Tasks</span>
                 </a>
               </li>
               <li className="nav-link">
-                <a href="#">
+                <a href="/uncompleted">
                   <FontAwesomeIcon icon={faBoxOpen} className="icon" />
                   <span className="text nav-text">Uncompleted Tasks</span>
                 </a>

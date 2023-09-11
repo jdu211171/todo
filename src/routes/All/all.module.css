@@ -81,3 +81,9 @@
 .option:hover {
   background: #f2f2f2;
 }
+
+@media screen and (max-width: 600px) {
+  .TaskContainer {
+    padding: 20px 0 80px 20px;
+  }
+}

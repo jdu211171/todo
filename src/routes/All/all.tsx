@@ -9,8 +9,15 @@ import axios from "axios";
 import * as qs from "qs";
 import CreateTask from "./createTask/CreateTask";
 import TaskDetails from "./details/details";
-import { faMagnifyingGlass, faRotate } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMagnifyingGlass,
+  faPlus,
+  faRotate,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+let isOpen: boolean;
+let isBeingUpdated:boolean;
 
 async function fetchTaskData() {
   const data = qs.stringify({});
@@ -42,6 +49,7 @@ export default function All() {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const priorityOptions = ["低い", "普通", "優先"];
   const [categories, setCategories] = useState<Category[]>([]);
+
   const [formData, setFormData] = useState({
     // Your filter criteria state
     selectValue1: "",
@@ -57,7 +65,7 @@ export default function All() {
       inputValue: "",
     });
 
-    updateTaskData()
+    updateTaskData();
     // You can also perform any other actions needed for resetting here
   };
 
@@ -72,11 +80,11 @@ export default function All() {
 
   const handleGetButtonClick = () => {
     fetchTaskData().then((data) => {
+      console.log(data);
       const filteredTasks = data.filter((task: any) => {
-        console.log(formData);
-        console.log(task);
+        console.log(task.Deadline.split(" ")[0]);
         // Check if selectValue1 matches task's priority (assuming task.priority is the attribute name)
-        if (formData.selectValue1 && task.Priority !== formData.selectValue1) {
+        if (formData.selectValue1 && task.Priority != formData.selectValue1) {
           return false;
         }
         // Check if selectValue2 matches task's status (assuming task.status is the attribute name)
@@ -87,7 +95,7 @@ export default function All() {
         // Check if inputValue matches task's due date (assuming task.dueDate is the attribute name)
         if (
           formData.inputValue &&
-          task.Deadline.split("T")[0] !== formData.inputValue
+          task.Deadline.split(" ")[0] != formData.inputValue
         ) {
           return false;
         }
@@ -169,9 +177,11 @@ export default function All() {
   };
 
   const getUpdateData = (TaskID: number) => {
-    console.log("asd: " + currentTaskID);
     setCurrentTaskID(TaskID);
-    console.log("UPD: " + currentTaskID);
+    isBeingUpdated = true;
+    if (!isOpen) {
+      openElement()
+    }
     return TaskID;
   };
 
@@ -185,6 +195,34 @@ export default function All() {
       });
   }, []);
 
+  function openElement(isCreate: bool) {
+    const heightElement = document.getElementsByClassName("CreateTask")[0].querySelectorAll('div')[1].clientHeight;
+    console.log(heightElement);
+    if (isCreate) {
+      setCurrentTaskID(null)
+    }
+    if (document.getElementsByClassName("CreateTask")[0].style.height === "") {
+      document.getElementsByClassName("CreateTask")[0].style.height = heightElement + 4 + "px";
+      setTimeout(() => {
+        document.getElementsByClassName("CreateTask")[0].style.height = "fit-content";
+      }, 400);
+      document.getElementsByClassName("CreateTask")[0].style.overflow = "unset";
+      isOpen = true;
+    }
+  }
+  
+  function closeElement() {
+    const heightElement = document.getElementsByClassName("CreateTask")[0].querySelectorAll('div')[1].clientHeight;
+    console.log(heightElement);
+    if (document.getElementsByClassName("CreateTask")[0].style.height !== "") {
+      document.getElementsByClassName("CreateTask")[0].style.height = heightElement + 4 + "px";
+      setTimeout(() => {
+        document.getElementsByClassName("CreateTask")[0].style.height = "";
+      }, 1);
+      document.getElementsByClassName("CreateTask")[0].style.overflow = "hidden";
+      isOpen = false;
+    }
+  }
   return (
     <div className="content">
       <div className="top">
@@ -248,7 +286,20 @@ export default function All() {
           />
         </div>
       </div>
-      <div className="CreateTask">
+
+      <div onClick={() => openElement(true)} className="float">
+        <FontAwesomeIcon icon={faPlus} className="my-float" />
+      </div>
+
+      <div  className="CreateTask" id="taskMenu">
+        <div onClick={() => closeElement()} className="closeButton">
+            <svg width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="15" cy="15" r="12" fill="none" stroke="#000000" strokeWidth="2" />
+  
+                <line x1="9" y1="9" x2="21" y2="21" stroke="#000000" strokeWidth="2" />
+                <line x1="9" y1="21" x2="21" y2="9" stroke="#000000" strokeWidth="2" />
+            </svg>
+        </div>
         {/* Pass the updateTaskData function as a prop to CreateTask */}
         <CreateTask
           updateTaskData={updateTaskData}
@@ -262,9 +313,6 @@ export default function All() {
           onClose={closeDetail}
         />
       )}
-      {/* <div className="CreateTaskBtn">
-        
-      </div> */}
       <div className={all.TaskContainer}>
         <Tasks
           taskdata={taskdata}

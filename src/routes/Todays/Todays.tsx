@@ -13,19 +13,21 @@ import { faMagnifyingGlass, faRotate } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 async function fetchTaskData() {
+  const data = qs.stringify({});
   const token = localStorage.getItem("token");
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: "http://" + window.location.hostname + ":3001/api/tasks/today",
+    url: "http://" + window.location.hostname + ":3001/api/today",
     headers: {
       Authorization: "Bearer " + token,
     },
+    data: data,
   };
 
   try {
     const response = await axios.request(config);
-    console.log(response.data);
+    console.log(response.data)
     return response.data;
   } catch (error) {
     console.log("Error fetching task data:", error);
@@ -33,7 +35,7 @@ async function fetchTaskData() {
   }
 }
 
-export default function Todays() {
+export default function All() {
   const [currentTaskID, setCurrentTaskID] = useState<number | null>(null);
   const [taskdata, setTaskdata] = useState([]);
   const [taskdataDetail, setTaskdataDetail] = useState([]);
@@ -70,22 +72,22 @@ export default function Todays() {
 
   const handleGetButtonClick = () => {
     fetchTaskData().then((data) => {
+      console.log(data)
       const filteredTasks = data.filter((task: any) => {
-        console.log(formData);
-        console.log(task);
+        console.log(task.Deadline.split(" ")[0])
         // Check if selectValue1 matches task's priority (assuming task.priority is the attribute name)
-        if (formData.selectValue1 && task.Priority !== formData.selectValue1) {
+        if (formData.selectValue1 && task.Priority != formData.selectValue1) {
           return false;
         }
         // Check if selectValue2 matches task's status (assuming task.status is the attribute name)
         if (formData.selectValue2 && task.CategoryID != formData.selectValue2) {
           return false;
         }
-
+       
         // Check if inputValue matches task's due date (assuming task.dueDate is the attribute name)
         if (
           formData.inputValue &&
-          task.Deadline.split("T")[0] !== formData.inputValue
+          task.Deadline.split(" ")[0] != formData.inputValue
         ) {
           return false;
         }

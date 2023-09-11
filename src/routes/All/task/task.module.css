@@ -11,7 +11,7 @@
 }
 
 .taskFold {
-  padding: 1px 0 0 10px;
+  padding: 8px 0 0 10px;
   display: inline;
   position: absolute;
   width: 30%;
@@ -26,6 +26,7 @@
 
 .taskFold:hover {
   content: "";
+  padding: 1px 0 0 10px;
   display: inline-block;
   position: absolute;
   width: 30%;

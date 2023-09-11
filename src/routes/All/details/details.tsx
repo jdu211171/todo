@@ -58,7 +58,7 @@ function TaskDetail({ taskdata, onClose }: TaskDetailProps) {
         </div>
         <div className={st.title}>{taskdata.TaskName}</div>
         <div className={st.deadline}>
-          <span>Deadline:</span> {taskdata.Deadline.split("T")[0]}
+          <span>Deadline:</span> {taskdata.Deadline.split(" ")[0]}
         </div>
         <div className={st.category}>
           <span>Category:</span> {taskdata.CategoryName}

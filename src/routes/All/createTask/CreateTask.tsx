@@ -27,12 +27,15 @@ interface CreateTaskProps {
   TaskIDNull: () => void;
 }
 
-
-const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDNull }) => {
+const CreateTask: React.FC<CreateTaskProps> = ({
+  updateTaskData,
+  TaskID,
+  TaskIDNull,
+}) => {
   const currentDate = new Date();
   const currentDateString = currentDate.toISOString().split("T")[0];
   const [categories, setCategories] = useState<Category[]>([]);
-    
+
   // Move this part inside the useEffect
   const [task, setTask] = useState<Task>({
     title: "",
@@ -56,22 +59,23 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
         Authorization: "Bearer " + token,
       },
     };
-  
+
     axios
       .request(config)
       .then((response) => {
         const fetchedCategories = response.data;
         setCategories(fetchedCategories);
         // const defaultCategory = fetchedCategories.length > 0 ? fetchedCategories[0].CategoryID : 0; // Use CategoryID
-        setTask((prevTask) => ({ ...prevTask, category: fetchedCategories.length > 0 ? fetchedCategories[0].CategoryID : 0 }));
+        setTask((prevTask) => ({
+          ...prevTask,
+          category:
+            fetchedCategories.length > 0 ? fetchedCategories[0].CategoryID : 0,
+        }));
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
-  
-  
-
 
   const handleReset = () => {
     const currentDate = new Date();
@@ -86,6 +90,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
       TaskID: undefined, // Reset TaskID to undefined
     });
   };
+  
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -133,6 +138,12 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
         console.log(error);
       });
   };
+
+  useEffect(() => {
+    if (TaskID === null) {
+      handleReset();
+    }
+  }, [TaskID]);
 
   const handleUpdate = (taskID: any) => {
     let data = qs.stringify({
@@ -215,8 +226,10 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
     }
   }, [TaskID, setUpdateData]);
 
+  
   return (
     <div className={styles.noselect}>
+     
       <form ref={formRef} onSubmit={handleSubmit}>
         <div className={styles.createTaskContainer}>
           <div className={styles.taskTitleForm}>

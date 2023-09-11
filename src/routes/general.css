@@ -22,21 +22,22 @@
 }
 
 .CreateTask {
-  overflow: hidden;
-}
-
-.CreateTaskBtn {
-  width: 40px;
-  border-bottom: 2px solid black;
-  margin: auto;
-}
-
-.CreateTaskBtn::after {
-  display: inline-block;
   position: relative;
-  content: "_";
+  height: 0px;
+  /* margin-top: -150px; */
+  /* transform: scaleY(0); */
+  overflow:hidden;
+  transition: all 0.4s;
+}
 
-  /* border-bottom: 2px solid black; */
+
+.closeButton {
+  position: absolute;
+  right: 12px;
+  margin-top: 8px;
+}
+.closeButton:hover {
+  transform: scale(1.1);
 }
 
 h1 {
@@ -54,6 +55,28 @@ label {
   white-space: nowrap;
 }
 
-/* div {
-  border:  1px solid black;
-} */
+.float{
+  position:fixed;
+  width:50px;
+  height:50px;
+  bottom:100px;
+  right:40px;
+  background-color:#045776;
+  color:#FFF;
+  border-radius:50%;
+  text-align:center;
+  box-shadow: 2px 2px 3px #999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.float:active{
+  transform: scale(0.9);
+}
+
+.my-float{
+  font-size: large;
+  font-weight: bold;
+}

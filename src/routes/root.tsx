@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
 import logo from "./logo.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Import the font awesome icons
 import {
@@ -93,10 +93,10 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
     const createAccount = (
       <div className="bottom-content">
         <li className="LogStatus">
-          <a href="/login">
+          <Link to="/login">
             <FontAwesomeIcon icon={faUserPlus} className="icon" />
             <span className="text nav-text">Login</span>
-          </a>
+          </Link>
         </li>
       </div>
     );
@@ -104,10 +104,10 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
     const logOut = (
       <div className="bottom-content">
         <li className="LogStatus">
-          <a href="#" onClick={handleLogout}>
+          <Link to="#" onClick={handleLogout}>
             <FontAwesomeIcon icon={faRightFromBracket} className="icon" />
             <span className="text nav-text">Log Out</span>
-          </a>
+          </Link>
         </li>
       </div>
     );
@@ -157,43 +157,43 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
             {/* <CurrentDate /> */}
             <ul className="menu-links">
               <li className="nav-link">
-                <a href={`/`}>
+                <Link to={`/`}>
                   <FontAwesomeIcon icon={faList} className="icon" />
                   <span className="text nav-text">All Tasks</span>
-                </a>
+                </Link>
               </li>
               <li className="nav-link">
-                <a href="/today">
+                <Link to="/today">
                   <FontAwesomeIcon icon={faCalendarDay} className="icon" />
                   <span className="text nav-text">Today's Tasks</span>
-                </a>
+                </Link>
               </li>
               <li className="nav-link">
-                <a href="#">
+                <Link to="#">
                   <FontAwesomeIcon icon={faRotateRight} className="icon" />
                   <span className="text nav-text">Repeated Tasks</span>
-                </a>
+                </Link>
               </li>
               <li className="nav-link">
-                <a href="/completed">
+                <Link to="/completed">
                   <FontAwesomeIcon icon={faThumbsUp} className="icon" />
                   <span className="text nav-text">Completed Tasks</span>
-                </a>
+                </Link>
               </li>
               <li className="nav-link">
-                <a href="/uncompleted">
+                <Link to="/uncompleted">
                   <FontAwesomeIcon icon={faBoxOpen} className="icon" />
                   <span className="text nav-text">Uncompleted Tasks</span>
-                </a>
+                </Link>
               </li>
               <li className="nav-link">
-                <a href="#">
+                <Link to="#">
                   <FontAwesomeIcon icon={faTrashCan} className="icon" />
                   <span className="text nav-text">Deleted Tasks</span>
-                </a>
+                </Link>
               </li>
               <li className="nav-link">
-                <a href="/categories">
+                <Link to="/categories">
                   <FontAwesomeIcon
                     icon={faFolderPlus}
                     className="icon"
@@ -205,7 +205,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
                   >
                     Categories
                   </span>
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

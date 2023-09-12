@@ -97,7 +97,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
         <li className="LogStatus">
           <Link to="/login">
             <FontAwesomeIcon icon={faUserPlus} className="icon" />
-            <span className="text nav-text">Login</span>
+            <span className="text nav-text">ログイン</span>
           </Link>
         </li>
       </div>
@@ -108,7 +108,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
         <li className="LogStatus">
           <Link to="#" onClick={handleLogout}>
             <FontAwesomeIcon icon={faRightFromBracket} className="icon" />
-            <span className="text nav-text">Log Out</span>
+            <span className="text nav-text">ログアウト</span>
           </Link>
         </li>
       </div>
@@ -127,7 +127,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
             </span>
             <div className="text header-text">
               <span className="name noselect">NIKKI</span>
-              <span className="profession noselect">Always On Time</span>
+              <span className="profession noselect">いつも時間通り</span>
             </div>
           </div>
           <div className="toggle cursor" onClick={handleClick}>
@@ -143,7 +143,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
             </span>
             <div className="text header-text">
               <span className="name noselect">NIKKI</span>
-              <span className="profession noselect">Always On Time</span>
+              <span className="profession noselect">いつも時間通り</span>
             </div>
           </div>
           <CurrentDate />
@@ -161,37 +161,37 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
               <li className="nav-link">
                 <Link to={`/`}>
                   <FontAwesomeIcon icon={faList} className="icon" />
-                  <span className="text nav-text">All Tasks</span>
+                  <span className="text nav-text">すべてのタスク</span>
                 </Link>
               </li>
               <li className="nav-link">
                 <Link to="/today">
                   <FontAwesomeIcon icon={faCalendarDay} className="icon" />
-                  <span className="text nav-text">Today's Tasks</span>
+                  <span className="text nav-text">今日のタスク</span>
                 </Link>
               </li>
               <li className="nav-link">
                 <Link to="/schedule">
                   <FontAwesomeIcon icon={faCalendarDays} className="icon" />
-                  <span className="text nav-text">Schedule</span>
+                  <span className="text nav-text">スケジュール</span>
                 </Link>
               </li>
               <li className="nav-link">
                 <Link to="#">
                   <FontAwesomeIcon icon={faRotateRight} className="icon" />
-                  <span className="text nav-text">Repeated Tasks</span>
+                  <span className="text nav-text">繰り返されるタスク</span>
                 </Link>
               </li>
               <li className="nav-link">
                 <Link to="/completed">
                   <FontAwesomeIcon icon={faThumbsUp} className="icon" />
-                  <span className="text nav-text">Completed Tasks</span>
+                  <span className="text nav-text">完了したタスク</span>
                 </Link>
               </li>
               <li className="nav-link">
                 <Link to="/uncompleted">
                   <FontAwesomeIcon icon={faBoxOpen} className="icon" />
-                  <span className="text nav-text">Uncompleted Tasks</span>
+                  <span className="text nav-text">未完了のタスク</span>
                 </Link>
               </li>
 
@@ -206,7 +206,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
                     className="text nav-text addCategory"
                     id="addCategoryText"
                   >
-                    Categories
+                    カテゴリー一覧
                   </span>
                 </Link>
               </li>

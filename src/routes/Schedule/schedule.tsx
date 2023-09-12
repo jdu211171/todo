@@ -274,8 +274,20 @@ export default function All() {
   };
 
   function getDates(dates:any) {
+    fetchTaskData().then((data) => {
+      console.log(data);
+      const filteredTasks = data.filter(task => {
+        const taskDate = new Date(task.Deadline);
+        return taskDate >= dates[0] && taskDate <= dates[1];
+      });
+
+      // Set the filtered data back to the taskdata state variable
+      setTaskdata(filteredTasks);
+    });
     console.log(dates)
   }
+
+  
 
   return (
     <div className="content">

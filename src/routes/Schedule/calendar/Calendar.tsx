@@ -11,14 +11,6 @@ function CalendarUI({ getDates, events }: CalendarProps) {
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
   const [startDate, endDate] = dateRange;
 
-  // Define an array of dates you want to mark
-  const markedDates = [
-    new Date("2023-09-10"),
-    new Date("2023-09-15"),
-    new Date("2023-09-20"),
-  ];
-
-  
 
   // Function to check if a date is in the markedDates array
   const isDateMarked = (date) =>
@@ -60,7 +52,7 @@ function CalendarUI({ getDates, events }: CalendarProps) {
           <input
             className="formSelect"
             type="date"
-            value={startDate.toISOString().split("T")[0]}
+            value={startDate.toLocaleDateString('en-CA', {timeZone: 'Asia/Tokyo'})}
             onChange={(e) => {
               const newStartDate = new Date(e.target.value);
               setDateRange([newStartDate, endDate]);

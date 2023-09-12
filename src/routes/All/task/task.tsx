@@ -161,18 +161,18 @@ export default function Tasks({
             {formatDeadline(taskdatas.Deadline)}
           </div>
           <div className={st.buttons}>
-            <div className={st.details}>Details</div>
+            <div className={st.details}>詳細情報</div>
             <div
               className={st.update}
               onClick={(event) => handleChange(taskdatas.TaskID, event)}
             >
-              Update
+              更新する
             </div>
             <div
               className={st.delete}
               onClick={(event) => handleDelete(taskdatas.TaskID, event)}
             >
-              Delete
+              削除する
             </div>
           </div>
         </div>

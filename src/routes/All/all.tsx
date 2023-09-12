@@ -25,8 +25,17 @@ let isOpen: boolean;
 let isBeingUpdated: boolean;
 
 async function fetchTaskData() {
-  const data = qs.stringify({});
   const token = localStorage.getItem("token");
+  console.log(token)
+  // Check if the user is a guest (you can use your own condition)
+  if (token === null || token === "guestToken") {
+    // User is a guest, fetch data from local storage
+    const tasksFromLocalStorage = getAllTasksFromLocalStorageWithCategoryName()
+    return tasksFromLocalStorage;
+  }
+
+  // User is authenticated, fetch data from the API
+  const data = qs.stringify({});
   const config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -55,7 +64,7 @@ export default function All() {
   const [taskdataDetail, setTaskdataDetail] = useState([]);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const priorityOptions = ["低い", "普通", "優先"];
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<[]>([]);
 
   const [formData, setFormData] = useState({
     // Your filter criteria state
@@ -117,7 +126,14 @@ export default function All() {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
+
+  if (token === null || token === "guestToken") {
+    // User is a guest, fetch categories from local storage
+    const categoriesFromLocalStorage = getCategoriesFromLocalStorage()
+    setCategories(categoriesFromLocalStorage);
+  } else {
+    // User is authenticated, fetch categories from the API
     let config = {
       method: "get",
       maxBodyLength: Infinity,
@@ -136,10 +152,22 @@ export default function All() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }
+}, []);
 
-  const openDetail = (TaskID: number) => {
-    const token = localStorage.getItem("token");
+
+const openDetail = (TaskID: number) => {
+  const token = localStorage.getItem("token");
+
+  if (token === null || token === "guestToken") {
+    // User is a guest, fetch task details from local storage
+    const taskDetailFromLocalStorage = getTaskFromLocalStorage(TaskID)
+    setTaskdataDetail(taskDetailFromLocalStorage);
+
+    // Open the detail view
+    setIsDetailOpen(true);
+  } else {
+    // User is authenticated, fetch task details from the API
     let config = {
       method: "get",
       maxBodyLength: Infinity,
@@ -161,7 +189,8 @@ export default function All() {
       .catch((error) => {
         console.log(error);
       });
-  };
+  }
+};
 
   const closeDetail = (event: any) => {
     setIsDetailOpen(false);
@@ -407,4 +436,76 @@ export default function All() {
       </div>
     </div>
   );
+}
+
+
+function getAllTasksFromLocalStorageWithCategoryName() {
+  try {
+    // Retrieve tasks from local storage
+    const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+
+    // Retrieve categories from local storage
+    const categories = JSON.parse(localStorage.getItem("categories") || "[]");
+
+    // Loop through tasks and add CategoryName to each task
+    const tasksWithCategoryName = tasks.map((task) => {
+      if (task.CategoryID) {
+        // Find the category with the matching CategoryID
+        const category = categories.find((c) => c.CategoryID === task.CategoryID);
+
+        // If a matching category is found, add CategoryName to the task
+        if (category) {
+          task.CategoryName = category.CategoryName;
+        }
+      }
+      return task;
+    });
+
+    return tasksWithCategoryName;
+  } catch (error) {
+    console.error("Error retrieving tasks from local storage:", error);
+    return [];
+  }
+}
+
+
+
+function getTaskFromLocalStorage(taskID: any) {
+  try {
+    // Retrieve tasks from local storage
+    const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+
+    // Find the task with the specified ID
+    const task = tasks.find((t) => t.TaskID === taskID);
+
+    // If the task is found and it has a CategoryID
+    if (task && task.CategoryID) {
+      // Retrieve categories from local storage
+      const categories = JSON.parse(localStorage.getItem("categories") || "[]");
+
+      // Find the category with the matching CategoryID
+      const category = categories.find((c) => c.CategoryID === task.CategoryID);
+
+      // Add CategoryName to the task object if category is found
+      if (category) {
+        task.CategoryName = category.CategoryName;
+      }
+    }
+
+    return task || null; // Return the found task or null if not found
+  } catch (error) {
+    console.error("Error retrieving task from local storage:", error);
+    return null;
+  }
+}
+
+function getCategoriesFromLocalStorage() {
+  try {
+    // Retrieve categories from local storage
+    const categories = JSON.parse(localStorage.getItem("categories") || "[]");
+    return categories;
+  } catch (error) {
+    console.error("Error retrieving categories from local storage:", error);
+    return [];
+  }
 }

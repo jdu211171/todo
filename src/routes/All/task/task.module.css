@@ -134,14 +134,17 @@
 
 .details {
   color: #4f4c4c;
+  white-space: nowrap;
 }
 
 .update {
   color: #0d6efd ;
+  white-space: nowrap;
 }
 
 .delete {
   color: #dc3545;
+  white-space: nowrap;
 }
 
 .right {

@@ -63,31 +63,31 @@ function Login() {
     <div className={style.container + ' ' + style.container} >
 
       <div className={style.form}>
-        <span className={style.title}>Login to Account</span>
-        <span className={style.entranceSpan}>organize your work</span>
+        <span className={style.title}>ログイン</span>
+        <span className={style.entranceSpan}>お客様の仕事を整理します</span>
         <form onSubmit={handleSubmit}>
           <label className={style.entranceLabel} htmlFor="email">
-            Email
+            メールアドレス
           </label>
           <input
             className={style.entranceInput}
             id="email"
             name="email"
             type="text"
-            placeholder="Write your email here"
+            placeholder="お客様のメールアドレス"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
 
           <label className={style.entranceLabel} htmlFor="password">
-            password
+            パスワード
           </label>
           <input
             className={style.entranceInput}
             id="password"
             name="password"
             type="password"
-            placeholder="Create a secure password"
+            placeholder="お客様のパスワード"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -96,13 +96,13 @@ function Login() {
             type="submit"
             onSubmit={handleSubmit}
           >
-            Log In
+            ログイン
           </button>
         </form>
         <span className={style.entranceSpan}>
-          Don't have an account?
+          アカウントをお持ちでないですか？
           <a className={style.entranceA} href={`/register`}>
-            Create one
+            アカウントを作成
           </a>
         </span>
       </div>

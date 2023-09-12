@@ -95,27 +95,27 @@ const navigate = useNavigate();
       <div className="logo"></div>
 
       <div className="form">
-        <span className="title">Create your account</span>
-        <span className='entrance-span'>organize your work</span>
+        <span className="title">アカウントを作成</span>
+        <span className='entrance-span'>お客様の仕事を整理します</span>
         <form onSubmit={handleSubmit} action="" method="">
-          <label className='entrance-label' htmlFor="fname">first name</label>
-          <input className='entrance-input' name="firstname" type="text" placeholder="Write your first name"/>
+          <label className='entrance-label' htmlFor="fname">名</label>
+          <input className='entrance-input' name="firstname" type="text" placeholder="名を入力してください"/>
 
-          <label className='entrance-label' htmlFor="lname">last name</label>
-          <input className='entrance-input' name="lastname" type="text" placeholder="Write your last name"/>
+          <label className='entrance-label' htmlFor="lname">姓</label>
+          <input className='entrance-input' name="lastname" type="text" placeholder="姓を入力してください"/>
 
-          <label className='entrance-label' htmlFor="email">email address</label>
-          <input className='entrance-input' name="email" type="mail" placeholder="Enter your email"/>
+          <label className='entrance-label' htmlFor="email">メールアドレス</label>
+          <input className='entrance-input' name="email" type="mail" placeholder="お客様のメールアドレス"/>
 
-          <label className='entrance-label' htmlFor="password">password</label>
-          <input className='entrance-input' name="password" type="password" placeholder="Create a secure password"/>
+          <label className='entrance-label' htmlFor="password">パスワード</label>
+          <input className='entrance-input' name="password" type="password" placeholder="安全なパスワードを作成してくだいさい"/>
 
-          <label className='entrance-label' htmlFor="rpassword">repeat password</label>
-          <input className='entrance-input' name="rpassword" type="password" placeholder="Write password one more time"/>
+          <label className='entrance-label' htmlFor="rpassword">パスワード再入力</label>
+          <input className='entrance-input' name="rpassword" type="password" placeholder="パスワードを繰り返してください"/>
 
-          <button className='entrance-button' type="submit">Create account</button>
+          <button className='entrance-button' type="submit">アカウントを作成</button>
         </form>
-        <span className='entrance-span' >Already have an account?<a className='entrance-a' href={`/login`}>Log in</a></span>
+        <span className='entrance-span' >現在ログインしていますか？<a className='entrance-a' href={`/login`}>ログイン</a></span>
       </div>
     </div>
   );

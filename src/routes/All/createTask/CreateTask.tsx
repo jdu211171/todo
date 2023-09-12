@@ -256,10 +256,10 @@ const CreateTask: React.FC<CreateTaskProps> = ({
                     value={task.title}
                     onChange={handleInputChange}
                     required
-                    
+                    autoFocus
                   />
                   <div className={styles.underline}></div>
-                  <label className={styles.label}>Enter a task title</label>
+                  <label className={styles.label}>タスクのタイトルを入力してください</label>
                 </div>
               </div>
             </div>
@@ -270,7 +270,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
                 name="description"
                 value={task.description}
                 onChange={handleInputChange}
-                placeholder="Enter task description"
+                placeholder="タスクの詳細を入力する"
               ></textarea>
             </div>
           </div>
@@ -278,7 +278,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
           <div className={styles.taskDetailsForm}>
             <div className={styles.priorityCategoryRepetition}>
               <label className={styles.label} htmlFor="task-priority">
-                Task Priority
+              タスクの優先度
               </label>
               <select
                 className={styles.formSelect}
@@ -298,7 +298,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
                 </option>
               </select>
               <label className={styles.label} htmlFor="task-category">
-                Task Category
+              タスクのカテゴリー
               </label>
               {categories.length > 0 && (
                 <select
@@ -323,7 +323,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
 
             <div className={styles.weekdays}>
               <label className={styles.label} htmlFor="task-category">
-                Task Repetition
+              タスクの繰り返し
               </label>
               <select
                 className={styles.formSelect}
@@ -333,17 +333,17 @@ const CreateTask: React.FC<CreateTaskProps> = ({
                 onChange={handleInputChange}
               >
                 <option className={styles.option} value="onetime">
-                  One time only
+                一回のみ
                 </option>
                 <option className={styles.option} value="daily">
-                  Daily
+                毎日
                 </option>
                 <option className={styles.option} value="weekly">
-                  Weekly
+                毎週
                 </option>
               </select>
               <label className={styles.label} htmlFor="task-category">
-                Task Deadline
+              タスクの締め切り
               </label>
               <input
                 type="date"
@@ -362,20 +362,20 @@ const CreateTask: React.FC<CreateTaskProps> = ({
               type="reset"
               onClick={handleReset}
             >
-              Reset
+              リセット
             </button>
-            <button className={styles.btn + " " + styles.delete}>Delete</button>
+            <button className={styles.btn + " " + styles.delete}>削除する</button>
             {TaskID ? (
               <button
                 type="button"
                 className={styles.btnLocal}
                 onClick={() => handleUpdate(TaskID)}
               >
-                Update
+                更新
               </button>
             ) : (
               <button className={styles.btnLocal} type="submit">
-                Add Task
+                タスクの追加
               </button>
             )}
           </div>

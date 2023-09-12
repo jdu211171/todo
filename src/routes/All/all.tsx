@@ -275,7 +275,7 @@ export default function All() {
     <div className="content">
       <div className="top">
         <div className={all.GetButton}>
-          <h1>All tasks</h1>
+          <h1>すべてのタスク</h1>
           <div className={all.buttons}>
             <div onClick={handleResetClick}>
               <FontAwesomeIcon icon={faRotate} />
@@ -387,7 +387,7 @@ export default function All() {
         <div className={all.sortBar}>
           <button onClick={() => handleSort("TaskName")}>
             <FontAwesomeIcon icon={faArrowUpAZ} />
-            Task Name
+            タスク名
           </button>
           <button onClick={() => handleSort("DueDate")}>
             {sortOrder === "asc" && sortCriteria ==="DueDate" ? (
@@ -395,7 +395,7 @@ export default function All() {
             ) : (
               <FontAwesomeIcon icon={faArrowDownWideShort} />
             )}
-            Due Date
+            期限日
           </button>
         </div>
         <Tasks

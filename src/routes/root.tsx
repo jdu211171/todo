@@ -25,32 +25,68 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
           Authorization: "Bearer " + token,
         },
       };
-
+  
       const response = await axios.request(config);
-
+  
       // If the request is successful, update the ActiveUser in local storage
       const userData = {
         UserName: response.data.UserName,
         UserID: response.data.UserID,
       };
       localStorage.setItem("ActiveUser", JSON.stringify(userData));
-
+  
       // Set the user data in state
       setUserData(userData);
+  
+      
     } catch (error) {
       console.log(error);
-
+  
       // Set ActiveUser to "Guest" and null for UserID
       const guestUser = {
         UserName: "ゲスト",
         UserID: null,
       };
       localStorage.setItem("ActiveUser", JSON.stringify(guestUser));
-
+      
+      // Check if the "categories" and "tasks" tables exist in local storage
+      let categories = JSON.parse(localStorage.getItem("categories"));
+      let tasks = JSON.parse(localStorage.getItem("tasks"));
+      
+      if (!categories) {
+        // Categories table doesn't exist, create it with the default category
+        categories = [
+          {
+            CategoryID: 1,
+            CategoryName: "デフォルト",
+          },
+        ];
+        localStorage.setItem("categories", JSON.stringify(categories));
+      }
+  
+      if (!tasks) {
+        // Tasks table doesn't exist, create it with the sample task
+        tasks = [
+          {
+            TaskID: 1,
+            CategoryID: 1, // CategoryID for the default category
+            TaskName: "サンプル",
+            Description: "This is a sample task description.",
+            Priority: "優先",
+            Deadline: "2023-09-14 04:00:00", // Replace with the actual deadline
+            Completed: 0, // 0 for not completed, 1 for completed
+            CompletedDate: null // Set to null for not completed, or provide a timestamp for completed
+          }
+        ];
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+      }
       // Set the guest user data in state
       setUserData(guestUser);
     }
   }
+  
+  
+  
 
   useEffect(() => {
     // Call fetchUserData when the component mounts

@@ -19,6 +19,7 @@ import {
   faFolderPlus,
   faChevronLeft,
   faChevronRight,
+  faRightToBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CurrentDate from "../Date";
@@ -26,6 +27,7 @@ import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons/faCalendarDays";
+import { faUserSecret } from "@fortawesome/free-solid-svg-icons/faUserSecret";
 
 // Define the props type for the component
 type DashboardSideBarMenuProps = {
@@ -53,7 +55,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
       })
       .catch((error) => {
         console.log(error);
-        navigate("/login");
+        // navigate("/login");
       });
   };
 
@@ -88,7 +90,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
     localStorage.removeItem("token");
 
     // Redirect the user to the logout page (assuming "/LogOut" is your logout page)
-    navigate("/");
+    window.location.reload();
   };
 
   function changeOnStatus() {
@@ -96,7 +98,14 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
       <div className="bottom-content">
         <li className="LogStatus">
           <Link to="/login">
-            <FontAwesomeIcon icon={faUserPlus} className="icon" />
+            <div  className="icon" />
+            <div className="UserData"><FontAwesomeIcon icon={faUserSecret} />ゲスト</div>
+          </Link>
+        </li>
+        <li className="LogStatus">
+          <Link to="/login">
+          <FontAwesomeIcon icon={faRightToBracket} className="icon" />
+            {/* <FontAwesomeIcon icon={faUserPlus}  /> */}
             <span className="text nav-text">ログイン</span>
           </Link>
         </li>
@@ -106,7 +115,14 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
     const logOut = (
       <div className="bottom-content">
         <li className="LogStatus">
-          <Link to="#" onClick={handleLogout}>
+          <Link to="/login">
+            <div  className="icon" />
+            <div className="UserData" >Botirov Saydiakhror</div>
+          </Link>
+        </li>
+        <li className="LogStatus">
+          <Link to="/" onClick={handleLogout}>
+            
             <FontAwesomeIcon icon={faRightFromBracket} className="icon" />
             <span className="text nav-text">ログアウト</span>
           </Link>
@@ -203,7 +219,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
                     id="addCategoryIcon"
                   />
                   <span
-                    className="text nav-text addCategory"
+                    className="text nav-text"
                     id="addCategoryText"
                   >
                     カテゴリー一覧

@@ -1,14 +1,17 @@
 import style from "./Login.module.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 import axios from "axios";
 import * as qs from "qs";
+import { Link } from "react-router-dom";
 
 function Login() {
   // Use state hooks to store the user's email and password
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // State to store error message
 
   // Use navigate hook to navigate to other pages
   const navigate = useNavigate();
@@ -56,15 +59,28 @@ function Login() {
       })
       .catch((error) => {
         console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "メールアドレスまたはパスワードが無効です。もう一度お試しください。",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        if (error.response && error.response.status === 401) {
+          // Display an error message when status is 401 (Unauthorized)
+          setErrorMessage("メールアドレスまたはパスワードが無効です。もう一度お試しください。");
+        } else {
+          // Handle other errors as needed
+          setErrorMessage("エラーが発生しました。後でもう一度お試しください。");
+        }
       });
   };
 
   return (
     <div className={style.container + ' ' + style.container} >
-
       <div className={style.form}>
         <span className={style.title}>ログイン</span>
         <span className={style.entranceSpan}>お客様の仕事を整理します</span>
+        
         <form onSubmit={handleSubmit}>
           <label className={style.entranceLabel} htmlFor="email">
             メールアドレス
@@ -91,6 +107,8 @@ function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+
+          
           <button
             className={style.entranceButton}
             type="submit"
@@ -99,11 +117,15 @@ function Login() {
             ログイン
           </button>
         </form>
+
+        {errorMessage && (
+          <div className={style.error}>{errorMessage}</div>
+        )}
         <span className={style.entranceSpan}>
           アカウントをお持ちでないですか？
-          <a className={style.entranceA} href={`/register`}>
+          <Link className={style.entranceA} to={`/register`}>
             アカウントを作成
-          </a>
+          </Link>
         </span>
       </div>
     </div>

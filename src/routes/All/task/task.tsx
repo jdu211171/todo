@@ -22,14 +22,14 @@ interface TasksProps {
   taskdata: Task[];
   updateTaskData: () => void;
   getUpdateData: (TaskID: number) => void; // Correctly define the type of getUpdateData
-  getDetails:(TaskID: number) => void;
+  getDetails: (TaskID: number) => void;
 }
 
 export default function Tasks({
   taskdata,
   updateTaskData,
   getUpdateData,
-  getDetails
+  getDetails,
 }: TasksProps): JSX.Element {
   const formatDeadline = (deadline: string) => {
     const date = new Date(deadline);
@@ -112,13 +112,15 @@ export default function Tasks({
       });
   }
 
+  function heees(event: React.MouseEvent<HTMLSpanElement, MouseEvent>): void {
+    event.stopPropagation()
+  }
+
   const TaskItems = taskdata.map((taskdatas: Task, index: number) => (
-    <div
-      key={index}
-      onClick={(event) => getDetails(taskdatas.TaskID)}
-    >
+    <div key={index} onClick={(event) => getDetails(taskdatas.TaskID)}>
       <span
         className={st.taskFold + " " + st[priorityClassMap[taskdatas.Priority]]}
+        onClick={(event) => heees(event)}
       >
         {taskdatas.CategoryName}
       </span>

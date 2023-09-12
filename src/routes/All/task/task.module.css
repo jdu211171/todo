@@ -52,31 +52,31 @@
 .critical::after {
   content: "\25CF"; /* Unicode character escape sequence */
   color: red;
-  font-size: 1.5em;
+  font-size: 1em;
   margin-right: 5px;
   position: absolute;
-  right: 8%;
-  top: -5px;
+  right: 12%;
+  top: 0px;
 }
 
 .normal::after {
   content: "\25CF"; /* Unicode character escape sequence */
   color: #045776;
-  font-size: 1.5em;
+  font-size: 1em;
   margin-right: 5px;
   position: absolute;
-  right: 8%;
-  top: -5px;
+  right: 12%;
+  top: 0px;
 }
 
 .low::after {
   content: "\25CF"; /* Unicode character escape sequence */
   color: green;
-  font-size: 1.5em;
+  font-size: 1em;
   margin-right: 5px;
   position: absolute;
-  right: 8%;
-  top: -5px;
+  right: 12%;
+  top: 0px;
 }
 
 

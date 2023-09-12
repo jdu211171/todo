@@ -1,3 +1,4 @@
+
 .container {
     background-color: #F3F2F1;
     display: flex;
@@ -106,3 +107,9 @@
 .entranceButton:hover {
     transform: scale(1.02);
 }
+
+.error {
+    color: red; /* Set the text color to red */
+    font-size: 14px; /* Set the font size */
+    margin-top: 5px; /* Add some space above the error message */
+  }

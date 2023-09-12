@@ -155,7 +155,7 @@ const Folder = ({ categories, triggerFetch }: any) => {
                 type="text"
                 value={newCategoryName}
                 onChange={(e) => setNewCategoryName(e.target.value)}
-                autoFocus
+                
               />
             ) : (
               category.CategoryName

@@ -98,6 +98,11 @@
   color: #777;
 }
 
+.Calendar {
+  padding-left: 21px;
+}
+
+
 
 
 @media screen and (max-width: 600px) {

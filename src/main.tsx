@@ -12,6 +12,7 @@ import Categories from "./routes/Categories/Categories";
 import Tasks from "./routes/All/task/task";
 import Task from "./htmlAssets/Task/Task";
 import Todays from "./routes/Todays/Todays";
+import Schedule from "./routes/Schedule/schedule";
 import Completed from "./routes/Completed/Completed";
 import Uncompleted from "./routes/Uncompleted/Uncompleted";
 // import CreateCategory from './routes/Categories/CreateCategory'
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/today",
         element: <Todays />,
+      },
+      {
+        path: "/schedule",
+        element: <Schedule />,
       },
       {
         path: "/completed",

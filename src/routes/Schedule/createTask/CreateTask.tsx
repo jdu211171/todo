@@ -256,7 +256,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
                     value={task.title}
                     onChange={handleInputChange}
                     required
-                    autoFocus
+                    
                   />
                   <div className={styles.underline}></div>
                   <label className={styles.label}>Enter a task title</label>

@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import all from "./all.module.css";
 import "../general.css";
 
-import App from "../../htmlAssets/Select/Select";
-import Button from "../filters/createButton";
 import Tasks from "./task/task";
 import axios from "axios";
 import * as qs from "qs";
 import CreateTask from "./createTask/CreateTask";
 import TaskDetails from "./details/details";
+import Calendar from "./calendar/Calendar";
 import {
   faArrowDownWideShort,
   faArrowUpAZ,
@@ -16,13 +15,10 @@ import {
   faMagnifyingGlass,
   faPlus,
   faRotate,
-  faSortDown,
-  faSortUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 let isOpen: boolean;
-let isBeingUpdated: boolean;
 
 async function fetchTaskData() {
   const data = qs.stringify({});
@@ -271,6 +267,10 @@ export default function All() {
     setTaskdata(sortedData);
   };
 
+  function getDates(dates:any) {
+    console.log(dates)
+  }
+
   return (
     <div className="content">
       <div className="top">
@@ -338,6 +338,10 @@ export default function All() {
       <div onClick={() => openElement(true)} className="float">
         <FontAwesomeIcon icon={faPlus} className="my-float" />
       </div>
+      <div className={all.Calendar}>
+      <Calendar getDates={getDates} />
+      </div>
+      
 
       <div className="CreateTask" id="taskMenu">
         <div onClick={() => closeElement()} className="closeButton">

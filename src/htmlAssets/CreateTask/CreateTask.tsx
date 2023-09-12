@@ -24,7 +24,7 @@ const CreateTask: React.FC<TaskProps> = (props: TaskProps) => {
                     fill="#212121" />
                 </svg>
                 <div className={styles.inputData}>
-                  <input className={styles.input} type="text" required autoFocus />
+                  <input className={styles.input} type="text" required  />
                   <div className={styles.underline}></div>
                   <label className={styles.label}>Enter a task title</label>
                 </div>

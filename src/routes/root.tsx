@@ -25,6 +25,7 @@ import CurrentDate from "../Date";
 import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { faCalendarDays } from "@fortawesome/free-solid-svg-icons/faCalendarDays";
 
 // Define the props type for the component
 type DashboardSideBarMenuProps = {
@@ -37,15 +38,16 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
   const CheckUser = () => {
     const token = localStorage.getItem("token");
     let config = {
-        method: 'get',
-        maxBodyLength: Infinity,
-        url: "http://" + window.location.hostname + ":3001/api/checkuser",
-        headers: { 
-          'Authorization': "Bearer " + token,
-        }
-      };
-      
-      axios.request(config)
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "http://" + window.location.hostname + ":3001/api/checkuser",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+
+    axios
+      .request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
       })
@@ -53,9 +55,9 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
         console.log(error);
         navigate("/login");
       });
-  }
+  };
 
-  CheckUser()
+  CheckUser();
   type ClickEvent = React.MouseEvent<HTMLDivElement>;
   function handleClick(event: ClickEvent) {
     event.preventDefault();
@@ -169,6 +171,12 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
                 </Link>
               </li>
               <li className="nav-link">
+                <Link to="/schedule">
+                  <FontAwesomeIcon icon={faCalendarDays} className="icon" />
+                  <span className="text nav-text">Schedule</span>
+                </Link>
+              </li>
+              <li className="nav-link">
                 <Link to="#">
                   <FontAwesomeIcon icon={faRotateRight} className="icon" />
                   <span className="text nav-text">Repeated Tasks</span>
@@ -186,12 +194,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
                   <span className="text nav-text">Uncompleted Tasks</span>
                 </Link>
               </li>
-              <li className="nav-link">
-                <Link to="#">
-                  <FontAwesomeIcon icon={faTrashCan} className="icon" />
-                  <span className="text nav-text">Deleted Tasks</span>
-                </Link>
-              </li>
+
               <li className="nav-link">
                 <Link to="/categories">
                   <FontAwesomeIcon

@@ -55,7 +55,6 @@ body.dark {
   display: none;
 }
 
-
 .sidebar.close {
   width: 88px;
 }
@@ -356,7 +355,7 @@ body.dark .switch::before {
     height: 50px;
   }
   .nav-link a span {
-    display:none;
+    display: none;
   }
   .sidebar .text {
     opacity: 0;
@@ -399,6 +398,4 @@ body.dark .switch::before {
     top: 0;
     right: 0;
   }
-
-  
 }

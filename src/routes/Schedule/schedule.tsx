@@ -19,6 +19,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 let isOpen: boolean;
+let isBeingUpdated: boolean;
 
 async function fetchTaskData() {
   const data = qs.stringify({});
@@ -26,7 +27,7 @@ async function fetchTaskData() {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: "http://" + window.location.hostname + ":3001/api/all",
+    url: "http://" + window.location.hostname + ":3001/api/calendar",
     headers: {
       Authorization: "Bearer " + token,
     },
@@ -49,6 +50,8 @@ export default function All() {
   const [sortCriteria, setSortCriteria] = useState("TaskName"); // Default sorting criteria
   const [sortOrder, setSortOrder] = useState("asc"); // Default sorting order
   const [taskdataDetail, setTaskdataDetail] = useState([]);
+  const [deadlineDates, setDeadlineDates] = useState([]);
+
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const priorityOptions = ["低い", "普通", "優先"];
   const [categories, setCategories] = useState<Category[]>([]);
@@ -188,10 +191,13 @@ export default function All() {
     return TaskID;
   };
 
+
   useEffect(() => {
     fetchTaskData()
       .then((data) => {
         setTaskdata(data);
+        setDeadlineDates(data.map(item => item.Deadline))
+        
       })
       .catch((error) => {
         // Handle error if needed
@@ -339,7 +345,7 @@ export default function All() {
         <FontAwesomeIcon icon={faPlus} className="my-float" />
       </div>
       <div className={all.Calendar}>
-      <Calendar getDates={getDates} />
+      <Calendar getDates={getDates} events={deadlineDates} />
       </div>
       
 
@@ -389,10 +395,6 @@ export default function All() {
       )}
       <div className={all.TaskContainer}>
         <div className={all.sortBar}>
-          <button onClick={() => handleSort("TaskName")}>
-            <FontAwesomeIcon icon={faArrowUpAZ} />
-            Task Name
-          </button>
           <button onClick={() => handleSort("DueDate")}>
             {sortOrder === "asc" && sortCriteria ==="DueDate" ? (
               <FontAwesomeIcon icon={faArrowUpShortWide} />

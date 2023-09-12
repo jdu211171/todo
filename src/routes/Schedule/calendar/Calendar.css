@@ -191,12 +191,12 @@ abbr[title] {
 }
 
 .mark::after {
-  content: "_";
+  content: "•";
   font-size: 18px;
   position: absolute;
   display: flex;
   justify-content: center;
-  bottom: -5px;
+  bottom: -12px;
   width: 100%;
   padding-top: 10px;
 }

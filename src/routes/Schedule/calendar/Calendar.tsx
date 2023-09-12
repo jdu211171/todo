@@ -4,9 +4,10 @@ import "./Calendar.css";
 
 interface CalendarProps {
   getDates: (dates: any) => void;
+  events: any
 }
 
-function CalendarUI({ getDates }: CalendarProps) {
+function CalendarUI({ getDates, events }: CalendarProps) {
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
   const [startDate, endDate] = dateRange;
 
@@ -17,18 +18,20 @@ function CalendarUI({ getDates }: CalendarProps) {
     new Date("2023-09-20"),
   ];
 
+  
+
   // Function to check if a date is in the markedDates array
   const isDateMarked = (date) =>
-    markedDates.some((d) => d.toDateString() === date.toDateString());
+  events.some((d) => new Date(d).toDateString() === date.toDateString());
 
   // Function to render custom content for marked dates
   const tileContent = ({ date, view }) => {
-  if (view === "month" && isDateMarked(date)) {
-    // Display the date without 日
-    return <div className="mark">{date.getDate()}</div>;
-  }
-  return null;
-};
+    if (view === "month" && isDateMarked(date)) {
+      return <div className="mark"></div>;
+      
+    }
+    return null;
+  };
 
   return (
     <div className="app-calendar">

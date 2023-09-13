@@ -27,18 +27,23 @@ interface CreateTaskProps {
   TaskIDNull: () => void;
 }
 
-
-const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDNull }) => {
+const CreateTask: React.FC<CreateTaskProps> = ({
+  updateTaskData,
+  TaskID,
+  TaskIDNull,
+}) => {
   const currentDate = new Date();
+  currentDate.setHours(currentDate.getHours() + 9);
+
   const currentDateString = currentDate.toISOString().split("T")[0];
   const [categories, setCategories] = useState<Category[]>([]);
-    
+
   // Move this part inside the useEffect
   const [task, setTask] = useState<Task>({
     title: "",
     description: "",
     priority: "普通",
-    category: 0, // Use defaultCategory (ID)
+    category: getCategoriesFromLocalStorage()[0].CategoryID,
     repetition: "onetime",
     deadline: currentDateString,
     TaskID: TaskID,
@@ -48,33 +53,50 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    let config = {
-      method: "get",
-      maxBodyLength: Infinity,
-      url: "http://" + window.location.hostname + ":3001/api/categories",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    };
-  
-    axios
-      .request(config)
-      .then((response) => {
-        const fetchedCategories = response.data;
-        setCategories(fetchedCategories);
-        // const defaultCategory = fetchedCategories.length > 0 ? fetchedCategories[0].CategoryID : 0; // Use CategoryID
-        setTask((prevTask) => ({ ...prevTask, category: fetchedCategories.length > 0 ? fetchedCategories[0].CategoryID : 0 }));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-  
-  
 
+    if (token === null || token === "guestToken") {
+      // User is a guest, fetch categories from local storage
+      const categoriesFromLocalStorage = getCategoriesFromLocalStorage();
+      setCategories(categoriesFromLocalStorage);
+      
+      setTask((prevTask) => ({
+        ...prevTask,
+        category: categoriesFromLocalStorage[0].CategoryID,
+      }));
+    } else {
+      let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: "http://" + window.location.hostname + ":3001/api/categories",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
+
+      axios
+        .request(config)
+        .then((response) => {
+          const fetchedCategories = response.data;
+          setCategories(fetchedCategories);
+          // const defaultCategory = fetchedCategories.length > 0 ? fetchedCategories[0].CategoryID : 0; // Use CategoryID
+          setTask((prevTask) => ({
+            ...prevTask,
+            category:
+              fetchedCategories.length > 0
+                ? fetchedCategories[0].CategoryID
+                : 0,
+          }));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, []);
 
   const handleReset = () => {
     const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
+
     const currentDateString = currentDate.toISOString().split("T")[0];
     setTask({
       title: "",
@@ -99,74 +121,122 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(task);
-    const date = new Date().toJSON().slice(0, 10);
-    let data = qs.stringify({
-      taskName: task.title,
-      categoryID: task.category,
-      description: task.description,
-      priority: task.priority,
-      deadline: task.deadline || date,
-    });
-
+    
     const token = localStorage.getItem("token");
-    let config = {
-      method: "post",
-      maxBodyLength: Infinity,
-      url: "http://" + window.location.hostname + ":3001/api/task",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: "Bearer " + token,
-      },
-      data: data,
-    };
 
-    axios
-      .request(config)
-      .then((response) => {
-        handleReset();
-        toastr.success("Task Created Successfully");
-        const newTask = response.data as Task;
-        updateTaskData(newTask);
-      })
-      .catch((error) => {
-        console.log(error);
+    if (token === null || token === "guestToken") {
+      // User is a guest, fetch categories from local storage
+      addTaskToLocalstorage(task);
+      handleReset();
+      toastr.success("Task Created Successfully");
+      updateTaskData(task);
+    } else {
+      const date = new Date().toJSON().slice(0, 10);
+      let data = qs.stringify({
+        taskName: task.title,
+        categoryID: task.category,
+        description: task.description,
+        priority: task.priority,
+        deadline: task.deadline || date,
       });
+
+      const token = localStorage.getItem("token");
+      let config = {
+        method: "post",
+        maxBodyLength: Infinity,
+        url: "http://" + window.location.hostname + ":3001/api/task",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: "Bearer " + token,
+        },
+        data: data,
+      };
+
+      axios
+        .request(config)
+        .then((response) => {
+          handleReset();
+          toastr.success("Task Created Successfully");
+          const newTask = response.data as Task;
+          updateTaskData(newTask);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
+  useEffect(() => {
+    if (TaskID === null) {
+      handleReset();
+    }
+  }, [TaskID]);
+
   const handleUpdate = (taskID: any) => {
-    let data = qs.stringify({
-      taskName: task.title,
-      categoryName: task.category,
+    const currentDate = new Date();
+    const date = currentDate.toISOString().split("T")[0];
+    const updatedTask = {
+      title: task.title,
+      category: task.category,
       description: task.description,
       priority: task.priority,
       deadline: task.deadline,
-    });
-    console.log("updating..", task);
-    const token = localStorage.getItem("token");
-    let config = {
-      method: "put",
-      maxBodyLength: Infinity,
-      url: "http://" + window.location.hostname + ":3001/api/tasks/" + TaskID,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: "Bearer " + token,
-      },
-      data: data,
     };
 
-    axios
-      .request(config)
-      .then((response) => {
-        handleReset();
-        toastr.success("Task Updated Successfully");
-        const newTask = response.data as Task;
-        updateTaskData(newTask);
-        TaskIDNull();
-      })
-      .catch((error) => {
-        console.log(error);
+    // Check if the user is a guest
+    const token = localStorage.getItem("token");
+
+    if (token === null || token === "guestToken") {
+      // User is a guest, update the task in local storage
+      updateTaskInLocalStorage(taskID, updatedTask);
+      updateTaskData(task);
+
+      // Trigger data update (you should implement this function)
+      // updateTaskDataInLocalStorage(updatedTask);
+
+      // Reset form or perform other actions as needed
+      handleReset();
+      toastr.success("Task Updated Successfully");
+      TaskIDNull();
+    } else {
+      // User is not a guest, make an API request as before
+      let data = qs.stringify({
+        taskName: task.title,
+        categoryName: task.category,
+        description: task.description,
+        priority: task.priority,
+        deadline: task.deadline,
       });
+      
+      const token = localStorage.getItem("token");
+      let config = {
+        method: "put",
+        maxBodyLength: Infinity,
+        url: "http://" + window.location.hostname + ":3001/api/tasks/" + TaskID,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: "Bearer " + token,
+        },
+        data: data,
+      };
+
+      axios
+        .request(config)
+        .then((response) => {
+          // Trigger data update (you should implement this function)
+          // updateTaskData(response.data);
+
+          // Reset form or perform other actions as needed
+          handleReset();
+          toastr.success("Task Updated Successfully");
+          const newTask = response.data as Task;
+          updateTaskData(newTask);
+          TaskIDNull();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   const setUpdateData = useCallback(
@@ -174,37 +244,62 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
       const currentDate = new Date();
       const currentDateString = currentDate.toISOString().split("T")[0];
       const token = localStorage.getItem("token");
-      let config = {
-        method: "get",
-        maxBodyLength: Infinity,
-        url: "http://" + window.location.hostname + ":3001/api/tasks/" + taskID,
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      };
 
-      axios
-        .request(config)
-        .then((response) => {
+      if (token === null || token === "guestToken") {
+        // User is a guest, fetch task data from local storage
+        const taskData = getTaskFromLocalStorage(taskID);
+        if (taskData) {
           const formattedDate = format(
-            new Date(response.data.Deadline),
+            new Date(taskData.Deadline),
             "yyyy-MM-dd"
           );
           setTask({
-            title: response.data.TaskName,
-            description: response.data.Description,
-            priority: response.data.Priority,
-            category: response.data.CategoryID, // Use CategoryID
+            title: taskData.TaskName,
+            description: taskData.Description,
+            priority: taskData.Priority,
+            category: taskData.CategoryID, // Use CategoryID
             repetition: "onetime",
             deadline: formattedDate,
             TaskID: taskID,
           });
 
           formRef.current?.querySelector("#inputTitle")?.focus();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        }
+      } else {
+        // User is not a guest, make an API request
+        let config = {
+          method: "get",
+          maxBodyLength: Infinity,
+          url:
+            "http://" + window.location.hostname + ":3001/api/tasks/" + taskID,
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        };
+
+        axios
+          .request(config)
+          .then((response) => {
+            const formattedDate = format(
+              new Date(response.data.Deadline),
+              "yyyy-MM-dd"
+            );
+            setTask({
+              title: response.data.TaskName,
+              description: response.data.Description,
+              priority: response.data.Priority,
+              category: response.data.CategoryID, // Use CategoryID
+              repetition: "onetime",
+              deadline: formattedDate,
+              TaskID: taskID,
+            });
+
+            formRef.current?.querySelector("#inputTitle")?.focus();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
     [setTask, formRef]
   );
@@ -243,10 +338,12 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
                     value={task.title}
                     onChange={handleInputChange}
                     required
-                    
+                    autoFocus
                   />
                   <div className={styles.underline}></div>
-                  <label className={styles.label}>Enter a task title</label>
+                  <label className={styles.label}>
+                    タスクのタイトルを入力してください
+                  </label>
                 </div>
               </div>
             </div>
@@ -257,7 +354,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
                 name="description"
                 value={task.description}
                 onChange={handleInputChange}
-                placeholder="Enter task description"
+                placeholder="タスクの詳細を入力する"
               ></textarea>
             </div>
           </div>
@@ -265,7 +362,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
           <div className={styles.taskDetailsForm}>
             <div className={styles.priorityCategoryRepetition}>
               <label className={styles.label} htmlFor="task-priority">
-                Task Priority
+                タスクの優先度
               </label>
               <select
                 className={styles.formSelect}
@@ -285,7 +382,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
                 </option>
               </select>
               <label className={styles.label} htmlFor="task-category">
-                Task Category
+                タスクのカテゴリー
               </label>
               {categories.length > 0 && (
                 <select
@@ -310,7 +407,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
 
             <div className={styles.weekdays}>
               <label className={styles.label} htmlFor="task-category">
-                Task Repetition
+                タスクの繰り返し
               </label>
               <select
                 className={styles.formSelect}
@@ -320,17 +417,17 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
                 onChange={handleInputChange}
               >
                 <option className={styles.option} value="onetime">
-                  One time only
+                  一回のみ
                 </option>
                 <option className={styles.option} value="daily">
-                  Daily
+                  毎日
                 </option>
                 <option className={styles.option} value="weekly">
-                  Weekly
+                  毎週
                 </option>
               </select>
               <label className={styles.label} htmlFor="task-category">
-                Task Deadline
+                タスクの締め切り
               </label>
               <input
                 type="date"
@@ -340,6 +437,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
                 value={task.deadline}
                 onChange={handleInputChange}
               />
+              
             </div>
           </div>
 
@@ -349,20 +447,22 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
               type="reset"
               onClick={handleReset}
             >
-              Reset
+              リセット
             </button>
-            <button className={styles.btn + " " + styles.delete}>Delete</button>
+            <button className={styles.btn + " " + styles.delete}>
+              削除する
+            </button>
             {TaskID ? (
               <button
                 type="button"
                 className={styles.btnLocal}
                 onClick={() => handleUpdate(TaskID)}
               >
-                Update
+                更新
               </button>
             ) : (
               <button className={styles.btnLocal} type="submit">
-                Add Task
+                タスクの追加
               </button>
             )}
           </div>
@@ -373,3 +473,112 @@ const CreateTask: React.FC<CreateTaskProps> = ({ updateTaskData, TaskID, TaskIDN
 };
 
 export default CreateTask;
+
+function getCategoriesFromLocalStorage() {
+  try {
+    // Retrieve categories from local storage
+    const categories = JSON.parse(localStorage.getItem("categories") || "[]");
+    return categories;
+  } catch (error) {
+    console.error("Error retrieving categories from local storage:", error);
+    return [];
+  }
+}
+
+function addTaskToLocalstorage(taskData) {
+  try {
+    // Retrieve tasks from local storage
+    const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    // Find the last task in the array to determine the next TaskID
+    const lastTask = tasks[tasks.length - 1];
+    const nextTaskID = lastTask ? lastTask.TaskID + 1 : 1;
+
+    // Create a new task object using the provided data
+    const newTask = {
+      TaskID: nextTaskID, // Assign a unique ID
+      CategoryID: taskData.category,
+      TaskName: taskData.title,
+      Description: taskData.description,
+      Priority: taskData.priority,
+      Deadline: taskData.deadline,
+      Completed: 0,
+      CompletedDate: null,
+
+      // Add other task properties as needed
+    };
+
+    // Add the new task to the tasks array
+    tasks.push(newTask);
+
+    // Update the tasks in local storage
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  } catch (error) {
+    console.error("Error adding task to local storage:", error);
+  }
+}
+
+function getTaskFromLocalStorage(taskID: any) {
+  try {
+    // Retrieve tasks from local storage
+    const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+
+    // Find the task with the specified ID
+    const task = tasks.find((t) => t.TaskID === taskID);
+
+    // If the task is found and it has a CategoryID
+    if (task && task.CategoryID) {
+      // Retrieve categories from local storage
+      const categories = JSON.parse(localStorage.getItem("categories") || "[]");
+
+      // Find the category with the matching CategoryID
+      const category = categories.find((c) => c.CategoryID === task.CategoryID);
+
+      // Add CategoryName to the task object if category is found
+      if (category) {
+        task.CategoryName = category.CategoryName;
+      }
+    }
+
+    return task || null; // Return the found task or null if not found
+  } catch (error) {
+    console.error("Error retrieving task from local storage:", error);
+    return null;
+  }
+}
+
+function updateTaskInLocalStorage(
+  taskID: any,
+  updatedTask: {
+    title: string;
+    category: number;
+    description: string;
+    priority: string;
+    deadline: string;
+  }
+) {
+  try {
+    // Retrieve tasks from local storage
+    const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+
+    // Find the task with the specified ID
+    const taskToUpdateIndex = tasks.findIndex((t) => t.TaskID === taskID);
+
+    if (taskToUpdateIndex !== -1) {
+      // Update the task properties
+      tasks[taskToUpdateIndex].TaskName = updatedTask.title;
+      tasks[taskToUpdateIndex].CategoryID = updatedTask.category;
+      tasks[taskToUpdateIndex].Description = updatedTask.description;
+      tasks[taskToUpdateIndex].Priority = updatedTask.priority;
+      tasks[taskToUpdateIndex].Deadline = updatedTask.deadline;
+
+      // Update the tasks array in local storage
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+
+      console.log("Task updated in local storage:", tasks[taskToUpdateIndex]);
+    } else {
+      console.log("Task with ID", taskID, "not found in local storage.");
+    }
+  } catch (error) {
+    console.error("Error updating task in local storage:", error);
+  }
+}

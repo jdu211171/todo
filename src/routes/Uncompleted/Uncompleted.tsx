@@ -9,12 +9,33 @@ import axios from "axios";
 import * as qs from "qs";
 import CreateTask from "./createTask/CreateTask";
 import TaskDetails from "./details/details";
-import { faMagnifyingGlass, faRotate } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowDownWideShort,
+  faArrowUpAZ,
+  faArrowUpShortWide,
+  faMagnifyingGlass,
+  faPlus,
+  faRotate,
+  faSortDown,
+  faSortUp,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+let isOpen: boolean;
+let isBeingUpdated: boolean;
+
 async function fetchTaskData() {
-  const data = qs.stringify({});
   const token = localStorage.getItem("token");
+  // Check if the user is a guest (you can use your own condition)
+  if (token === null || token === "guestToken") {
+    // User is a guest, fetch data from local storage
+    const tasksFromLocalStorage = getUnCompletedTasksFromLocalStorageWithCategoryName()
+    return tasksFromLocalStorage;
+  }
+
+  // User is authenticated, fetch data from the API
+  const data = qs.stringify({});
+
   const config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -27,7 +48,7 @@ async function fetchTaskData() {
 
   try {
     const response = await axios.request(config);
-    console.log(response.data);
+    
     return response.data;
   } catch (error) {
     console.log("Error fetching task data:", error);
@@ -35,13 +56,16 @@ async function fetchTaskData() {
   }
 }
 
-export default function Uncompleted() {
+export default function All() {
   const [currentTaskID, setCurrentTaskID] = useState<number | null>(null);
   const [taskdata, setTaskdata] = useState([]);
+  const [sortCriteria, setSortCriteria] = useState("TaskName"); // Default sorting criteria
+  const [sortOrder, setSortOrder] = useState("asc"); // Default sorting order
   const [taskdataDetail, setTaskdataDetail] = useState([]);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const priorityOptions = ["低い", "普通", "優先"];
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<[]>([]);
+
   const [formData, setFormData] = useState({
     // Your filter criteria state
     selectValue1: "",
@@ -57,7 +81,7 @@ export default function Uncompleted() {
       inputValue: "",
     });
 
-    updateTaskData()
+    updateTaskData();
     // You can also perform any other actions needed for resetting here
   };
 
@@ -72,11 +96,11 @@ export default function Uncompleted() {
 
   const handleGetButtonClick = () => {
     fetchTaskData().then((data) => {
+      console.log(data);
       const filteredTasks = data.filter((task: any) => {
-        console.log(formData);
-        console.log(task);
+        console.log(task.Deadline.split(" ")[0]);
         // Check if selectValue1 matches task's priority (assuming task.priority is the attribute name)
-        if (formData.selectValue1 && task.Priority !== formData.selectValue1) {
+        if (formData.selectValue1 && task.Priority != formData.selectValue1) {
           return false;
         }
         // Check if selectValue2 matches task's status (assuming task.status is the attribute name)
@@ -87,7 +111,7 @@ export default function Uncompleted() {
         // Check if inputValue matches task's due date (assuming task.dueDate is the attribute name)
         if (
           formData.inputValue &&
-          task.Deadline.split("T")[0] !== formData.inputValue
+          task.Deadline.split(" ")[0] != formData.inputValue
         ) {
           return false;
         }
@@ -102,7 +126,14 @@ export default function Uncompleted() {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
+
+  if (token === null || token === "guestToken") {
+    // User is a guest, fetch categories from local storage
+    const categoriesFromLocalStorage = getCategoriesFromLocalStorage()
+    setCategories(categoriesFromLocalStorage);
+  } else {
+    // User is authenticated, fetch categories from the API
     let config = {
       method: "get",
       maxBodyLength: Infinity,
@@ -121,10 +152,22 @@ export default function Uncompleted() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }
+}, []);
 
-  const openDetail = (TaskID: number) => {
-    const token = localStorage.getItem("token");
+
+const openDetail = (TaskID: number) => {
+  const token = localStorage.getItem("token");
+
+  if (token === null || token === "guestToken") {
+    // User is a guest, fetch task details from local storage
+    const taskDetailFromLocalStorage = getTaskFromLocalStorage(TaskID)
+    setTaskdataDetail(taskDetailFromLocalStorage);
+
+    // Open the detail view
+    setIsDetailOpen(true);
+  } else {
+    // User is authenticated, fetch task details from the API
     let config = {
       method: "get",
       maxBodyLength: Infinity,
@@ -146,7 +189,8 @@ export default function Uncompleted() {
       .catch((error) => {
         console.log(error);
       });
-  };
+  }
+};
 
   const closeDetail = (event: any) => {
     setIsDetailOpen(false);
@@ -169,9 +213,11 @@ export default function Uncompleted() {
   };
 
   const getUpdateData = (TaskID: number) => {
-    console.log("asd: " + currentTaskID);
     setCurrentTaskID(TaskID);
-    console.log("UPD: " + currentTaskID);
+    isBeingUpdated = true;
+    if (!isOpen) {
+      openElement();
+    }
     return TaskID;
   };
 
@@ -185,11 +231,80 @@ export default function Uncompleted() {
       });
   }, []);
 
+  function openElement(isCreate: bool) {
+    const heightElement = document
+      .getElementsByClassName("CreateTask")[0]
+      .querySelectorAll("div")[1].clientHeight;
+    
+    if (isCreate) {
+      setCurrentTaskID(null);
+    }
+    if (document.getElementsByClassName("CreateTask")[0].style.height === "") {
+      document.getElementsByClassName("CreateTask")[0].style.height =
+        heightElement + 4 + "px";
+      setTimeout(() => {
+        document.getElementsByClassName("CreateTask")[0].style.height =
+          "fit-content";
+      }, 400);
+      document.getElementsByClassName("CreateTask")[0].style.overflow = "unset";
+      isOpen = true;
+    }
+  }
+
+  function closeElement() {
+    const heightElement = document
+      .getElementsByClassName("CreateTask")[0]
+      .querySelectorAll("div")[1].clientHeight;
+    
+    if (document.getElementsByClassName("CreateTask")[0].style.height !== "") {
+      document.getElementsByClassName("CreateTask")[0].style.height =
+        heightElement + 4 + "px";
+      setTimeout(() => {
+        document.getElementsByClassName("CreateTask")[0].style.height = "";
+      }, 1);
+      document.getElementsByClassName("CreateTask")[0].style.overflow =
+        "hidden";
+      isOpen = false;
+    }
+  }
+
+  const handleSort = (criteria:any) => {
+    
+    // Toggle sorting order if the same criteria is clicked again
+    if (criteria === sortCriteria) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      // If a different criteria is clicked, reset the sorting order
+      setSortOrder("asc");
+    }
+    setSortCriteria(criteria);
+    
+
+    // Sort the taskData array based on the selected criteria and order
+    const sortedData = [...taskdata].sort((a, b) => {
+      if (criteria === "TaskName") {
+        // Sort by TaskName
+        return a.TaskName.localeCompare(b.TaskName);
+      } else if (criteria === "DueDate") {
+        console.log("DueDate");
+
+        // Sort by DueDate
+        const dateA = new Date(a.Deadline).getTime();
+        const dateB = new Date(b.Deadline).getTime();
+        return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+      }
+      return 0;
+    });
+
+    // Update the state with the sorted array
+    setTaskdata(sortedData);
+  };
+
   return (
     <div className="content">
       <div className="top">
         <div className={all.GetButton}>
-          <h1>All tasks</h1>
+          <h1>未完了のタスク</h1>
           <div className={all.buttons}>
             <div onClick={handleResetClick}>
               <FontAwesomeIcon icon={faRotate} />
@@ -248,7 +363,41 @@ export default function Uncompleted() {
           />
         </div>
       </div>
-      <div className="CreateTask">
+
+      <div onClick={() => openElement(true)} className="float">
+        <FontAwesomeIcon icon={faPlus} className="my-float" />
+      </div>
+
+      <div className="CreateTask" id="taskMenu">
+        <div onClick={() => closeElement()} className="closeButton">
+          <svg width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+            <circle
+              cx="15"
+              cy="15"
+              r="12"
+              fill="none"
+              stroke="#000000"
+              strokeWidth="2"
+            />
+
+            <line
+              x1="9"
+              y1="9"
+              x2="21"
+              y2="21"
+              stroke="#000000"
+              strokeWidth="2"
+            />
+            <line
+              x1="9"
+              y1="21"
+              x2="21"
+              y2="9"
+              stroke="#000000"
+              strokeWidth="2"
+            />
+          </svg>
+        </div>
         {/* Pass the updateTaskData function as a prop to CreateTask */}
         <CreateTask
           updateTaskData={updateTaskData}
@@ -256,16 +405,28 @@ export default function Uncompleted() {
           TaskIDNull={setIDNull} // Pass currentTaskID
         />
       </div>
+
       {isDetailOpen && (
         <TaskDetails
           taskdata={taskdataDetail} // Pass the fetched data to TaskDetails
           onClose={closeDetail}
         />
       )}
-      {/* <div className="CreateTaskBtn">
-        
-      </div> */}
       <div className={all.TaskContainer}>
+        <div className={all.sortBar}>
+          <button onClick={() => handleSort("TaskName")}>
+            <FontAwesomeIcon icon={faArrowUpAZ} />
+            タスク名
+          </button>
+          <button onClick={() => handleSort("DueDate")}>
+            {sortOrder === "asc" && sortCriteria ==="DueDate" ? (
+              <FontAwesomeIcon icon={faArrowUpShortWide} />
+            ) : (
+              <FontAwesomeIcon icon={faArrowDownWideShort} />
+            )}
+            期限日
+          </button>
+        </div>
         <Tasks
           taskdata={taskdata}
           updateTaskData={updateTaskData}
@@ -275,4 +436,79 @@ export default function Uncompleted() {
       </div>
     </div>
   );
+}
+
+
+function getUnCompletedTasksFromLocalStorageWithCategoryName() {
+  try {
+    // Retrieve tasks from local storage
+    const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+
+    // Retrieve categories from local storage
+    const categories = JSON.parse(localStorage.getItem("categories") || "[]");
+
+    // Filter completed tasks and add CategoryName to each task
+    const completedTasksWithCategoryName = tasks
+      .filter((task) => !task.Completed) // Filter completed tasks
+      .map((task) => {
+        if (task.CategoryID) {
+          // Find the category with the matching CategoryID
+          const category = categories.find((c) => c.CategoryID === task.CategoryID);
+
+          // If a matching category is found, add CategoryName to the task
+          if (category) {
+            task.CategoryName = category.CategoryName;
+          }
+        }
+        return task;
+      });
+
+    return completedTasksWithCategoryName;
+  } catch (error) {
+    console.error("Error retrieving completed tasks from local storage:", error);
+    return [];
+  }
+}
+
+
+
+
+function getTaskFromLocalStorage(taskID: any) {
+  try {
+    // Retrieve tasks from local storage
+    const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+
+    // Find the task with the specified ID
+    const task = tasks.find((t) => t.TaskID === taskID);
+
+    // If the task is found and it has a CategoryID
+    if (task && task.CategoryID) {
+      // Retrieve categories from local storage
+      const categories = JSON.parse(localStorage.getItem("categories") || "[]");
+
+      // Find the category with the matching CategoryID
+      const category = categories.find((c) => c.CategoryID === task.CategoryID);
+
+      // Add CategoryName to the task object if category is found
+      if (category) {
+        task.CategoryName = category.CategoryName;
+      }
+    }
+
+    return task || null; // Return the found task or null if not found
+  } catch (error) {
+    console.error("Error retrieving task from local storage:", error);
+    return null;
+  }
+}
+
+function getCategoriesFromLocalStorage() {
+  try {
+    // Retrieve categories from local storage
+    const categories = JSON.parse(localStorage.getItem("categories") || "[]");
+    return categories;
+  } catch (error) {
+    console.error("Error retrieving categories from local storage:", error);
+    return [];
+  }
 }

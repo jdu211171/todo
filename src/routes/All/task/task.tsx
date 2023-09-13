@@ -42,13 +42,13 @@ export default function Tasks({
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ): void => {
     event.stopPropagation();
-    console.log(TaskID);
-  
+    
+
     // Check if the user is a guest (UserID is null)
     const isGuest = localStorage.getItem("ActiveUser")
       ? JSON.parse(localStorage.getItem("ActiveUser")).UserID === null
       : true;
-  
+
     if (isGuest) {
       // User is a guest, delete from local storage
       deleteTaskById(TaskID); // Use the deleteTaskById function from the previous response
@@ -64,7 +64,7 @@ export default function Tasks({
           Authorization: "Bearer " + token,
         },
       };
-  
+
       axios
         .request(config)
         .then((response) => {
@@ -83,7 +83,7 @@ export default function Tasks({
   ): void {
     event.stopPropagation();
     getUpdateData(TaskID);
-    console.log(TaskID);
+    
   }
 
   const handleDetails = (
@@ -91,7 +91,7 @@ export default function Tasks({
     TaskID: number
   ): void => {
     event.stopPropagation();
-    console.log(TaskID);
+    
   };
 
   function taskComplete(
@@ -100,8 +100,10 @@ export default function Tasks({
   ): void {
     event.stopPropagation();
     // Check if the user is a guest
-    const isGuest = localStorage.getItem("ActiveUser") === '{"UserName":"ゲスト","UserID":null}';
-  
+    const isGuest =
+      localStorage.getItem("ActiveUser") ===
+      '{"UserName":"ゲスト","UserID":null}';
+
     if (isGuest) {
       // User is a guest, toggle the completed status in local storage
       toggleTaskCompletedStatus(TaskID);
@@ -123,7 +125,7 @@ export default function Tasks({
           Authorization: "Bearer " + token,
         },
       };
-  
+
       axios
         .request(config)
         .then((response) => {
@@ -135,10 +137,11 @@ export default function Tasks({
         });
     }
   }
-  
 
-  function nonClick(event: React.MouseEvent<HTMLSpanElement, MouseEvent>): void {
-    event.stopPropagation()
+  function nonClick(
+    event: React.MouseEvent<HTMLSpanElement, MouseEvent>
+  ): void {
+    event.stopPropagation();
   }
 
   const TaskItems = taskdata.map((taskdatas: Task, index: number) => (
@@ -208,7 +211,7 @@ export default function Tasks({
   return <div>{TaskItems}</div>;
 }
 
-function deleteTaskById(taskID:any) {
+function deleteTaskById(taskID: any) {
   try {
     // Retrieve tasks from local storage
     let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");

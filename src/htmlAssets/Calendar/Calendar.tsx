@@ -20,7 +20,7 @@ function CalendarUI() {
         <Calendar
           onChange={(newValue) => {
             setDate(newValue)
-            console.log(newValue)
+            
           }}
           value={date}
           selectRange={true}

@@ -34,7 +34,7 @@ function CalendarUI({ getDates, events }: CalendarProps) {
           onChange={(newValue) => {
             setDateRange(newValue);
             getDates(newValue);
-            // console.log(newValue);
+            // ;
           }}
           lang={"jp"}
           value={dateRange}
@@ -48,7 +48,7 @@ function CalendarUI({ getDates, events }: CalendarProps) {
       </div>
       <div className="date-inputs">
         <div>
-          <label>Start Date:</label>
+          <label>開始日:</label>
           <input
             className="formSelect"
             type="date"
@@ -61,7 +61,7 @@ function CalendarUI({ getDates, events }: CalendarProps) {
         </div>
 
         <div>
-          <label>End Date:</label>
+          <label>終了日:</label>
           <input
             className="formSelect"
             type="date"

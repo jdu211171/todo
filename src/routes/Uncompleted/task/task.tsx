@@ -22,14 +22,14 @@ interface TasksProps {
   taskdata: Task[];
   updateTaskData: () => void;
   getUpdateData: (TaskID: number) => void; // Correctly define the type of getUpdateData
-  getDetails:(TaskID: number) => void;
+  getDetails: (TaskID: number) => void;
 }
 
 export default function Tasks({
   taskdata,
   updateTaskData,
   getUpdateData,
-  getDetails
+  getDetails,
 }: TasksProps): JSX.Element {
   const formatDeadline = (deadline: string) => {
     const date = new Date(deadline);
@@ -42,27 +42,39 @@ export default function Tasks({
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ): void => {
     event.stopPropagation();
-    console.log(TaskID);
-
-    const token = localStorage.getItem("token");
-    let config = {
-      method: "delete",
-      maxBodyLength: Infinity,
-      url: "http://" + window.location.hostname + ":3001/api/tasks/" + TaskID,
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    };
-
-    axios
-      .request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-        updateTaskData(); // Trigger data update after successful deletion
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    
+  
+    // Check if the user is a guest (UserID is null)
+    const isGuest = localStorage.getItem("ActiveUser")
+      ? JSON.parse(localStorage.getItem("ActiveUser")).UserID === null
+      : true;
+  
+    if (isGuest) {
+      // User is a guest, delete from local storage
+      deleteTaskById(TaskID); // Use the deleteTaskById function from the previous response
+      updateTaskData(); // Trigger data update after deletion
+    } else {
+      // User is authenticated, send a request to delete from the API
+      const token = localStorage.getItem("token");
+      let config = {
+        method: "delete",
+        maxBodyLength: Infinity,
+        url: "http://" + window.location.hostname + ":3001/api/tasks/" + TaskID,
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
+  
+      axios
+        .request(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          updateTaskData(); // Trigger data update after successful deletion
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   function handleChange(
@@ -71,7 +83,7 @@ export default function Tasks({
   ): void {
     event.stopPropagation();
     getUpdateData(TaskID);
-    console.log(TaskID);
+    
   }
 
   const handleDetails = (
@@ -79,7 +91,7 @@ export default function Tasks({
     TaskID: number
   ): void => {
     event.stopPropagation();
-    console.log(TaskID);
+    
   };
 
   function taskComplete(
@@ -87,38 +99,53 @@ export default function Tasks({
     TaskID: number
   ): void {
     event.stopPropagation();
-    const token = localStorage.getItem("token");
-    let config = {
-      method: "put",
-      maxBodyLength: Infinity,
-      url:
-        "http://" +
-        window.location.hostname +
-        ":3001/api/tasks/" +
-        TaskID +
-        "/complete",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    };
+    // Check if the user is a guest
+    const isGuest = localStorage.getItem("ActiveUser") === '{"UserName":"ゲスト","UserID":null}';
+  
+    if (isGuest) {
+      // User is a guest, toggle the completed status in local storage
+      toggleTaskCompletedStatus(TaskID);
+      // Update the UI or perform any other actions as needed
+      updateTaskData();
+    } else {
+      // User is not a guest, send a request to the API to toggle the completed status
+      const token = localStorage.getItem("token");
+      let config = {
+        method: "put",
+        maxBodyLength: Infinity,
+        url:
+          "http://" +
+          window.location.hostname +
+          ":3001/api/tasks/" +
+          TaskID +
+          "/complete",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
+  
+      axios
+        .request(config)
+        .then((response) => {
+          // Update the UI or perform any other actions as needed
+          updateTaskData();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }
+  
 
-    axios
-      .request(config)
-      .then((response) => {
-        updateTaskData();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  function nonClick(event: React.MouseEvent<HTMLSpanElement, MouseEvent>): void {
+    event.stopPropagation()
   }
 
   const TaskItems = taskdata.map((taskdatas: Task, index: number) => (
-    <div
-      key={index}
-      onClick={(event) => getDetails(taskdatas.TaskID)}
-    >
+    <div key={index} onClick={(event) => getDetails(taskdatas.TaskID)}>
       <span
         className={st.taskFold + " " + st[priorityClassMap[taskdatas.Priority]]}
+        onClick={(event) => nonClick(event)}
       >
         {taskdatas.CategoryName}
       </span>
@@ -159,18 +186,18 @@ export default function Tasks({
             {formatDeadline(taskdatas.Deadline)}
           </div>
           <div className={st.buttons}>
-            <div className={st.details}>Details</div>
+            <div className={st.details}>詳細</div>
             <div
               className={st.update}
               onClick={(event) => handleChange(taskdatas.TaskID, event)}
             >
-              Update
+              更新
             </div>
             <div
               className={st.delete}
               onClick={(event) => handleDelete(taskdatas.TaskID, event)}
             >
-              Delete
+              削除
             </div>
           </div>
         </div>
@@ -179,4 +206,58 @@ export default function Tasks({
   ));
 
   return <div>{TaskItems}</div>;
+}
+
+function deleteTaskById(taskID:any) {
+  try {
+    // Retrieve tasks from local storage
+    let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+
+    // Find the index of the task with the specified ID
+    const taskIndex = tasks.findIndex((t) => t.TaskID === taskID);
+
+    if (taskIndex !== -1) {
+      // If the task was found, remove it from the tasks array
+      tasks.splice(taskIndex, 1);
+
+      // Update the tasks in local storage
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+
+      console.log(`Task with ID ${taskID} has been deleted.`);
+    } else {
+      console.log(`Task with ID ${taskID} not found.`);
+    }
+  } catch (error) {
+    console.error("Error deleting task from local storage:", error);
+  }
+}
+
+function toggleTaskCompletedStatus(TaskID) {
+  try {
+    // Retrieve tasks from local storage
+    const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+
+    // Find the task with the specified ID
+    const taskIndex = tasks.findIndex((t) => t.TaskID === TaskID);
+
+    if (taskIndex !== -1) {
+      // Task found in local storage, toggle its completed status
+      tasks[taskIndex].Completed = !tasks[taskIndex].Completed;
+
+      // Set the completed date
+      if (tasks[taskIndex].Completed) {
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString();
+        tasks[taskIndex].CompletedDate = formattedDate;
+      } else {
+        // If the task is marked as not completed, clear the completed date
+        tasks[taskIndex].CompletedDate = null;
+      }
+
+      // Update the tasks in local storage
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+  } catch (error) {
+    console.error("Error toggling task completed status:", error);
+  }
 }

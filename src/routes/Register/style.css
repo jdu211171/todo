@@ -5,6 +5,10 @@
     align-items: center;
 }
 
+.error {
+    color: red;
+}
+
 .title {
     display: block;
     color: #0B0502;

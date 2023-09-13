@@ -58,32 +58,32 @@ function TaskDetail({ taskdata, onClose }: TaskDetailProps) {
         </div>
         <div className={st.title}>{taskdata.TaskName}</div>
         <div className={st.deadline}>
-          <span>Deadline:</span> {taskdata.Deadline.split("T")[0]}
+          <span>期限日:</span> {taskdata.Deadline.split(" ")[0]}
         </div>
         <div className={st.category}>
-          <span>Category:</span> {taskdata.CategoryName}
+          <span>カテゴリー:</span> {taskdata.CategoryName}
         </div>
         <div className={st.priority}>
-          <span>Priority: </span>
+          <span>優先度: </span>
           <span className={st[priorityClassMap[taskdata.Priority]]}>
             {taskdata.Priority}
           </span>
           
         </div>
         <div className={st.completed}>
-          <span>Completed:</span> {taskdata.Completed ? "Yes" : "No"}
+          <span>完了状態:</span> {taskdata.Completed ? "完成" : "未完成"}
         </div>
         <div className={st.completedDate}>
-          <span>Completed Date:</span>{" "}
-          {taskdata.CompletedDate === null ? "Not completed yet" : taskdata.CompletedDate.split("T")[0]}
+          <span>完了日:</span>{" "}
+          {taskdata.CompletedDate === null ? "まだ完成していない" : taskdata.CompletedDate.split("T")[0]}
         </div>
 
         <fieldset className={st.description}>
-          <legend>Description</legend>
+          <legend>タスクの詳細</legend>
           <div>
             {taskdata.Description === "" ? (
                 <div className={st.noDesc}>
-                    No Description
+                    詳細なし
                 </div>
             ) : taskdata.Description}
           </div>

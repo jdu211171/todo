@@ -26,11 +26,11 @@ let isBeingUpdated: boolean;
 
 async function fetchTaskData() {
   const token = localStorage.getItem("token");
-  console.log(token)
+  
   // Check if the user is a guest (you can use your own condition)
   if (token === null || token === "guestToken") {
     // User is a guest, fetch data from local storage
-    const tasksFromLocalStorage = getAllTasksFromLocalStorageWithCategoryName()
+    const tasksFromLocalStorage = getAllTasksFromLocalStorageWithCategoryName();
     return tasksFromLocalStorage;
   }
 
@@ -48,7 +48,7 @@ async function fetchTaskData() {
 
   try {
     const response = await axios.request(config);
-    console.log(response.data);
+    
     return response.data;
   } catch (error) {
     console.log("Error fetching task data:", error);
@@ -87,7 +87,7 @@ export default function All() {
 
   const handleInputChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target;
-    console.log(value);
+    ;
     setFormData({
       ...formData,
       [name]: value,
@@ -96,7 +96,7 @@ export default function All() {
 
   const handleGetButtonClick = () => {
     fetchTaskData().then((data) => {
-      console.log(data);
+      ;
       const filteredTasks = data.filter((task: any) => {
         console.log(task.Deadline.split(" ")[0]);
         // Check if selectValue1 matches task's priority (assuming task.priority is the attribute name)
@@ -126,71 +126,70 @@ export default function All() {
   };
 
   useEffect(() => {
-  const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-  if (token === null || token === "guestToken") {
-    // User is a guest, fetch categories from local storage
-    const categoriesFromLocalStorage = getCategoriesFromLocalStorage()
-    setCategories(categoriesFromLocalStorage);
-  } else {
-    // User is authenticated, fetch categories from the API
-    let config = {
-      method: "get",
-      maxBodyLength: Infinity,
-      url: "http://" + window.location.hostname + ":3001/api/categories",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    };
+    if (token === null || token === "guestToken") {
+      // User is a guest, fetch categories from local storage
+      const categoriesFromLocalStorage = getCategoriesFromLocalStorage();
+      setCategories(categoriesFromLocalStorage);
+    } else {
+      // User is authenticated, fetch categories from the API
+      let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: "http://" + window.location.hostname + ":3001/api/categories",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
 
-    axios
-      .request(config)
-      .then((response) => {
-        const fetchedCategories = response.data;
-        setCategories(fetchedCategories);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-}, []);
+      axios
+        .request(config)
+        .then((response) => {
+          const fetchedCategories = response.data;
+          setCategories(fetchedCategories);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, []);
 
+  const openDetail = (TaskID: number) => {
+    const token = localStorage.getItem("token");
 
-const openDetail = (TaskID: number) => {
-  const token = localStorage.getItem("token");
+    if (token === null || token === "guestToken") {
+      // User is a guest, fetch task details from local storage
+      const taskDetailFromLocalStorage = getTaskFromLocalStorage(TaskID);
+      setTaskdataDetail(taskDetailFromLocalStorage);
 
-  if (token === null || token === "guestToken") {
-    // User is a guest, fetch task details from local storage
-    const taskDetailFromLocalStorage = getTaskFromLocalStorage(TaskID)
-    setTaskdataDetail(taskDetailFromLocalStorage);
+      // Open the detail view
+      setIsDetailOpen(true);
+    } else {
+      // User is authenticated, fetch task details from the API
+      let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: "http://" + window.location.hostname + ":3001/api/tasks/" + TaskID,
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
 
-    // Open the detail view
-    setIsDetailOpen(true);
-  } else {
-    // User is authenticated, fetch task details from the API
-    let config = {
-      method: "get",
-      maxBodyLength: Infinity,
-      url: "http://" + window.location.hostname + ":3001/api/tasks/" + TaskID,
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    };
+      axios
+        .request(config)
+        .then((response) => {
+          // Set the fetched data in the taskdataDetail state
+          setTaskdataDetail(response.data);
 
-    axios
-      .request(config)
-      .then((response) => {
-        // Set the fetched data in the taskdataDetail state
-        setTaskdataDetail(response.data);
-
-        // Open the detail view
-        setIsDetailOpen(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-};
+          // Open the detail view
+          setIsDetailOpen(true);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
 
   const closeDetail = (event: any) => {
     setIsDetailOpen(false);
@@ -235,7 +234,7 @@ const openDetail = (TaskID: number) => {
     const heightElement = document
       .getElementsByClassName("CreateTask")[0]
       .querySelectorAll("div")[1].clientHeight;
-    console.log(heightElement);
+    
     if (isCreate) {
       setCurrentTaskID(null);
     }
@@ -255,7 +254,7 @@ const openDetail = (TaskID: number) => {
     const heightElement = document
       .getElementsByClassName("CreateTask")[0]
       .querySelectorAll("div")[1].clientHeight;
-    console.log(heightElement);
+    
     if (document.getElementsByClassName("CreateTask")[0].style.height !== "") {
       document.getElementsByClassName("CreateTask")[0].style.height =
         heightElement + 4 + "px";
@@ -268,8 +267,7 @@ const openDetail = (TaskID: number) => {
     }
   }
 
-  const handleSort = (criteria:any) => {
-    
+  const handleSort = (criteria: any) => {
     // Toggle sorting order if the same criteria is clicked again
     if (criteria === sortCriteria) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -278,7 +276,6 @@ const openDetail = (TaskID: number) => {
       setSortOrder("asc");
     }
     setSortCriteria(criteria);
-    
 
     // Sort the taskData array based on the selected criteria and order
     const sortedData = [...taskdata].sort((a, b) => {
@@ -286,7 +283,7 @@ const openDetail = (TaskID: number) => {
         // Sort by TaskName
         return a.TaskName.localeCompare(b.TaskName);
       } else if (criteria === "DueDate") {
-        console.log("DueDate");
+        ;
 
         // Sort by DueDate
         const dateA = new Date(a.Deadline).getTime();
@@ -419,7 +416,7 @@ const openDetail = (TaskID: number) => {
             タスク名
           </button>
           <button onClick={() => handleSort("DueDate")}>
-            {sortOrder === "asc" && sortCriteria ==="DueDate" ? (
+            {sortOrder === "asc" && sortCriteria === "DueDate" ? (
               <FontAwesomeIcon icon={faArrowUpShortWide} />
             ) : (
               <FontAwesomeIcon icon={faArrowDownWideShort} />
@@ -438,7 +435,6 @@ const openDetail = (TaskID: number) => {
   );
 }
 
-
 function getAllTasksFromLocalStorageWithCategoryName() {
   try {
     // Retrieve tasks from local storage
@@ -451,7 +447,9 @@ function getAllTasksFromLocalStorageWithCategoryName() {
     const tasksWithCategoryName = tasks.map((task) => {
       if (task.CategoryID) {
         // Find the category with the matching CategoryID
-        const category = categories.find((c) => c.CategoryID === task.CategoryID);
+        const category = categories.find(
+          (c) => c.CategoryID === task.CategoryID
+        );
 
         // If a matching category is found, add CategoryName to the task
         if (category) {
@@ -467,8 +465,6 @@ function getAllTasksFromLocalStorageWithCategoryName() {
     return [];
   }
 }
-
-
 
 function getTaskFromLocalStorage(taskID: any) {
   try {

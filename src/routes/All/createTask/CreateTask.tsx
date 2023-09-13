@@ -33,6 +33,8 @@ const CreateTask: React.FC<CreateTaskProps> = ({
   TaskIDNull,
 }) => {
   const currentDate = new Date();
+  currentDate.setHours(currentDate.getHours() + 9);
+
   const currentDateString = currentDate.toISOString().split("T")[0];
   const [categories, setCategories] = useState<Category[]>([]);
 
@@ -56,7 +58,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
       // User is a guest, fetch categories from local storage
       const categoriesFromLocalStorage = getCategoriesFromLocalStorage();
       setCategories(categoriesFromLocalStorage);
-      console.log(categoriesFromLocalStorage[0].CategoryID);
+      
       setTask((prevTask) => ({
         ...prevTask,
         category: categoriesFromLocalStorage[0].CategoryID,
@@ -93,6 +95,8 @@ const CreateTask: React.FC<CreateTaskProps> = ({
 
   const handleReset = () => {
     const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 9);
+
     const currentDateString = currentDate.toISOString().split("T")[0];
     setTask({
       title: "",
@@ -117,7 +121,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(task);
+    
     const token = localStorage.getItem("token");
 
     if (token === null || token === "guestToken") {
@@ -203,7 +207,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
         priority: task.priority,
         deadline: task.deadline,
       });
-      console.log("updating..", task);
+      
       const token = localStorage.getItem("token");
       let config = {
         method: "put",
@@ -433,6 +437,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
                 value={task.deadline}
                 onChange={handleInputChange}
               />
+              
             </div>
           </div>
 
@@ -491,7 +496,7 @@ function addTaskToLocalstorage(taskData) {
     // Create a new task object using the provided data
     const newTask = {
       TaskID: nextTaskID, // Assign a unique ID
-      CategoryID: taskData.categoryID,
+      CategoryID: taskData.category,
       TaskName: taskData.title,
       Description: taskData.description,
       Priority: taskData.priority,

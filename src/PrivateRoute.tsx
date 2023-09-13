@@ -31,7 +31,7 @@ export const PrivateRoute = ({ children }: PropsWithChildren<PrivateRouteProps>)
   // If the user is not logged in, redirect to the /login page
   // and preserve the current location in the state
   if (!user) {
-    return <Navigate to="/login" state={{ from: location }} />;
+    return <Navigate to="/" state={{ from: location }} />;
   }
 
   // If the user is logged in and localStorage has "user" as a key, redirect to the "/" (root) component

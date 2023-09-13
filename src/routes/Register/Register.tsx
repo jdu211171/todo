@@ -81,7 +81,7 @@ const Register: React.FC<RegisterProps> = (props) => {
           .then((response) => {
             // You can replace this with your own logic
             const token = response.data.token;
-            console.log(token);
+            
             // Save the user token and status in localStorage
             localStorage.setItem("user", "true");
             localStorage.setItem("token", token);

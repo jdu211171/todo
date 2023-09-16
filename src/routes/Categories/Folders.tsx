@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import st from "./categories.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Swal from "sweetalert2";
@@ -221,12 +221,12 @@ function removeCategoryFromLocal(categoryID: any) {
 
   // Filter out the category to be removed
   const updatedCategories = categories.filter(
-    (category) => category.CategoryID !== categoryID
+    (category:any) => category.CategoryID !== categoryID
   );
 
   // Filter out tasks associated with the category to be removed
   const updatedTasks = tasks.filter(
-    (task) => task.CategoryID !== categoryID
+    (task:any) => task.CategoryID !== categoryID
   );
 
   // Update local storage with the modified categories and tasks

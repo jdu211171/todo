@@ -7,10 +7,8 @@ import ErrorPage from "./htmlAssets/ErrorPage/ErrorPage";
 import All from "./routes/All/all";
 import Login from "./routes/Login/Login";
 import Register from "./routes/Register/Register";
-import CreateTask from "./htmlAssets/CreateTask/CreateTask";
 import Categories from "./routes/Categories/Categories";
-import Tasks from "./routes/All/task/task";
-import Task from "./htmlAssets/Task/Task";
+// import Task from "./htmlAssets/Task/Task";
 import Todays from "./routes/Todays/Todays";
 import Schedule from "./routes/Schedule/schedule";
 import Completed from "./routes/Completed/Completed";
@@ -58,23 +56,7 @@ const router = createBrowserRouter([
     ],
   },
 
-  {
-    path: "/task",
-    element: (
-      <Task
-        taskTitle={"Write essay about Shakespear's life and literature"}
-        taskCategory={"School and Education"}
-        taskDeadline={"February 14th"}
-        taskPriority={"Ordinary"}
-        handleChange={function (): void {
-          throw new Error("Function not implemented.");
-        }}
-        handleDelete={function (): void {
-          throw new Error("Function not implemented.");
-        }}
-      />
-    ),
-  },
+
 
   {
     path: "/category",

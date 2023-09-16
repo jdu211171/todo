@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import all from "./all.module.css";
 import "../general.css";
 
-import App from "../../htmlAssets/Select/Select";
-import Button from "../filters/createButton";
 import Tasks from "./task/task";
 import axios from "axios";
 import * as qs from "qs";
-import CreateTask from "./createTask/CreateTask";
-import TaskDetails from "./details/details";
+import CreateTask from "../../htmlAssets/CreateTask/createTask/CreateTask";
+import TaskDetails from "../../htmlAssets/details/details";
 import {
   faArrowDownWideShort,
   faArrowUpAZ,
@@ -16,17 +14,24 @@ import {
   faMagnifyingGlass,
   faPlus,
   faRotate,
-  faSortDown,
-  faSortUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+interface TaskData {
+  TaskName: string;
+  Description: string;
+  Deadline: string;
+  CategoryName: string;
+  Priority: string;
+  Completed: boolean;
+  CompletedDate: string | null;
+}
+
 let isOpen: boolean;
-let isBeingUpdated: boolean;
 
 async function fetchTaskData() {
   const token = localStorage.getItem("token");
-  
+
   // Check if the user is a guest (you can use your own condition)
   if (token === null || token === "guestToken") {
     // User is a guest, fetch data from local storage
@@ -48,7 +53,7 @@ async function fetchTaskData() {
 
   try {
     const response = await axios.request(config);
-    
+
     return response.data;
   } catch (error) {
     console.log("Error fetching task data:", error);
@@ -61,7 +66,15 @@ export default function All() {
   const [taskdata, setTaskdata] = useState([]);
   const [sortCriteria, setSortCriteria] = useState("TaskName"); // Default sorting criteria
   const [sortOrder, setSortOrder] = useState("asc"); // Default sorting order
-  const [taskdataDetail, setTaskdataDetail] = useState([]);
+  const [taskdataDetail, setTaskdataDetail] = useState<TaskData>({
+    TaskName: "",
+    Description: "",
+    Deadline: "",
+    CategoryName: "",
+    Priority: "",
+    Completed: false,
+    CompletedDate: null,
+  });
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const priorityOptions = ["低い", "普通", "優先"];
   const [categories, setCategories] = useState<[]>([]);
@@ -87,7 +100,6 @@ export default function All() {
 
   const handleInputChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target;
-    ;
     setFormData({
       ...formData,
       [name]: value,
@@ -96,7 +108,6 @@ export default function All() {
 
   const handleGetButtonClick = () => {
     fetchTaskData().then((data) => {
-      ;
       const filteredTasks = data.filter((task: any) => {
         console.log(task.Deadline.split(" ")[0]);
         // Check if selectValue1 matches task's priority (assuming task.priority is the attribute name)
@@ -191,7 +202,7 @@ export default function All() {
     }
   };
 
-  const closeDetail = (event: any) => {
+  const closeDetail = () => {
     setIsDetailOpen(false);
   };
 
@@ -203,7 +214,7 @@ export default function All() {
         setTaskdata(data);
       })
       .catch((error) => {
-        // Handle error if needed
+        console.log(error);
       });
   };
 
@@ -213,9 +224,8 @@ export default function All() {
 
   const getUpdateData = (TaskID: number) => {
     setCurrentTaskID(TaskID);
-    isBeingUpdated = true;
     if (!isOpen) {
-      openElement();
+      openElement(false);
     }
     return TaskID;
   };
@@ -226,45 +236,58 @@ export default function All() {
         setTaskdata(data);
       })
       .catch((error) => {
-        // Handle error if needed
+        console.log(error);
       });
   }, []);
 
-  function openElement(isCreate: bool) {
-    const heightElement = document
-      .getElementsByClassName("CreateTask")[0]
-      .querySelectorAll("div")[1].clientHeight;
-    
+  function openElement(isCreate: any) {
+    const heightElement =
+      document
+        .getElementsByClassName("CreateTask")[0]
+        .querySelectorAll("div")[1].clientHeight +
+      4 +
+      "px";
     if (isCreate) {
       setCurrentTaskID(null);
     }
-    if (document.getElementsByClassName("CreateTask")[0].style.height === "") {
-      document.getElementsByClassName("CreateTask")[0].style.height =
-        heightElement + 4 + "px";
-      setTimeout(() => {
-        document.getElementsByClassName("CreateTask")[0].style.height =
-          "fit-content";
-      }, 400);
-      document.getElementsByClassName("CreateTask")[0].style.overflow = "unset";
-      isOpen = true;
+    const createTaskElement = document.getElementsByClassName(
+      "CreateTask"
+    )[0] as HTMLElement | null;
+    if (createTaskElement) {
+      createTaskElement.style.height = heightElement;
     }
+
+    setTimeout(() => {
+      if (createTaskElement) {
+        createTaskElement.style.height = "fit-content";
+        createTaskElement.style.overflow = "unset";
+      }
+    }, 400);
+
+    isOpen = true;
   }
 
   function closeElement() {
     const heightElement = document
       .getElementsByClassName("CreateTask")[0]
       .querySelectorAll("div")[1].clientHeight;
-    
-    if (document.getElementsByClassName("CreateTask")[0].style.height !== "") {
-      document.getElementsByClassName("CreateTask")[0].style.height =
-        heightElement + 4 + "px";
-      setTimeout(() => {
-        document.getElementsByClassName("CreateTask")[0].style.height = "";
-      }, 1);
-      document.getElementsByClassName("CreateTask")[0].style.overflow =
-        "hidden";
-      isOpen = false;
+
+    const createTaskElement = document.getElementsByClassName(
+      "CreateTask"
+    )[0] as HTMLElement | null;
+    if (createTaskElement) {
+      createTaskElement.style.height = heightElement + 4 + "px";
     }
+
+    setTimeout(() => {
+      if (createTaskElement) {
+        createTaskElement.style.height = "";
+      }
+    }, 1);
+    if (createTaskElement) {
+      createTaskElement.style.overflow = "hidden";
+    }
+    isOpen = false;
   }
 
   const handleSort = (criteria: any) => {
@@ -278,13 +301,11 @@ export default function All() {
     setSortCriteria(criteria);
 
     // Sort the taskData array based on the selected criteria and order
-    const sortedData = [...taskdata].sort((a, b) => {
+    const sortedData = [...taskdata].sort((a: any, b: any) => {
       if (criteria === "TaskName") {
         // Sort by TaskName
         return a.TaskName.localeCompare(b.TaskName);
       } else if (criteria === "DueDate") {
-        ;
-
         // Sort by DueDate
         const dateA = new Date(a.Deadline).getTime();
         const dateB = new Date(b.Deadline).getTime();
@@ -340,7 +361,7 @@ export default function All() {
             <option value="0" disabled>
               カテゴリー
             </option>
-            {categories.map((category) => (
+            {categories.map((category: any) => (
               <option
                 key={category.CategoryID}
                 value={category.CategoryID} // Use CategoryID
@@ -444,11 +465,11 @@ function getAllTasksFromLocalStorageWithCategoryName() {
     const categories = JSON.parse(localStorage.getItem("categories") || "[]");
 
     // Loop through tasks and add CategoryName to each task
-    const tasksWithCategoryName = tasks.map((task) => {
+    const tasksWithCategoryName = tasks.map((task: any) => {
       if (task.CategoryID) {
         // Find the category with the matching CategoryID
         const category = categories.find(
-          (c) => c.CategoryID === task.CategoryID
+          (c: any) => c.CategoryID === task.CategoryID
         );
 
         // If a matching category is found, add CategoryName to the task
@@ -472,7 +493,7 @@ function getTaskFromLocalStorage(taskID: any) {
     const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
 
     // Find the task with the specified ID
-    const task = tasks.find((t) => t.TaskID === taskID);
+    const task = tasks.find((t: any) => t.TaskID === taskID);
 
     // If the task is found and it has a CategoryID
     if (task && task.CategoryID) {
@@ -480,7 +501,9 @@ function getTaskFromLocalStorage(taskID: any) {
       const categories = JSON.parse(localStorage.getItem("categories") || "[]");
 
       // Find the category with the matching CategoryID
-      const category = categories.find((c) => c.CategoryID === task.CategoryID);
+      const category = categories.find(
+        (c: any) => c.CategoryID === task.CategoryID
+      );
 
       // Add CategoryName to the task object if category is found
       if (category) {

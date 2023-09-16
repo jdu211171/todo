@@ -1,18 +1,35 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./style.css";
 import logo from "./logo.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarDays, faUserSecret, faRightToBracket, faChevronRight, faList, faCalendarDay, faRotateRight, faThumbsUp, faBoxOpen, faRightFromBracket, faFolderPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCalendarDays,
+  faUserSecret,
+  faRightToBracket,
+  faChevronRight,
+  faList,
+  faCalendarDay,
+  faRotateRight,
+  faThumbsUp,
+  faBoxOpen,
+  faRightFromBracket,
+  faFolderPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import CurrentDate from "../Date";
 import { Outlet } from "react-router-dom";
 
-type DashboardSideBarMenuProps = {};
+interface UserData {
+  UserName: string;
+  UserID:any;
+}
 
-function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
-  const navigate = useNavigate();
-  const [userData, setUserData] = useState(null);
+function DashboardSideBarMenu() {
+  const [userData, setUserData] = useState<UserData>({
+    UserName: "",
+    UserID: null,
+  });
 
   async function fetchUserData() {
     try {
@@ -25,48 +42,46 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
           Authorization: "Bearer " + token,
         },
       };
-  
+
       const response = await axios.request(config);
-  
+
       // If the request is successful, update the ActiveUser in local storage
       const userData = {
         UserName: response.data.UserName,
         UserID: response.data.UserID,
       };
       localStorage.setItem("ActiveUser", JSON.stringify(userData));
-  
+
       // Set the user data in state
       setUserData(userData);
-  
-      
     } catch (error) {
       console.log(error);
-  
+
       // Set ActiveUser to "Guest" and null for UserID
       const guestUser = {
         UserName: "ゲスト",
         UserID: null,
       };
       localStorage.setItem("ActiveUser", JSON.stringify(guestUser));
-      
+
       // Check if the "categories" and "tasks" tables exist in local storage
-      let categories = JSON.parse(localStorage.getItem("categories"));
-      let tasks = JSON.parse(localStorage.getItem("tasks"));
-      
+      let categories = localStorage.getItem("categories") || "";
+      let tasks = localStorage.getItem("tasks") || "";
+
       if (!categories) {
         // Categories table doesn't exist, create it with the default category
-        categories = [
+        let category = [
           {
             CategoryID: 1,
             CategoryName: "デフォルト",
           },
         ];
-        localStorage.setItem("categories", JSON.stringify(categories));
+        localStorage.setItem("categories", JSON.stringify(category));
       }
-  
+
       if (!tasks) {
         // Tasks table doesn't exist, create it with the sample task
-        tasks = [
+       let task = [
           {
             TaskID: 1,
             CategoryID: 1, // CategoryID for the default category
@@ -75,30 +90,28 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
             Priority: "優先",
             Deadline: "2023-09-14 04:00:00", // Replace with the actual deadline
             Completed: 0, // 0 for not completed, 1 for completed
-            CompletedDate: null // Set to null for not completed, or provide a timestamp for completed
-          }
+            CompletedDate: null, // Set to null for not completed, or provide a timestamp for completed
+          },
         ];
-        localStorage.setItem("tasks", JSON.stringify(tasks));
+        localStorage.setItem("tasks", JSON.stringify(task));
       }
       // Set the guest user data in state
       setUserData(guestUser);
     }
   }
-  
-  
-  
 
   useEffect(() => {
     // Call fetchUserData when the component mounts
     fetchUserData();
   }, []);
 
-  function handleClick(event) {
+  function handleClick(event: any) {
     event.preventDefault();
     const sidebar = document.querySelector(".sidebar");
-    sidebar.classList.toggle("close");
+    if (sidebar) {
+      sidebar.classList.toggle("close");
+    }
   }
-
   function handleResize() {
     const sidebar = document.querySelector(".sidebar");
     const screenWidth = window.innerWidth;
@@ -144,9 +157,7 @@ function DashboardSideBarMenu(props: DashboardSideBarMenuProps) {
         <li className="LogStatus">
           <Link to="/login">
             <div className="icon" />
-            <div className="UserData">
-              {userData ? userData.UserName : ""}
-            </div>
+            <div className="UserData">{userData ? userData.UserName : ""}</div>
           </Link>
         </li>
         <li className="LogStatus">

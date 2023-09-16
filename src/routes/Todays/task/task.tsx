@@ -1,10 +1,13 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import axios from "axios";
 import "../../general.css";
 import st from "./task.module.css";
 import { format } from "date-fns";
 
+var localStorage: Storage;
+
 interface Task {
+  Priority: "低い" | "普通" | "優先";
   Completed: boolean;
   TaskID: number;
   CategoryName: string;
@@ -42,13 +45,11 @@ export default function Tasks({
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ): void => {
     event.stopPropagation();
-    
-  
+
     // Check if the user is a guest (UserID is null)
-    const isGuest = localStorage.getItem("ActiveUser")
-      ? JSON.parse(localStorage.getItem("ActiveUser")).UserID === null
-      : true;
-  
+    const storedValue = localStorage.getItem("ActiveUser");
+    const isGuest = !storedValue || JSON.parse(storedValue)?.UserID === null;
+
     if (isGuest) {
       // User is a guest, delete from local storage
       deleteTaskById(TaskID); // Use the deleteTaskById function from the previous response
@@ -64,7 +65,7 @@ export default function Tasks({
           Authorization: "Bearer " + token,
         },
       };
-  
+
       axios
         .request(config)
         .then((response) => {
@@ -83,16 +84,14 @@ export default function Tasks({
   ): void {
     event.stopPropagation();
     getUpdateData(TaskID);
-    
   }
 
-  const handleDetails = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    TaskID: number
-  ): void => {
-    event.stopPropagation();
-    
-  };
+  // const handleDetails = (
+  //   event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  // ): void => {
+  //   event.stopPropagation();
+
+  // };
 
   function taskComplete(
     event: React.MouseEvent<SVGSVGElement, MouseEvent>,
@@ -100,8 +99,10 @@ export default function Tasks({
   ): void {
     event.stopPropagation();
     // Check if the user is a guest
-    const isGuest = localStorage.getItem("ActiveUser") === '{"UserName":"ゲスト","UserID":null}';
-  
+    const isGuest =
+      localStorage.getItem("ActiveUser") ===
+      '{"UserName":"ゲスト","UserID":null}';
+
     if (isGuest) {
       // User is a guest, toggle the completed status in local storage
       toggleTaskCompletedStatus(TaskID);
@@ -123,10 +124,10 @@ export default function Tasks({
           Authorization: "Bearer " + token,
         },
       };
-  
+
       axios
         .request(config)
-        .then((response) => {
+        .then(() => {
           // Update the UI or perform any other actions as needed
           updateTaskData();
         })
@@ -135,16 +136,25 @@ export default function Tasks({
         });
     }
   }
-  
 
-  function nonClick(event: React.MouseEvent<HTMLSpanElement, MouseEvent>): void {
-    event.stopPropagation()
+  function nonClick(
+    event: React.MouseEvent<HTMLSpanElement, MouseEvent>
+  ): void {
+    event.stopPropagation();
   }
 
   const TaskItems = taskdata.map((taskdatas: Task, index: number) => (
-    <div key={index} onClick={(event) => getDetails(taskdatas.TaskID)}>
+    <div key={index} onClick={() => getDetails(taskdatas.TaskID)}>
       <span
-        className={st.taskFold + " " + st[priorityClassMap[taskdatas.Priority]]}
+        className={
+          st.taskFold +
+          " " +
+          st[
+            priorityClassMap[
+              taskdatas.Priority as keyof typeof priorityClassMap
+            ]
+          ]
+        }
         onClick={(event) => nonClick(event)}
       >
         {taskdatas.CategoryName}
@@ -208,13 +218,13 @@ export default function Tasks({
   return <div>{TaskItems}</div>;
 }
 
-function deleteTaskById(taskID:any) {
+function deleteTaskById(taskID: any) {
   try {
     // Retrieve tasks from local storage
     let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
 
     // Find the index of the task with the specified ID
-    const taskIndex = tasks.findIndex((t) => t.TaskID === taskID);
+    const taskIndex = tasks.findIndex((t:any) => t.TaskID === taskID);
 
     if (taskIndex !== -1) {
       // If the task was found, remove it from the tasks array
@@ -232,13 +242,13 @@ function deleteTaskById(taskID:any) {
   }
 }
 
-function toggleTaskCompletedStatus(TaskID) {
+function toggleTaskCompletedStatus(TaskID:any) {
   try {
     // Retrieve tasks from local storage
     const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
 
     // Find the task with the specified ID
-    const taskIndex = tasks.findIndex((t) => t.TaskID === TaskID);
+    const taskIndex = tasks.findIndex((t:any) => t.TaskID === TaskID);
 
     if (taskIndex !== -1) {
       // Task found in local storage, toggle its completed status

@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 
 interface RegisterProps {}
 
-const Register: React.FC<RegisterProps> = (props) => {
+const Register: React.FC<RegisterProps> = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string>(""); // State to store error message
   const [formData, setFormData] = useState({

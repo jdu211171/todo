@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import st from "./details.module.css";
-import { eventNames } from "process";
 
 interface TaskData {
   TaskName: string;
@@ -12,16 +11,20 @@ interface TaskData {
   CompletedDate: string | null;
 }
 
-
-
 interface TaskDetailProps {
-  taskdata: TaskData;
+      taskdata: TaskData ;
   onClose: () => void; // Function to close the detail view
 }
 
 function TaskDetail({ taskdata, onClose }: TaskDetailProps) {
   const [isActive, setIsActive] = useState(false);
-  const priorityClassMap = {
+
+  type TaskPriority = "低い" | "普通" | "優先";
+
+  // Now use TaskPriority for taskdata.Priority
+  const priorityClassMap: {
+    [key in TaskPriority]: string;
+  } = {
     低い: "low",
     普通: "normal",
     優先: "critical",
@@ -49,12 +52,33 @@ function TaskDetail({ taskdata, onClose }: TaskDetailProps) {
         className={`${st.taskDetail} ${isActive ? st.active : st.closed}`}
       >
         <div className={st.closeButton} onClick={onClose}>
-            <svg width="30" height="30" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="15" cy="15" r="12" fill="none" stroke="#000000" strokeWidth="2" />
-  
-                <line x1="9" y1="9" x2="21" y2="21" stroke="#000000" strokeWidth="2" />
-                <line x1="9" y1="21" x2="21" y2="9" stroke="#000000" strokeWidth="2" />
-            </svg>
+          <svg width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+            <circle
+              cx="15"
+              cy="15"
+              r="12"
+              fill="none"
+              stroke="#000000"
+              strokeWidth="2"
+            />
+
+            <line
+              x1="9"
+              y1="9"
+              x2="21"
+              y2="21"
+              stroke="#000000"
+              strokeWidth="2"
+            />
+            <line
+              x1="9"
+              y1="21"
+              x2="21"
+              y2="9"
+              stroke="#000000"
+              strokeWidth="2"
+            />
+          </svg>
         </div>
         <div className={st.title}>{taskdata.TaskName}</div>
         <div className={st.deadline}>
@@ -65,27 +89,36 @@ function TaskDetail({ taskdata, onClose }: TaskDetailProps) {
         </div>
         <div className={st.priority}>
           <span>優先度: </span>
-          <span className={st[priorityClassMap[taskdata.Priority]]}>
+          <span
+            className={
+              st[
+                priorityClassMap[
+                  taskdata.Priority as keyof typeof priorityClassMap
+                ]
+              ]
+            }
+          >
             {taskdata.Priority}
           </span>
-          
         </div>
         <div className={st.completed}>
           <span>完了状態:</span> {taskdata.Completed ? "完成" : "未完成"}
         </div>
         <div className={st.completedDate}>
           <span>完了日:</span>{" "}
-          {taskdata.CompletedDate === null ? "まだ完成していない" : taskdata.CompletedDate.split("T")[0]}
+          {taskdata.CompletedDate === null
+            ? "まだ完成していない"
+            : taskdata.CompletedDate.split("T")[0]}
         </div>
 
         <fieldset className={st.description}>
           <legend>タスクの詳細</legend>
           <div>
             {taskdata.Description === "" ? (
-                <div className={st.noDesc}>
-                    詳細なし
-                </div>
-            ) : taskdata.Description}
+              <div className={st.noDesc}>詳細なし</div>
+            ) : (
+              taskdata.Description
+            )}
           </div>
         </fieldset>
       </div>

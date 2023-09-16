@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styles from "./Task.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle, faCircleCheck } from "@fortawesome/free-regular-svg-icons";
-import { stat } from "fs";
 
 interface TaskProps {
     taskTitle: string;

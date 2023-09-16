@@ -58,7 +58,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
       // User is a guest, fetch categories from local storage
       const categoriesFromLocalStorage = getCategoriesFromLocalStorage();
       setCategories(categoriesFromLocalStorage);
-      
+
       setTask((prevTask) => ({
         ...prevTask,
         category: categoriesFromLocalStorage[0].CategoryID,
@@ -121,7 +121,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     const token = localStorage.getItem("token");
 
     if (token === null || token === "guestToken") {
@@ -173,8 +173,6 @@ const CreateTask: React.FC<CreateTaskProps> = ({
   }, [TaskID]);
 
   const handleUpdate = (taskID: any) => {
-    const currentDate = new Date();
-    const date = currentDate.toISOString().split("T")[0];
     const updatedTask = {
       title: task.title,
       category: task.category,
@@ -207,7 +205,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
         priority: task.priority,
         deadline: task.deadline,
       });
-      
+
       const token = localStorage.getItem("token");
       let config = {
         method: "put",
@@ -241,8 +239,6 @@ const CreateTask: React.FC<CreateTaskProps> = ({
 
   const setUpdateData = useCallback(
     (taskID: any) => {
-      const currentDate = new Date();
-      const currentDateString = currentDate.toISOString().split("T")[0];
       const token = localStorage.getItem("token");
 
       if (token === null || token === "guestToken") {
@@ -263,7 +259,12 @@ const CreateTask: React.FC<CreateTaskProps> = ({
             TaskID: taskID,
           });
 
-          formRef.current?.querySelector("#inputTitle")?.focus();
+          const inputTitle = formRef.current?.querySelector(
+            "#inputTitle"
+          ) as HTMLInputElement | null;
+          if (inputTitle) {
+            inputTitle.focus();
+          }
         }
       } else {
         // User is not a guest, make an API request
@@ -294,7 +295,12 @@ const CreateTask: React.FC<CreateTaskProps> = ({
               TaskID: taskID,
             });
 
-            formRef.current?.querySelector("#inputTitle")?.focus();
+            const inputTitle = formRef.current?.querySelector(
+              "#inputTitle"
+            ) as HTMLInputElement | null;
+            if (inputTitle) {
+              inputTitle.focus();
+            }
           })
           .catch((error) => {
             console.log(error);
@@ -437,7 +443,6 @@ const CreateTask: React.FC<CreateTaskProps> = ({
                 value={task.deadline}
                 onChange={handleInputChange}
               />
-              
             </div>
           </div>
 
@@ -485,7 +490,7 @@ function getCategoriesFromLocalStorage() {
   }
 }
 
-function addTaskToLocalstorage(taskData) {
+function addTaskToLocalstorage(taskData:any) {
   try {
     // Retrieve tasks from local storage
     const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
@@ -523,7 +528,7 @@ function getTaskFromLocalStorage(taskID: any) {
     const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
 
     // Find the task with the specified ID
-    const task = tasks.find((t) => t.TaskID === taskID);
+    const task = tasks.find((t:any) => t.TaskID === taskID);
 
     // If the task is found and it has a CategoryID
     if (task && task.CategoryID) {
@@ -531,7 +536,7 @@ function getTaskFromLocalStorage(taskID: any) {
       const categories = JSON.parse(localStorage.getItem("categories") || "[]");
 
       // Find the category with the matching CategoryID
-      const category = categories.find((c) => c.CategoryID === task.CategoryID);
+      const category = categories.find((c:any) => c.CategoryID === task.CategoryID);
 
       // Add CategoryName to the task object if category is found
       if (category) {
@@ -561,7 +566,7 @@ function updateTaskInLocalStorage(
     const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
 
     // Find the task with the specified ID
-    const taskToUpdateIndex = tasks.findIndex((t) => t.TaskID === taskID);
+    const taskToUpdateIndex = tasks.findIndex((t:any) => t.TaskID === taskID);
 
     if (taskToUpdateIndex !== -1) {
       // Update the task properties

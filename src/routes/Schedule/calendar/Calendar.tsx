@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Calendar from "react-calendar";
 import "./Calendar.css";
 
@@ -13,11 +13,11 @@ function CalendarUI({ getDates, events }: CalendarProps) {
 
 
   // Function to check if a date is in the markedDates array
-  const isDateMarked = (date) =>
-  events.some((d) => new Date(d).toDateString() === date.toDateString());
+  const isDateMarked = (date:any) =>
+  events.some((d:any) => new Date(d).toDateString() === date.toDateString());
 
   // Function to render custom content for marked dates
-  const tileContent = ({ date, view }) => {
+  const tileContent = ({ date, view }:any) => {
     if (view === "month" && isDateMarked(date)) {
       return <div className="mark"></div>;
       
@@ -29,21 +29,14 @@ function CalendarUI({ getDates, events }: CalendarProps) {
     <div className="app-calendar">
       <div className="calendar-container">
         <Calendar
-          // dateFormat="dd MM yyyy"
           locale="ja"
-          onChange={(newValue) => {
+          onChange={(newValue:any) => {
             setDateRange(newValue);
             getDates(newValue);
-            // ;
           }}
-          lang={"jp"}
-          value={dateRange}
+          value={[dateRange[0], dateRange[1]]}
           selectRange={true}
           tileContent={tileContent} // Apply custom content to marked dates
-          onClickDay={(newDate) => {
-            // console.log("onClick property", `clicked single date is ${newDate}`)
-            // getDates(newDate)
-          }}
         />
       </div>
       <div className="date-inputs">

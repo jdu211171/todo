@@ -1,15 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../general.css";
-import Button from "../filters/createButton";
 import st from "./categories.module.css";
 import Folder from "./Folders";
 import toastr from "toastr";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faClipboard,
-  faThumbtack,
-  faFolder,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFolder } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import * as qs from "qs";
 
@@ -17,12 +12,12 @@ export default function Categories() {
   const [categories, setCategories] = useState([]);
   const [inputValue, setInputValue] = useState("");
 
-  const handleChange = (event) => {
+  const handleChange = (event: any) => {
     setInputValue(event.target.value);
   };
 
   // Modify your handleSubmit function to use the addCategoryToLocal function
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
 
     // Check if the user is a guest (not logged in)
@@ -54,7 +49,7 @@ export default function Categories() {
 
       axios
         .request(config)
-        .then((response) => {
+        .then(() => {
           setInputValue("");
           triggerFetch();
         })
@@ -98,7 +93,6 @@ export default function Categories() {
   const triggerFetch = async () => {
     try {
       const data = await fetchCategories();
-      ;
       setCategories(data);
     } catch (error) {
       // Handle error if needed
@@ -151,12 +145,13 @@ export default function Categories() {
 }
 
 // Function to add a new category to localStorage
-function addCategoryToLocal(categoryName) {
-  const categories = JSON.parse(localStorage.getItem("categories")) || [];
+function addCategoryToLocal(categoryName: any) {
+  const storedCategories = localStorage.getItem("categories");
+  const categories = storedCategories ? JSON.parse(storedCategories) : [];
 
   // Check if the category already exists
   const categoryExists = categories.some(
-    (category) => category.CategoryName === categoryName
+    (category: any) => category.CategoryName === categoryName
   );
 
   if (categoryExists) {
@@ -176,14 +171,17 @@ function addCategoryToLocal(categoryName) {
 
 // Function to get categories from localStorage with task counts
 function getCategoriesFromLocalWithTaskCount() {
-  const categories = JSON.parse(localStorage.getItem("categories")) || [];
-  const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+  const storedCategories = localStorage.getItem("categories");
+  const categories =
+    storedCategories !== null ? JSON.parse(storedCategories) : [];
+  const tasksJSON = localStorage.getItem("tasks");
+  const tasks = tasksJSON ? JSON.parse(tasksJSON) : [];
 
   // Create an object to store category IDs and their corresponding task counts
-  const categoryTaskCounts = {};
+  const categoryTaskCounts: Record<string, number> = {};
 
   // Count tasks for each category
-  tasks.forEach((task) => {
+  tasks.forEach((task: any) => {
     const categoryId = task.CategoryID;
     if (categoryId) {
       categoryTaskCounts[categoryId] =
@@ -192,7 +190,7 @@ function getCategoriesFromLocalWithTaskCount() {
   });
 
   // Add task counts to each category
-  categories.forEach((category) => {
+  categories.forEach((category: any) => {
     const categoryId = category.CategoryID;
     category.taskCount = categoryTaskCounts[categoryId] || 0;
   });

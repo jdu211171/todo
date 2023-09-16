@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import all from "./all.module.css";
 import "../general.css";
 
-import Tasks from "./task/task";
 import axios from "axios";
 import * as qs from "qs";
+import Tasks from "../../htmlAssets/task/task";
 import CreateTask from "../../htmlAssets/CreateTask/createTask/CreateTask";
 import TaskDetails from "../../htmlAssets/details/details";
 import {
@@ -28,7 +28,6 @@ interface TaskData {
   Completed: boolean;
   CompletedDate: string | null;
 }
-
 
 async function fetchTaskData() {
   const token = localStorage.getItem("token");
@@ -69,11 +68,11 @@ export default function All() {
   const [sortCriteria, setSortCriteria] = useState("TaskName"); // Default sorting criteria
   const [sortOrder, setSortOrder] = useState("asc"); // Default sorting order
   const [taskdataDetail, setTaskdataDetail] = useState<TaskData>({
-    TaskName: '',
-    Description: '',
-    Deadline: '',
-    CategoryName: '',
-    Priority: '',
+    TaskName: "",
+    Description: "",
+    Deadline: "",
+    CategoryName: "",
+    Priority: "",
     Completed: false,
     CompletedDate: null,
   });
@@ -305,7 +304,7 @@ export default function All() {
     setSortCriteria(criteria);
 
     // Sort the taskData array based on the selected criteria and order
-    const sortedData = [...taskdata].sort((a:any, b:any) => {
+    const sortedData = [...taskdata].sort((a: any, b: any) => {
       if (criteria === "TaskName") {
         // Sort by TaskName
         return a.TaskName.localeCompare(b.TaskName);
@@ -367,7 +366,7 @@ export default function All() {
             <option value="0" disabled>
               カテゴリー
             </option>
-            {categories.map((category:any) => (
+            {categories.map((category: any) => (
               <option
                 key={category.CategoryID}
                 value={category.CategoryID} // Use CategoryID
@@ -472,12 +471,12 @@ function getUnCompletedTasksFromLocalStorageWithCategoryName() {
 
     // Filter completed tasks and add CategoryName to each task
     const completedTasksWithCategoryName = tasks
-      .filter((task:any) => !task.Completed) // Filter completed tasks
-      .map((task:any) => {
+      .filter((task: any) => !task.Completed) // Filter completed tasks
+      .map((task: any) => {
         if (task.CategoryID) {
           // Find the category with the matching CategoryID
           const category = categories.find(
-            (c:any) => c.CategoryID === task.CategoryID
+            (c: any) => c.CategoryID === task.CategoryID
           );
 
           // If a matching category is found, add CategoryName to the task
@@ -504,7 +503,7 @@ function getTaskFromLocalStorage(taskID: any) {
     const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
 
     // Find the task with the specified ID
-    const task = tasks.find((t:any) => t.TaskID === taskID);
+    const task = tasks.find((t: any) => t.TaskID === taskID);
 
     // If the task is found and it has a CategoryID
     if (task && task.CategoryID) {
@@ -512,7 +511,9 @@ function getTaskFromLocalStorage(taskID: any) {
       const categories = JSON.parse(localStorage.getItem("categories") || "[]");
 
       // Find the category with the matching CategoryID
-      const category = categories.find((c:any) => c.CategoryID === task.CategoryID);
+      const category = categories.find(
+        (c: any) => c.CategoryID === task.CategoryID
+      );
 
       // Add CategoryName to the task object if category is found
       if (category) {

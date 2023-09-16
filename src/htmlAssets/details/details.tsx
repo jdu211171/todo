@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import st from "./details.module.css";
+import { faFireFlameCurved } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface TaskData {
   TaskName: string;
@@ -12,7 +14,7 @@ interface TaskData {
 }
 
 interface TaskDetailProps {
-      taskdata: TaskData ;
+  taskdata: TaskData;
   onClose: () => void; // Function to close the detail view
 }
 
@@ -81,9 +83,25 @@ function TaskDetail({ taskdata, onClose }: TaskDetailProps) {
           </svg>
         </div>
         <div className={st.title}>{taskdata.TaskName}</div>
-        <div className={st.deadline}>
-          <span>期限日:</span> {taskdata.Deadline.split(" ")[0]}
+        <div
+          className={
+            new Date(taskdata.Deadline) > new Date() ||
+            Boolean(taskdata.Completed)
+              ? st.deadline
+              : st.deadlineExp
+          }
+        >
+          <span>期限日:</span>
+          {new Date(taskdata.Deadline) > new Date() ||
+          Boolean(taskdata.Completed) ? (
+            ""
+          ) : (
+            <FontAwesomeIcon icon={faFireFlameCurved} />
+          )}
+
+          {taskdata.Deadline.split(" ")[0]}
         </div>
+
         <div className={st.category}>
           <span>カテゴリー:</span> {taskdata.CategoryName}
         </div>

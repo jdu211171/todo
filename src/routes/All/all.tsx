@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import all from "./all.module.css";
 import "../general.css";
 
-import Tasks from "./task/task";
+import Tasks from "../../htmlAssets/task/task";
 import axios from "axios";
 import * as qs from "qs";
 import CreateTask from "../../htmlAssets/CreateTask/createTask/CreateTask";

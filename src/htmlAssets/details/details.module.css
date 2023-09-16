@@ -90,6 +90,7 @@
   font-weight: 800;
   padding-left: 20px;
   color: black;
+  margin-right: 5px;
 }
 .taskDetailBack {
   position: fixed;
@@ -131,6 +132,12 @@
 .deadline {
   font-size: 14px;
   color: #777;
+  margin-bottom: 5px;
+}
+
+.deadlineExp {
+  font-size: 14px;
+  color: red;
   margin-bottom: 5px;
 }
 
